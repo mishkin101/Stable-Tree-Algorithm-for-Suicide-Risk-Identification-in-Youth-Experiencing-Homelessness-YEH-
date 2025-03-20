@@ -26,3 +26,7 @@ uv sync
 uv run run8.py
 uv run run9.py
 ```
+
+## R stuff
+
+[ ] DataExplorer package to summarize the dataset (https://boxuancui.github.io/DataExplorer/)
