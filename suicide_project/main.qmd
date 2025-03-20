@@ -7,6 +7,8 @@ format:
 ---
 
 ```{r}
+install.packages(c("DataExplorer", "ggplot2", "readr"))
+
 library(DataExplorer)
 library(ggplot2)
 library(readr)

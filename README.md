@@ -34,4 +34,4 @@ uv run run9.py
 [ ] VS Code extensions
     [ ] Quarto
     [ ] R
-[ ] `DataExplorer` package to summarize the dataset (https://boxuancui.github.io/DataExplorer/)
+[ ] run `main.qmd`
