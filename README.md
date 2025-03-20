@@ -14,9 +14,15 @@
 1. install uv
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh 33 
+brew install graphviz #graphviz binaries for pydotplus
 ```
 
-2. Run `main.py` using UV
+2. `cd` to source directory; file(s) using UV
 ```
-uv run suicide_project/main.py
+cd suicide_project
+uv venv # only first time
+source /bin/activate
+uv sync
+uv run run8.py
+uv run run9.py
 ```
