@@ -17,13 +17,14 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import r2_score
 from sklearn.metrics import recall_score
 import matplotlib.pyplot as plt
-from sklearn.externals import joblib
+import joblib
+from functools import reduce
 from  sklearn.ensemble import RandomForestClassifier
 from  sklearn.ensemble import ExtraTreesClassifier
 from  sklearn.ensemble import BaggingClassifier
 from sklearn.naive_bayes import GaussianNB
 import pydotplus
-from sklearn.externals.six import StringIO
+from six import StringIO
 from IPython.display import Image, display
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
@@ -34,11 +35,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import operator
 
-from sklearn import grid_search
-from sklearn.cross_validation import PredefinedSplit
+# from sklearn import grid_search
 import logging
 import sys
-from scipy.stats import itemfreq
+# from scipy.stats import itemfreq
 
 
 def plot_im(im, dpi=300):
@@ -154,8 +154,8 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
-dir = "/Users/avisegal/Dropbox/Decision Tree/USC Machine Learning/Processed Datasets for Algorithms/"
-fin = dir + "DataSet_Combined_SI_SNI_Baseline_FE.csv"
+dir = "data/"
+fin = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 logging.info("Loading  Data")
 origindf= pd.read_csv(fin)
@@ -203,7 +203,7 @@ y = dfm[:,-1]
 # Data preparation Ended
 
 logging.info("Fitting Model")
-cw = compute_class_weight('balanced',np.unique(y), y)
+cw = compute_class_weight(class_weight='balanced', classes=np.unique(y), y=y)
 print ("Class Weighting: " + str(cw))
 cwt={0:cw[0], 1:cw[1]}
 
@@ -248,7 +248,7 @@ for id in sorted_idx:
         print(X_feature_names[id]+": "+str(feature_importance[id]))
 
 n_classes = 2
-y_test_bin=label_binarize(y_test,range(n_classes+1))  # +1 to ovecome sklearn issue with binarizing of 2 classes
+y_test_bin=label_binarize(y_test, classes=range(n_classes+1)) # +1 to ovecome sklearn issue with binarizing of 2 classes
 print ("-----------------------------------------------------")
 print ("Overall number of samples: " + str(dfn.shape[0]))
 print ("Accuracy:" + str(accuracy_score(y_test,y_predicted)))
