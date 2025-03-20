@@ -1,0 +1,21 @@
+---
+title: "test"
+date: "5/22/2021"
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+library(DataExplorer)
+library(ggplot2)
+library(readr)
+
+data = read_csv("data/DataSet_Combined_SI_SNI_Baseline_FE.csv")
+```
+
+
+```{r}
+create_report(data)
+```
+

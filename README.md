@@ -29,4 +29,9 @@ uv run run9.py
 
 ## R stuff
 
-[ ] DataExplorer package to summarize the dataset (https://boxuancui.github.io/DataExplorer/)
+[ ] Install R `brew install r`
+[ ] Quarto (https://quarto.org/docs/get-started/)
+[ ] VS Code extensions
+    [ ] Quarto
+    [ ] R
+[ ] `DataExplorer` package to summarize the dataset (https://boxuancui.github.io/DataExplorer/)

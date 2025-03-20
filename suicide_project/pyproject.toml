@@ -13,4 +13,5 @@ dependencies = [
     "pydotplus>=2.0.2",
     "scikit-learn>=1.6.1",
     "six>=1.17.0",
+    "skimpy>=0.0.18",
 ]
