@@ -41,10 +41,11 @@ import sys
 # from scipy.stats import itemfreq
 
 
+
 def plot_im(im, dpi=300):
     #px,py = im.shape # depending of your matplotlib.rc you mayhave to use py,px instead
     px,py = im[:,:,0].shape # if image has a (x,y,z) shape
-    size = (py/np.float(dpi), px/np.float(dpi)) # note the np.float()
+    size = (py/float(dpi), px/float(dpi)) # note the np.float()
 
 
     fig = plt.figure(figsize=size, dpi=dpi)
@@ -148,9 +149,15 @@ labelstr = "suicidea"
 root = logging.getLogger()
 root.setLevel(logging.DEBUG)
 
+
+
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+#disablimng logging on  matplotlib to avoid warnings @mishkin101
+logging.getLogger("matplotlib").setLevel(logging.WARNING)  # Suppress DEBUG/INFO logs
+
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
