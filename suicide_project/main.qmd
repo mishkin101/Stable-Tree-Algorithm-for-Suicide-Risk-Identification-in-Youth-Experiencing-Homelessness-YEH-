@@ -7,17 +7,19 @@ format:
 ---
 
 ```{r}
-install.packages(c("DataExplorer", "ggplot2", "readr"))
-
+# install.packages(c("DataExplorer", "ggplot2", "readr", "skimr"))
 library(DataExplorer)
 library(ggplot2)
 library(readr)
 
-data = read_csv("data/DataSet_Combined_SI_SNI_Baseline_FE.csv")
+data = read_csv("../data/DataSet_Combined_SI_SNI_Baseline_FE.csv")
 ```
 
+```{r}
+skimr(data)
+```
 
 ```{r}
-create_report(data)
+# create_report(data)
 ```
 
