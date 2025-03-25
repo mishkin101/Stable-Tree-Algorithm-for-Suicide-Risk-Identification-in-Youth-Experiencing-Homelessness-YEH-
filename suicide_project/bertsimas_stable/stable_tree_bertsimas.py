@@ -20,46 +20,42 @@ from sklearn.datasets import load_breast_cancer
 # X_full = np.vstack([X0, X1])
 # y_full = np.concatenate([y0, y1])
 
-data_breast_cancer = load_breast_cancer()
-X_full = data_breast_cancer.data()
-y_full = data_breast_cancer.target()
+data_breast_cancer = load_breast_cancer(as_frame=True)
+X_full = data_breast_cancer["data"]
+y_full = data_breast_cancer["target"]
 
-# Get shapes, and samples of X_full, y_full
-print("X_full shape: ", X_full.shape)
-print("X_full head: ", X_full.head())
-
-print("y_full shape: ", y_full.shape)
-print("y_full head: ", y_full.head())
+X_train, X_test, y_train, y_test = train_test_split(X_full, y_full, test_size=0.2, random_state=42)
 
 # Optionally also define your test set or use cross-validation as needed.
 
 ###############################################################################
 # Step 2: Generate first collection of trees (trained on X0)
 ###############################################################################
-# def train_trees(X, y, depths=[3,5,7], min_samples=[5,10]):
-#     """Train multiple trees for different hyperparams & possibly bootstrap."""
-#     trees = []
-#     for depth, min_leaf in itertools.product(depths, min_samples):
-#         # Possibly do multiple runs (bootstrap)
-#         # e.g. for seed in range(num_bootstraps):
-#         #     X_bs, y_bs = resample(X, y, random_state=seed)
-#         #     ...
-#         clf = DecisionTreeClassifier(
-#             max_depth=depth,
-#             min_samples_leaf=min_leaf,
-#             random_state=42
-#         )
-#         clf.fit(X, y)
-#         trees.append(clf)
-#     return trees
+def train_trees(X, y, depths=[3,5,7], min_samples=[5,10]):
+    """Train multiple trees for different hyperparams & possibly bootstrap."""
+    trees = []
+    for depth, min_leaf in itertools.product(depths, min_samples):
+        # Possibly do multiple runs (bootstrap)
+        # e.g. for seed in range(num_bootstraps):
+        #     X_bs, y_bs = resample(X, y, random_state=seed)
+        #     ...
+        clf = DecisionTreeClassifier(
+            max_depth=depth,
+            min_samples_leaf=min_leaf,
+            random_state=42
+        )
+        clf.fit(X, y)
+        trees.append(clf)
+    return trees
 
-# T0 = train_trees(X0, y0, depths=[3,5,7], min_samples=[3,5,10])
+T0 = train_trees(X_train, y_train)
+print("Generated {} trees.".format(len(T0)))
 # T0 is our "first collection"
 
 ###############################################################################
 # Step 3: Generate second collection of trees (trained on full data)
 ###############################################################################
-# T = train_trees(X_full, y_full, depths=[3,5,7], min_samples=[3,5,10])
+T = train_trees(X_full, y_full)
 # T is our "second collection"
 
 ###############################################################################
