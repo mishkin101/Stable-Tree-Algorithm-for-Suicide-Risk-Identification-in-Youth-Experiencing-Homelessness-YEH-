@@ -330,6 +330,17 @@ wheels = [
 ]
 
 [[package]]
+name = "gurobipy"
+version = "12.0.1"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/34/63/15d003008f9787808e6d318d1a4d54b0d4c61b6e3c71f9ea5654ecc19de3/gurobipy-12.0.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:11ca2f493afc5ac5f8e2ed74eb07a86781bb6ffecf57aef0a9a526d498c07c00", size = 12264089 },
+    { url = "https://files.pythonhosted.org/packages/43/e2/647614262b7109d161c7999c50db2bfd45b433b895eaa033d621019473f9/gurobipy-12.0.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:b40627838e8bc5d5f608d9a1b0b13340da9933313f6e2dfab165702a3ad2a866", size = 62738486 },
+    { url = "https://files.pythonhosted.org/packages/fa/e2/8725551a78c01d828a51d96990f2580e3d5862daac44972915bd4e42a8f3/gurobipy-12.0.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:4cf692f2fd2984ff669011dbae2f1a2be7dc15e2b96b951dda4f75ad7146d1bf", size = 14449466 },
+    { url = "https://files.pythonhosted.org/packages/f7/8c/e47d72d1d719627d695f2930f0be65c3394305bb5f5253cbd7cfa850eb7b/gurobipy-12.0.1-cp311-cp311-win_amd64.whl", hash = "sha256:4b1e4ff859b0b641dc2bff5a0385090c6fd6fe4465bdef545571a07f728f2535", size = 11227500 },
+]
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1438,6 +1449,7 @@ name = "suicide-project"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "gurobipy" },
     { name = "joblib" },
     { name = "matplotlib" },
     { name = "notebook" },
@@ -1451,6 +1463,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "gurobipy", specifier = ">=12.0.1" },
     { name = "joblib", specifier = ">=1.4.2" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "notebook", specifier = ">=7.3.3" },
