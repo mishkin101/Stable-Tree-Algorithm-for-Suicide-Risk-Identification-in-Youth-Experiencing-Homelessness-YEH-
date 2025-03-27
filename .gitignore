@@ -176,3 +176,4 @@ cython_debug/
 .pypirc
 .vscode/settings.json
 .DS_Store
+suicide_project/main_files
