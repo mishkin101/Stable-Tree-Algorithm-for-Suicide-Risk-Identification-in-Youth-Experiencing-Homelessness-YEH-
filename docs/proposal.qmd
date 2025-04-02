@@ -25,11 +25,18 @@ editor:
 ## Problem Context and Background
 - **Aim:** Predict suicidal experiences among youth experiencing homelessness (YEH)
 - The provided decision tree model is unstable to change in train-test splits
+- 
 
 ## Dataset Considerations
 - Missing data
+    - 584, 587 samples remaining for each prediction model from initial listwise deletion method form oriignal 940 total samples
+    - 4% of data set mising for suicideideation and planning (36 and 40 samples respectively)
 - Imputed data (MICE)
+    - Not statistically significant in terms of AUC comparison with listwise deletion
 - Imbalanced classes
+    - 83% labeled 2, 16% labeled 1 for suicideidea class
+    - 88% labeled 
+
 
 ## Stable Decision Trees
 - Bertsimas et al. (2023) proposes a method to create stable decision trees

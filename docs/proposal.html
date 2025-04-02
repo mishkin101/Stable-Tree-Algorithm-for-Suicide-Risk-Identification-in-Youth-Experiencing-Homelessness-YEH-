@@ -157,14 +157,26 @@ Adhithya Bhaskar, Michelle Gelman
 <ul>
 <li><strong>Aim:</strong> Predict suicidal experiences among youth experiencing homelessness (YEH)</li>
 <li>The provided decision tree model is unstable to change in train-test splits</li>
+<li></li>
 </ul>
 </section>
 <section id="dataset-considerations" class="slide level2">
 <h2>Dataset Considerations</h2>
 <ul>
-<li>Missing data</li>
-<li>Imputed data (MICE)</li>
-<li>Imbalanced classes</li>
+<li>Missing data
+<ul>
+<li>584, 587 samples remaining for each prediction model from initial listwise deletion method form oriignal 940 total samples</li>
+<li>4% of data set mising for suicideideation and planning (36 and 40 samples respectively)</li>
+</ul></li>
+<li>Imputed data (MICE)
+<ul>
+<li>Not statistically significant in terms of AUC comparison with listwise deletion</li>
+</ul></li>
+<li>Imbalanced classes
+<ul>
+<li>83% labeled 2, 16% labeled 1 for suicideidea class</li>
+<li>88% labeled</li>
+</ul></li>
 </ul>
 </section>
 <section id="stable-decision-trees" class="slide level2">
