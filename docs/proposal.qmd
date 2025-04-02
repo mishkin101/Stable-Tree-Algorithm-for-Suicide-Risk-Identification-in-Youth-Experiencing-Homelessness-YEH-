@@ -1,7 +1,7 @@
 ---
 title: "ISE 625 Project Proposal"
 # date: "5/22/2021"
-subtitle: "test"
+subtitle: "Stable decision trees for suicide experience prediction"
 format: 
   revealjs:
     slide-number: c/t
@@ -33,11 +33,11 @@ editor:
 
 ## Stable Decision Trees
 - Bertsimas et al. (2023) proposes a method to create stable decision trees
-- 1 of the 6 datasets used in the paper is publicly available - Breast Cancer dataset from UCI Machine Learning Repository
-- This will be used to test and compare our implementation of the algorithm
-- With satisfactory results, we will apply the algorithm to the suicide dataset
+- 1 of 6 datasets used is publicly available - Breast Cancer dataset (UCI Machine Learning Repository)
+- Used to test and compare our implementation
+- With satisfactory results, we will apply our implementation to the suicide dataset
 
-## Proposed Plan - 1. Understand the instability of provided DT
+## Proposed Plan - [1. Understand the instability of provided DT]{.highlighted}
 - Given model exists as 2 python files (for `suicidea` and `suicattemp`)
 - Create simple example to deterministically try various splits
 - Empirically measure the difference in predicted splits
