@@ -35,3 +35,10 @@ uv run run9.py
     [ ] Quarto
     [ ] R
 [ ] run `main.qmd`
+
+## notes
+
+- is this the best nethod in lit.?
+- robust to distribution shifts? numerical diff in distribution
+- https://arxiv.org/abs/2310.17772
+- https://optimization-online.org/wp-content/uploads/2023/10/RobustTrees_arXiv-2.pdf
