@@ -69,8 +69,9 @@ $$
 - Pareto optimal tree
 $$\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!$$
 
+<!-- 
 ## Project Goals and Outcomes
-- Implement a stable decision tree model that is robust to train-test splits for better interpretability
+- Implement a stable decision tree model that is robust to train-test splits for better interpretability -->
 
 <!-- The project proposal and presentation will be evaluated based on the following criteria:
     Relevance to class topic
