@@ -144,10 +144,11 @@ Adhithya Bhaskar, Michelle Gelman
 <ul>
 <li><a href="#/problem-context-and-background" id="/toc-problem-context-and-background">Problem Context and Background</a></li>
 <li><a href="#/dataset-considerations" id="/toc-dataset-considerations">Dataset Considerations</a></li>
-<li><a href="#/previous-decision-tree-model" id="/toc-previous-decision-tree-model">Previous decision tree model</a></li>
+<li><a href="#/previous-decision-tree-models" id="/toc-previous-decision-tree-models">Previous decision tree models</a></li>
 <li><a href="#/stable-decision-trees" id="/toc-stable-decision-trees">Stable Decision Trees</a></li>
-<li><a href="#/optimization-algorithms" id="/toc-optimization-algorithms">Optimization algorithms</a></li>
-<li><a href="#/measuring-stability" id="/toc-measuring-stability">Measuring stability</a></li>
+<li><a href="#/proposed-plan---1.-understand-the-instability-of-provided-dt" id="/toc-proposed-plan---1.-understand-the-instability-of-provided-dt">Proposed Plan - 1. Understand the instability of provided DT</a></li>
+<li><a href="#/proposed-plan---2.-stable-dt" id="/toc-proposed-plan---2.-stable-dt">Proposed Plan - 2. Stable DT</a></li>
+<li><a href="#/proposed-plan---2.-measuing-effectiveness-of-proposed-model" id="/toc-proposed-plan---2.-measuing-effectiveness-of-proposed-model">Proposed Plan - 2. Measuing effectiveness of proposed model</a></li>
 <li><a href="#/project-goals-and-outcomes" id="/toc-project-goals-and-outcomes">Project Goals and Outcomes</a></li>
 </ul>
 </nav>
@@ -166,17 +167,44 @@ Adhithya Bhaskar, Michelle Gelman
 <li>Imbalanced classes</li>
 </ul>
 </section>
-<section id="previous-decision-tree-model" class="slide level2">
-<h2>Previous decision tree model</h2>
+<section id="previous-decision-tree-models" class="slide level2">
+<h2>Previous decision tree models</h2>
 </section>
 <section id="stable-decision-trees" class="slide level2">
 <h2>Stable Decision Trees</h2>
 </section>
-<section id="optimization-algorithms" class="slide level2">
-<h2>Optimization algorithms</h2>
+<section id="proposed-plan---1.-understand-the-instability-of-provided-dt" class="slide level2">
+<h2>Proposed Plan - 1. Understand the instability of provided DT</h2>
+<ol type="1">
+<li>Understand the instability of provided DT
+<ul>
+<li>Given model exists as 2 python files (for <code>suicidea</code> and <code>suicattemp</code>)</li>
+<li>Create simple example to deterministically try various splits</li>
+<li>Empirically measure the difference in predicted splits</li>
+</ul></li>
+</ol>
 </section>
-<section id="measuring-stability" class="slide level2">
-<h2>Measuring stability</h2>
+<section id="proposed-plan---2.-stable-dt" class="slide level2">
+<h2>Proposed Plan - 2. Stable DT</h2>
+<ol start="2" type="1">
+<li>Implement a stable DT (Bertsimas et al.&nbsp;2023)
+<ol type="1">
+<li>Train initial set <strong>(T0)</strong> of decision trees on a subset of the data</li>
+<li>Train second set <strong>(T)</strong> of decision trees on the full dataset</li>
+<li>Compute <strong>average distance</strong> of each tree in <strong>T</strong> to <strong>T0</strong></li>
+<li>Compute performance metrics of</li>
+</ol></li>
+</ol>
+</section>
+<section id="proposed-plan---2.-measuing-effectiveness-of-proposed-model" class="slide level2">
+<h2>Proposed Plan - 2. Measuing effectiveness of proposed model</h2>
+<ul>
+<li>Optimization algorithms</li>
+<li>Measuring stability
+<ul>
+<li></li>
+</ul></li>
+</ul>
 </section>
 <section id="project-goals-and-outcomes" class="slide level2">
 <h2>Project Goals and Outcomes</h2>

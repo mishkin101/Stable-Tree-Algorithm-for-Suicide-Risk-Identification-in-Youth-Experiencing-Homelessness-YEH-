@@ -25,13 +25,31 @@ editor:
 - Imputed data (MICE)
 - Imbalanced classes
 
-## Previous decision tree model
+## Previous decision tree models
+
+
 
 ## Stable Decision Trees
 
-## Optimization algorithms
+## Proposed Plan - 1. Understand the instability of provided DT
+1. Understand the instability of provided DT
+    - Given model exists as 2 python files (for `suicidea` and `suicattemp`)
+    - Create simple example to deterministically try various splits
+    - Empirically measure the difference in predicted splits
 
-## Measuring stability
+## Proposed Plan - 2. Stable DT
+
+2. Implement a stable DT (Bertsimas et al. 2023)
+    1. Train initial set **(T0)** of decision trees on a subset of the data
+    2. Train second set **(T)** of decision trees on the full dataset
+    3. Compute **average distance** of each tree in **T** to **T0**
+    4. Compute performance metrics of 
+
+
+## Proposed Plan - 2. Measuing effectiveness of proposed model
+- Optimization algorithms
+- Measuring stability
+    - 
 
 ## Project Goals and Outcomes
 - Implement a stable decision tree model that is robust to train-test splits for better interpretability
