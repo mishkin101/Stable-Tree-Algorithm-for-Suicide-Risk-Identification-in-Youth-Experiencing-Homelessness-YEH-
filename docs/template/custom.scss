@@ -30,14 +30,14 @@ $font-family-sans-serif: $font-family-fira-sans;
 // colors
 $body-bg: #f0f1eb !default;
 $body-color: #272727 !default;
-$link-color: #7678ED !default;
-$selection-bg: #26351c !default;
+$link-color: #5549c3 !default;
+$selection-bg: #9c4436 !default;
 
 // custom colors
 $primary-color: #798478;
 $secondary-color: #4d6a6d;
 $white-color: #ffffff;
-$error-color: #30011e;
+$error-color: #7678ED;
 $bold-color: #C05746;
 $italic-color: #3D348B;
 
@@ -48,10 +48,14 @@ $presentation-heading-color: #3D348B !default;
 
 /*-- scss:rules --*/
 
+.highlighted {
+    color: $selection-bg;
+}  
+
 em,
 i,
-[style*="font-style:italic"],
-[style*="font-style: italic"] {
+[style*="font-style:regular"],
+[style*="font-style:regular"]{
     color: $italic-color;
 }
 
