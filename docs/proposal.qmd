@@ -25,7 +25,7 @@ editor:
 ## Problem Context and Background
 - **Aim:** Predict suicidal experiences among youth experiencing homelessness (YEH)
 - The provided decision tree model is unstable to change in train-test splits
-- 
+- Can we find a robust model invariant to shifts in distributions that will procude the same best features indicative of suicide ideaiton and attempts?
 
 ## Dataset Considerations
 - Missing data
