@@ -144,11 +144,10 @@ Adhithya Bhaskar, Michelle Gelman
 <ul>
 <li><a href="#/problem-context-and-background" id="/toc-problem-context-and-background">Problem Context and Background</a></li>
 <li><a href="#/dataset-considerations" id="/toc-dataset-considerations">Dataset Considerations</a></li>
-<li><a href="#/previous-decision-tree-models" id="/toc-previous-decision-tree-models">Previous decision tree models</a></li>
 <li><a href="#/stable-decision-trees" id="/toc-stable-decision-trees">Stable Decision Trees</a></li>
 <li><a href="#/proposed-plan---1.-understand-the-instability-of-provided-dt" id="/toc-proposed-plan---1.-understand-the-instability-of-provided-dt">Proposed Plan - 1. Understand the instability of provided DT</a></li>
-<li><a href="#/proposed-plan---2.-stable-dt" id="/toc-proposed-plan---2.-stable-dt">Proposed Plan - 2. Stable DT</a></li>
-<li><a href="#/proposed-plan---2.-measuing-effectiveness-of-proposed-model" id="/toc-proposed-plan---2.-measuing-effectiveness-of-proposed-model">Proposed Plan - 2. Measuing effectiveness of proposed model</a></li>
+<li><a href="#/proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" id="/toc-proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023">Proposed Plan - 2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</a></li>
+<li><a href="#/proposed-plan---3.-measuring-effectiveness-of-proposed-model" id="/toc-proposed-plan---3.-measuring-effectiveness-of-proposed-model">Proposed Plan - 3. Measuring effectiveness of proposed model</a></li>
 <li><a href="#/project-goals-and-outcomes" id="/toc-project-goals-and-outcomes">Project Goals and Outcomes</a></li>
 </ul>
 </nav>
@@ -157,6 +156,7 @@ Adhithya Bhaskar, Michelle Gelman
 <h2>Problem Context and Background</h2>
 <ul>
 <li><strong>Aim:</strong> Predict suicidal experiences among youth experiencing homelessness (YEH)</li>
+<li>The provided decision tree model is unstable to change in train-test splits</li>
 </ul>
 </section>
 <section id="dataset-considerations" class="slide level2">
@@ -167,43 +167,47 @@ Adhithya Bhaskar, Michelle Gelman
 <li>Imbalanced classes</li>
 </ul>
 </section>
-<section id="previous-decision-tree-models" class="slide level2">
-<h2>Previous decision tree models</h2>
-</section>
 <section id="stable-decision-trees" class="slide level2">
 <h2>Stable Decision Trees</h2>
+<ul>
+<li>Bertsimas et al.&nbsp;(2023) proposes a method to create stable decision trees</li>
+<li>1 of the 6 datasets used in the paper is publicly available - Breast Cancer dataset from UCI Machine Learning Repository</li>
+<li>This will be used to test and compare our implementation of the algorithm</li>
+<li>With satisfactory results, we will apply the algorithm to the suicide dataset</li>
+</ul>
 </section>
 <section id="proposed-plan---1.-understand-the-instability-of-provided-dt" class="slide level2">
 <h2>Proposed Plan - 1. Understand the instability of provided DT</h2>
-<ol type="1">
-<li>Understand the instability of provided DT
 <ul>
 <li>Given model exists as 2 python files (for <code>suicidea</code> and <code>suicattemp</code>)</li>
 <li>Create simple example to deterministically try various splits</li>
 <li>Empirically measure the difference in predicted splits</li>
-</ul></li>
-</ol>
+</ul>
 </section>
-<section id="proposed-plan---2.-stable-dt" class="slide level2">
-<h2>Proposed Plan - 2. Stable DT</h2>
-<ol start="2" type="1">
-<li>Implement a stable DT (Bertsimas et al.&nbsp;2023)
+<section id="proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" class="slide level2">
+<h2>Proposed Plan - 2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</h2>
 <ol type="1">
 <li>Train initial set <strong>(T0)</strong> of decision trees on a subset of the data</li>
 <li>Train second set <strong>(T)</strong> of decision trees on the full dataset</li>
 <li>Compute <strong>average distance</strong> of each tree in <strong>T</strong> to <strong>T0</strong></li>
-<li>Compute performance metrics of</li>
-</ol></li>
+<li>Compute performance metrics (AUC) of trees on validation/test set</li>
+<li>For the trees in <strong>T</strong> we select the Pareto optimal trees by optimizing for predictive performance and distance to <strong>T0</strong></li>
 </ol>
 </section>
-<section id="proposed-plan---2.-measuing-effectiveness-of-proposed-model" class="slide level2">
-<h2>Proposed Plan - 2. Measuing effectiveness of proposed model</h2>
+<section id="proposed-plan---3.-measuring-effectiveness-of-proposed-model" class="slide level2">
+<h2>Proposed Plan - 3. Measuring effectiveness of proposed model</h2>
 <ul>
-<li>Optimization algorithms</li>
-<li>Measuring stability
+<li>Compare the performance of stable trees to the provided DT using metrics we define in step 1</li>
+</ul>
+<p><strong>Key optimization algorithms to implement:</strong></p>
 <ul>
-<li></li>
-</ul></li>
+<li>Distance between two trees <span class="math display">\[
+d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr)
+\;=\;\min_{\{x\}}\;
+\sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+\]</span></li>
+<li>Pareto optimal tree <span class="math display">\[\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!\]</span></li>
 </ul>
 </section>
 <section id="project-goals-and-outcomes" class="slide level2">
@@ -270,7 +274,7 @@ Adhithya Bhaskar, Michelle Gelman
       // Full list of configuration options available at:
       // https://revealjs.com/config/
       Reveal.initialize({
-'controlsAuto': true,
+'controlsAuto': false,
 'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
@@ -281,7 +285,7 @@ Adhithya Bhaskar, Michelle Gelman
 'smaller': false,
  
         // Display controls in the bottom right corner
-        controls: false,
+        controls: true,
 
         // Help the user learn the controls by providing hints, for example by
         // bouncing the down arrow when they first encounter a vertical slide
@@ -388,7 +392,7 @@ Adhithya Bhaskar, Michelle Gelman
         defaultTiming: null,
 
         // Enable slide navigation via mouse wheel
-        mouseWheel: false,
+        mouseWheel: true,
 
         // The display mode that will be used to show slides
         display: 'block',
@@ -423,7 +427,7 @@ Adhithya Bhaskar, Michelle Gelman
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1200,
 
         height: 700,
 

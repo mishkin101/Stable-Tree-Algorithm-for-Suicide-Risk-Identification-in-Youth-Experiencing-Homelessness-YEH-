@@ -7,49 +7,62 @@ format:
     slide-number: c/t
     theme: [default, template/custom.scss]
     toc: true
+    progress: true
+    mouse-wheel: true
+    controls: true
 author: "Adhithya Bhaskar, Michelle Gelman"
 # lightbox: true
 # embed-resources: true
 # bibliography: template/references.bib
 # incremental: true
 # csl: template/ieee.csl
+width: 1200
+height: 700
 editor:
     render-on-save: true
 ---
 
 ## Problem Context and Background
 - **Aim:** Predict suicidal experiences among youth experiencing homelessness (YEH)
+- The provided decision tree model is unstable to change in train-test splits
 
 ## Dataset Considerations
 - Missing data
 - Imputed data (MICE)
 - Imbalanced classes
 
-## Previous decision tree models
-
-
-
 ## Stable Decision Trees
+- Bertsimas et al. (2023) proposes a method to create stable decision trees
+- 1 of the 6 datasets used in the paper is publicly available - Breast Cancer dataset from UCI Machine Learning Repository
+- This will be used to test and compare our implementation of the algorithm
+- With satisfactory results, we will apply the algorithm to the suicide dataset
 
 ## Proposed Plan - 1. Understand the instability of provided DT
-1. Understand the instability of provided DT
-    - Given model exists as 2 python files (for `suicidea` and `suicattemp`)
-    - Create simple example to deterministically try various splits
-    - Empirically measure the difference in predicted splits
+- Given model exists as 2 python files (for `suicidea` and `suicattemp`)
+- Create simple example to deterministically try various splits
+- Empirically measure the difference in predicted splits
 
-## Proposed Plan - 2. Stable DT
+## Proposed Plan - 2. Implement a stable DT (Bertsimas et al. 2023)
+1. Train initial set **(T0)** of decision trees on a subset of the data
+2. Train second set **(T)** of decision trees on the full dataset
+3. Compute **average distance** of each tree in **T** to **T0**
+4. Compute performance metrics (AUC) of trees on validation/test set
+5. For the trees in **T** we select the Pareto optimal trees by optimizing for predictive performance and distance to **T0**
 
-2. Implement a stable DT (Bertsimas et al. 2023)
-    1. Train initial set **(T0)** of decision trees on a subset of the data
-    2. Train second set **(T)** of decision trees on the full dataset
-    3. Compute **average distance** of each tree in **T** to **T0**
-    4. Compute performance metrics of 
+## Proposed Plan - 3. Measuring effectiveness of proposed model
+- Compare the performance of stable trees to the provided DT using metrics we define in step 1
 
+**Key optimization algorithms to implement:**
 
-## Proposed Plan - 2. Measuing effectiveness of proposed model
-- Optimization algorithms
-- Measuring stability
-    - 
+- Distance between two trees
+$$
+d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) 
+\;=\;\min_{\{x\}}\;
+\sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+$$
+- Pareto optimal tree
+$$\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!$$
 
 ## Project Goals and Outcomes
 - Implement a stable decision tree model that is robust to train-test splits for better interpretability
