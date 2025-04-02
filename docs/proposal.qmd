@@ -1,0 +1,68 @@
+---
+title: "ISE 625 Project Proposal"
+# date: "5/22/2021"
+subtitle: "test"
+format: 
+  revealjs:
+    slide-number: c/t
+    theme: [default, template/custom.scss]
+    toc: true
+author: "Adhithya Bhaskar, Michelle Gelman"
+# lightbox: true
+# embed-resources: true
+# bibliography: template/references.bib
+# incremental: true
+# csl: template/ieee.csl
+editor:
+    render-on-save: true
+---
+
+## Problem Context and Background
+- **Aim:** Predict suicidal experiences among youth experiencing homelessness (YEH)
+
+## Dataset Considerations
+- Missing data
+- Imputed data (MICE)
+- Imbalanced classes
+
+## Previous decision tree model
+
+## Stable Decision Trees
+
+## Optimization algorithms
+
+## Measuring stability
+
+## Project Goals and Outcomes
+- Implement a stable decision tree model that is robust to train-test splits for better interpretability
+
+<!-- The project proposal and presentation will be evaluated based on the following criteria:
+    Relevance to class topic
+    Clarity of the project proposal (1 page) and presentation.
+    Feasibility of the proposed work based on data availability and proposed plan for solving the problem.
+    Potential for social impact. -->
+
+<!-- ### Proposal Outline
+## 1. Problem Context and Background
+## 2. Pre-processing Data
+
+- Dataset Considerations
+- Compare/contrast old pre-processing steps with new proposal
+
+## 3. Data Analysis      
+- Criteria for Ideal deal dataset
+- Defining Stability
+- Defining Generalizability
+- Defining Fairness
+## 3. Model Background
+- Literature Review
+- Hyperparameter Considerations
+- Mathematical Formulation
+## 1. Implementation
+-  Defining Tree Pipeline  
+- Mathematical Details
+## 4. Training ML Model
+## 5. Testing and Results 
+## 6. Discussion 
+## 7. Future Work -->
+<!-- https://quarto.org/docs/presentations/ -->

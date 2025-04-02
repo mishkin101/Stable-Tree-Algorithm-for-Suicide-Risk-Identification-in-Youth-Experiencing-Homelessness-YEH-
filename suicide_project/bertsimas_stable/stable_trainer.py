@@ -39,9 +39,29 @@ class StableTrainer:
         # in the path distance metric (lambda_val).
         self.lambda_val = 2 * max_depth_for_lambda
 
+        # Collections of trees
+        self.T0_ = None
+        self.T_ = None
+
+        # Metadata
+        self.distances_ = []
+        self.performances_ = []
+        self.pareto_indices_ = []
+        self.pareto_trees_ = []
+
         # Will hold final chosen stable tree
         self.stable_tree_ = None
+        # Hold image of the final stable tree
+        self.stable_tree_image_ = None
+        self.best_idx_ = None
 
+        # Global feature ranges for distance computations
+        self.global_lower_ = None
+        self.global_upper_ = None
+
+    ############################################################################
+    # 1) Private utility: train a "collection" of candidate trees
+    ############################################################################
     def _train_collection(self, X, y):
         """
         Train a collection of DecisionTreeClassifiers by varying depths
@@ -58,33 +78,30 @@ class StableTrainer:
             trees.append(clf)
         return trees
 
-    def train_stable(
-            self,
-            X0, y0,
-            X_full, y_full,
-            X_test=None, y_test=None):
+    def fit(self, X0, y0, X_full, y_full, X_test=None, y_test=None):
         """
         The main interface method that:
          1) Trains collection T0 from (X0, y0)
          2) Trains collection T  from (X_full, y_full)
-         3) Computes distances from T to T0
-         4) Computes performance on (X_test, y_test) if provided
-         5) Identifies Pareto frontier
-         6) Selects a final stable tree
+         3) Computes distances from each tree in T to T0
+         4) Computes performance (accuracy) on (X_test, y_test) if provided,
+            otherwise on (X_full, y_full).
+         5) Identifies Pareto frontier in (distance, performance) space
+         6) Selects a final stable tree (self.stable_tree_)
+
         Returns self for chaining.
         """
         # 1) Train T0
-        print("[INFO] Training first collection (T0)...")
+        # print("[INFO] Training first collection (T0)...")
         self.T0_ = self._train_collection(X0, y0)
-        print(f"  -> T0: {len(self.T0_)} trees")
+        # print(f"  -> T0: {len(self.T0_)} trees")
 
         # 2) Train T
-        print("[INFO] Training second collection (T)...")
+        # print("[INFO] Training second collection (T)...")
         self.T_ = self._train_collection(X_full, y_full)
-        print(f"  -> T: {len(self.T_)} trees")
+        # print(f"  -> T: {len(self.T_)} trees")
 
         # 3) Distances (average from each tree in T to T0)
-        # We'll need the global feature ranges from X_full
         self.global_lower_ = X_full.min().values
         self.global_upper_ = X_full.max().values
         self.distances_ = []
@@ -103,13 +120,13 @@ class StableTrainer:
         # 4) Performance
         self.performances_ = []
         if X_test is not None and y_test is not None:
+            # Evaluate all trees on holdout test
             for tree_b in self.T_:
                 y_pred = tree_b.predict(X_test)
                 acc = accuracy_score(y_test, y_pred)
                 self.performances_.append(acc)
         else:
-            # If no test set is given, we can do in-sample performance on X_full
-            # or just placeholder zeros
+            # In-sample fallback
             for tree_b in self.T_:
                 acc = accuracy_score(y_full, tree_b.predict(X_full))
                 self.performances_.append(acc)
@@ -120,31 +137,18 @@ class StableTrainer:
         self.pareto_trees_ = [self.T_[i] for i in self.pareto_indices_]
 
         # 6) Choose final stable tree
-        # For example, pick the best accuracy among those whose distance
-        # is within 20% of the min distance.
-        dist_min = min(self.distances_)
-        dist_max = max(self.distances_)
-        threshold = dist_min + 0.2 * (dist_max - dist_min)
-        candidate_indices = [
-            i for i in self.pareto_indices_
-            if self.distances_[i] <= threshold
-        ]
-        if candidate_indices:
-            best_idx = max(candidate_indices,
-                           key=lambda i: self.performances_[i])
-        else:
-            # fallback: best accuracy overall
-            best_idx = np.argmax(self.performances_)
-
-        self.best_idx_ = best_idx
-        self.stable_tree_ = self.T_[best_idx]
-
-        print(f"[INFO] Final chosen stable tree index = {best_idx}, "
-              f"distance = {self.distances_[best_idx]:.4f}, "
-              f"perf = {self.performances_[best_idx]:.4f}")
+        self._select_stable_tree()
 
         return self
 
+    def predict(self, X):
+        """
+        Predict class labels for samples in X using the chosen stable tree.
+        """
+        if self.stable_tree_ is None:
+            raise ValueError("No stable_tree_ found. Call .fit(...) first.")
+        return self.stable_tree_.predict(X)
+    
     def _get_pareto_indices(self, pairs):
         """
         Identify indices that are non-dominated in the (distance,performance) space.
@@ -162,12 +166,44 @@ class StableTrainer:
                 indices.append(i)
         return indices
 
+    def _select_stable_tree(self):
+        """
+        Pick the final stable tree from the Pareto set, based on the 
+        distance threshold approach described in train_stable docstring.
+        """
+        if not self.distances_:
+            print("[WARN] No distances available. Did you call .fit(...) yet?")
+            return
+
+        dist_min = min(self.distances_)
+        dist_max = max(self.distances_)
+        threshold = dist_min + 0.2 * (dist_max - dist_min)
+
+        candidate_indices = [
+            i for i in self.pareto_indices_
+            if self.distances_[i] <= threshold
+        ]
+        if candidate_indices:
+            # Among those candidates, pick the best accuracy
+            best_idx = max(candidate_indices,
+                           key=lambda i: self.performances_[i])
+        else:
+            # fallback: best accuracy overall
+            best_idx = np.argmax(self.performances_)
+
+        self.best_idx_ = best_idx
+        self.stable_tree_ = self.T_[best_idx]
+
+        print(f"[INFO] Final chosen stable tree index = {best_idx}, "
+              f"distance = {self.distances_[best_idx]:.4f}, "
+              f"perf = {self.performances_[best_idx]:.4f}")
+
     def plot_stable_tree(self, feature_names=None, class_names=None, max_depth_to_plot=None):
         """
         Visualize the final chosen stable tree using sklearn.tree.plot_tree.
         """
         if self.stable_tree_ is None:
-            print("No stable_tree_ found; please call train_stable() first.")
+            print("No stable_tree_ found; please call .fit(...) first.")
             return
 
         plt.figure(figsize=(12, 8))
@@ -178,4 +214,6 @@ class StableTrainer:
             filled=True,
             max_depth=max_depth_to_plot
         )
-        plt.show()
+        
+        # plt.show()
+        # return plt
