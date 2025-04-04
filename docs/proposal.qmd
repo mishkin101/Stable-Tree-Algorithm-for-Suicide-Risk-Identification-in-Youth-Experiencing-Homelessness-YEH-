@@ -10,6 +10,9 @@ format:
     progress: true
     mouse-wheel: true
     controls: true
+  pdf:
+    documentclass: scrartcl
+    papersize: letter
 author: "Adhithya Bhaskar, Michelle Gelman"
 # lightbox: true
 # embed-resources: true
