@@ -10,14 +10,17 @@ format:
     progress: true
     mouse-wheel: true
     controls: true
+  pdf:
+    documentclass: scrartcl
+    papersize: letter
 author: "Adhithya Bhaskar, Michelle Gelman"
 # lightbox: true
 # embed-resources: true
 # bibliography: template/references.bib
 # incremental: true
 # csl: template/ieee.csl
-width: 1200
-height: 700
+width: 1056
+height: 816
 editor:
     render-on-save: true
 ---
@@ -47,31 +50,37 @@ editor:
 - Create simple example to deterministically try various splits
 - Empirically measure the difference in predicted splits
 
-## Proposed Plan - 2. Implement a stable DT (Bertsimas et al. 2023)
-1. Train initial set **(T0)** of decision trees on a subset of the data
-2. Train second set **(T)** of decision trees on the full dataset
+## Proposed Plan - [2. Implement a stable DT (Bertsimas et al. 2023)]{.highlighted}
+1. Train initial set **(T0)** of decision trees on a subset of the data and a second set **(T)** on the full dataset
 3. Compute **average distance** of each tree in **T** to **T0**
 4. Compute performance metrics (AUC) of trees on validation/test set
 5. For the trees in **T** we select the Pareto optimal trees by optimizing for predictive performance and distance to **T0**
 
-## Proposed Plan - 3. Measuring effectiveness of proposed model
-- Compare the performance of stable trees to the provided DT using metrics we define in step 1
+## Proposed Plan - [3. Measuring effectiveness of proposed model]{.highlighted}
+1. Evaluate performance of provided DT using the stability experiment we define in step 1
+2. Evaluate performance of the stable tree using the same experiment handler
+3. Define and compare the models using metrics for assessing stability over various splits 
 
-**Key optimization algorithms to implement:**
-
+## Key optimization algorithms to implement
 - Distance between two trees
+
 $$
 d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) 
 \;=\;\min_{\{x\}}\;
 \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
-\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+\;
+\\+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
 $$
+
 - Pareto optimal tree
 $$\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!$$
 
-<!-- 
-## Project Goals and Outcomes
-- Implement a stable decision tree model that is robust to train-test splits for better interpretability -->
+
+## Project Outcomes
+- A robust, stable decision tree model that minimizes the variability in tree structure due to random train-test splits
+- Empirical evidence supporting the stability of the model through consistent feature selection and comparable performance metrics
+
+- **Impact:** Better interpretability of decision trees to predict suicide risk among YEHs
 
 <!-- The project proposal and presentation will be evaluated based on the following criteria:
     Relevance to class topic
