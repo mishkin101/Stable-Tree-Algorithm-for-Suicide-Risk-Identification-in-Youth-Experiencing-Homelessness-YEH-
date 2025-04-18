@@ -146,10 +146,8 @@ Adhithya Bhaskar, Michelle Gelman
 <li><a href="#/dataset-considerations" id="/toc-dataset-considerations">Dataset Considerations</a></li>
 <li><a href="#/stable-decision-trees" id="/toc-stable-decision-trees">Stable Decision Trees</a></li>
 <li><a href="#/proposed-plan---1.-understand-the-instability-of-provided-dt" id="/toc-proposed-plan---1.-understand-the-instability-of-provided-dt">Proposed Plan - <span class="highlighted">1. Understand the instability of provided DT</span></a></li>
-<li><a href="#/proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" id="/toc-proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023">Proposed Plan - <span class="highlighted">2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</span></a></li>
-<li><a href="#/proposed-plan---3.-measuring-effectiveness-of-proposed-model" id="/toc-proposed-plan---3.-measuring-effectiveness-of-proposed-model">Proposed Plan - <span class="highlighted">3. Measuring effectiveness of proposed model</span></a></li>
-<li><a href="#/key-optimization-algorithms-to-implement" id="/toc-key-optimization-algorithms-to-implement">Key optimization algorithms to implement</a></li>
-<li><a href="#/project-outcomes" id="/toc-project-outcomes">Project Outcomes</a></li>
+<li><a href="#/proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" id="/toc-proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023">Proposed Plan - 2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</a></li>
+<li><a href="#/proposed-plan---3.-measuring-effectiveness-of-proposed-model" id="/toc-proposed-plan---3.-measuring-effectiveness-of-proposed-model">Proposed Plan - 3. Measuring effectiveness of proposed model</a></li>
 </ul>
 </nav>
 </section>
@@ -194,45 +192,33 @@ Adhithya Bhaskar, Michelle Gelman
 </ul>
 </section>
 <section id="proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" class="slide level2">
-<h2>Proposed Plan - <span class="highlighted">2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</span></h2>
+<h2>Proposed Plan - 2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</h2>
 <ol type="1">
-<li>Train initial set <strong>(T0)</strong> of decision trees on a subset of the data and a second set <strong>(T)</strong> on the full dataset</li>
+<li>Train initial set <strong>(T0)</strong> of decision trees on a subset of the data</li>
+<li>Train second set <strong>(T)</strong> of decision trees on the full dataset</li>
 <li>Compute <strong>average distance</strong> of each tree in <strong>T</strong> to <strong>T0</strong></li>
 <li>Compute performance metrics (AUC) of trees on validation/test set</li>
 <li>For the trees in <strong>T</strong> we select the Pareto optimal trees by optimizing for predictive performance and distance to <strong>T0</strong></li>
 </ol>
 </section>
 <section id="proposed-plan---3.-measuring-effectiveness-of-proposed-model" class="slide level2">
-<h2>Proposed Plan - <span class="highlighted">3. Measuring effectiveness of proposed model</span></h2>
-<ol type="1">
-<li>Evaluate performance of provided DT using the stability experiment we define in step 1</li>
-<li>Evaluate performance of the stable tree using the same experiment handler</li>
-<li>Define and compare the models using metrics for assessing stability over various splits</li>
-</ol>
-</section>
-<section id="key-optimization-algorithms-to-implement" class="slide level2">
-<h2>Key optimization algorithms to implement</h2>
+<h2>Proposed Plan - 3. Measuring effectiveness of proposed model</h2>
 <ul>
-<li>Distance between two trees</li>
+<li>Compare the performance of stable trees to the provided DT using metrics we define in step 1</li>
 </ul>
-<p><span class="math display">\[
+<p><strong>Key optimization algorithms to implement:</strong></p>
+<ul>
+<li><p>Distance between two trees <span class="math display">\[
 d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr)
 \;=\;\min_{\{x\}}\;
 \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
-\;
-\\+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
-\]</span></p>
-<ul>
-<li>Pareto optimal tree <span class="math display">\[\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!\]</span></li>
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+\]</span> the <em>Suicide Ideation</em> class has 83% labeled as “2” while 16% are labeled “1.”. <em>Suicide Attempt:</em> has 88% are labeled “0” while 11% are labeled “1.”</p></li>
+<li><p>Pareto optimal tree <span class="math display">\[\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!\]</span></p></li>
 </ul>
-</section>
-<section id="project-outcomes" class="slide level2">
-<h2>Project Outcomes</h2>
-<ul>
-<li><p>A robust, stable decision tree model that minimizes the variability in tree structure due to random train-test splits</p></li>
-<li><p>Empirical evidence supporting the stability of the model through consistent feature selection and comparable performance metrics</p></li>
-<li><p><strong>Impact:</strong> Better interpretability of decision trees to predict suicide risk among YEHs</p></li>
-</ul>
+<!-- 
+## Project Goals and Outcomes
+- Implement a stable decision tree model that is robust to train-test splits for better interpretability -->
 <!-- The project proposal and presentation will be evaluated based on the following criteria:
     Relevance to class topic
     Clarity of the project proposal (1 page) and presentation.
@@ -445,9 +431,9 @@ d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr)
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1056,
+        width: 1200,
 
-        height: 816,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
