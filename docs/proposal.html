@@ -262,7 +262,7 @@ Adhithya Bhaskar, Michelle Gelman
 </ul>
 </section>
 <section id="proposed-plan---2.-implement-a-stable-dt-bertsimas-et-al.-2023" class="slide level2">
-<h2>Proposed Plan - <span class="highlighted">2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</span></h2>
+<h2>Proposed Plan - 2. Implement a stable DT (Bertsimas et al.&nbsp;2023)</h2>
 <ol type="1">
 <li>Train initial set <strong>(T0)</strong> of decision trees on a subset of the data and a second set <strong>(T)</strong> on the full dataset</li>
 <li>Compute <strong>average distance</strong> of each tree in <strong>T</strong> to <strong>T0</strong> <em>(found code for this)</em></li>
@@ -283,15 +283,15 @@ Adhithya Bhaskar, Michelle Gelman
 <ul>
 <li><del>Distance between two trees</del></li>
 </ul>
-<p><span class="math display">\[
+<p><strong>Key optimization algorithms to implement:</strong></p>
+<ul>
+<li><p>Distance between two trees <span class="math display">\[
 d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr)
 \;=\;\min_{\{x\}}\;
 \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
-\;
-\\+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
-\]</span></p>
-<ul>
-<li>Pareto optimal tree <span class="math display">\[\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!\]</span></li>
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+\]</span> the <em>Suicide Ideation</em> class has 83% labeled as “2” while 16% are labeled “1.”. <em>Suicide Attempt:</em> has 88% are labeled “0” while 11% are labeled “1.”</p></li>
+<li><p>Pareto optimal tree <span class="math display">\[\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!\]</span></p></li>
 </ul>
 </section>
 <section id="implementation-progress" class="slide level2">
@@ -549,6 +549,7 @@ d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr)
         // specified using percentage units.
         width: 1050,
 
+        height: 700,
         height: 700,
 
         // Factor of the display size that should remain empty around the content

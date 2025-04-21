@@ -10,9 +10,6 @@ format:
     progress: true
     # mouse-wheel: true
     controls: true
-  pdf:
-    documentclass: scrartcl
-    papersize: letter
 author: "Adhithya Bhaskar, Michelle Gelman"
 # lightbox: true
 # embed-resources: true
@@ -68,9 +65,8 @@ $$
 d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) 
 \;=\;\min_{\{x\}}\;
 \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
-\;
-\\+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
-$$
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+$$ the *Suicide Ideation* class has  83%  labeled as “2” while 16% are labeled “1.”. *Suicide Attempt:* has  88% are labeled “0” while 11% are labeled “1.”
 
 - Pareto optimal tree
 $$\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!$$
