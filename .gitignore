@@ -178,3 +178,15 @@ cython_debug/
 .DS_Store
 suicide_project/main_files
 .DS_Store
+.DS_Store
+suicide_project/stable_tree_bertsimas_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css
+suicide_project/stable_tree_bertsimas_files/libs/bootstrap/bootstrap-icons.css
+suicide_project/stable_tree_bertsimas_files/libs/bootstrap/bootstrap-icons.woff
+suicide_project/stable_tree_bertsimas_files/libs/bootstrap/bootstrap.min.js
+suicide_project/stable_tree_bertsimas_files/libs/clipboard/clipboard.min.js
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/anchor.min.js
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/popper.min.js
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/quarto.js
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/tippy.css
+suicide_project/stable_tree_bertsimas_files/libs/quarto-html/tippy.umd.min.js
