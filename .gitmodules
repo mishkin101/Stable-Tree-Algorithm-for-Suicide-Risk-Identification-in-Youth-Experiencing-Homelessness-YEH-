@@ -1,3 +1,3 @@
 [submodule "dt-distance"]
 	path = dt-distance
-	url = https://github.com/vvdigalakis/dt-distance.git
+	url = git@github.com:vvdigalakis/dt-distance.git
