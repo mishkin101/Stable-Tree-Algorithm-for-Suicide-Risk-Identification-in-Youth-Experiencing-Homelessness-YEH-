@@ -43,7 +43,7 @@ import sys
 def plot_im(im, dpi=300):
     #px,py = im.shape # depending of your matplotlib.rc you mayhave to use py,px instead
     px,py = im[:,:,0].shape # if image has a (x,y,z) shape
-    size = (py/np.float(dpi), px/np.float(dpi)) # note the np.float()
+    size = (py/float(dpi), px/float(dpi)) # note the np.float()
 
 
     fig = plt.figure(figsize=size, dpi=dpi)
@@ -154,7 +154,7 @@ ch.setFormatter(formatter)
 root.addHandler(ch)
 
 dir = "data/"
-fin = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
+fin = "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 logging.info("Loading  Data")
 origindf= pd.read_csv(fin)

@@ -162,7 +162,7 @@ ch.setFormatter(formatter)
 root.addHandler(ch)
 
 dir = "data/"
-fin = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
+fin = "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 logging.info("Loading  Data")
 origindf= pd.read_csv(fin)
