@@ -256,7 +256,7 @@ print(classification_report(y_test, y_predicted))
 print ("Note: \nSensitivity == Recall of the Positive Class.\nSpecificity == Recall of the Negative Class.\n")
 print ("-----------------------------------------------------")
 
-f = open('Metrics.txt','w')
+f = open('run9_Metrics.txt','w')
 f. write("-----------------------------------------------------\n")
 f.write("Features: ")
 f.write(str(features))
@@ -271,8 +271,8 @@ f. write(classification_report(y_test, y_predicted)+'\n')
 f. write ("Note: \nSensitivity == Recall of the Positive Class.\nSpecificity == Recall of the Negative Class.\n")
 f. write ("-----------------------------------------------------\n")
 f.close()
-plt.savefig("Feature Importance.png")
-plt.show()
+plt.savefig("run9_Feature Importance.png")
+# plt.show()
 
 
 # plot ROC curve
@@ -301,13 +301,13 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver operating Characteristic (Micro) Curve')
 plt.legend(loc="lower right")
-plt.savefig("Roc Curve.png")
-plt.show()
+plt.savefig("run9_Roc Curve.png")
+# plt.show()
 
 mpl.rcParams['figure.dpi']= 300
-img = mpimg.imread('Decision_Tree.png')
+img = mpimg.imread('run9_Decision_Tree.png')
 plot_im(img)
-plt.show()
+# plt.show()
 
 #print ()
 #get_code(clf, features, targets)
