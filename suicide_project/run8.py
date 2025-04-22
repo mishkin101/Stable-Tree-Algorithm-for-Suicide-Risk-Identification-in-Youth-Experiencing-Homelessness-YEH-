@@ -162,7 +162,7 @@ ch.setFormatter(formatter)
 root.addHandler(ch)
 
 dir = "data/"
-fin = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
+fin = "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 logging.info("Loading  Data")
 origindf= pd.read_csv(fin)
@@ -265,7 +265,7 @@ print(classification_report(y_test, y_predicted))
 print ("Note: \nSensitivity == Recall of the Positive Class.\nSpecificity == Recall of the Negative Class.\n")
 print ("-----------------------------------------------------")
 
-f = open('Metrics.txt','w')
+f = open('run8_Metrics.txt','w')
 f. write("-----------------------------------------------------\n")
 f.write("Features: ")
 f.write(str(features))
@@ -281,8 +281,8 @@ f. write(classification_report(y_test, y_predicted)+'\n')
 f. write ("Note: \nSensitivity == Recall of the Positive Class.\nSpecificity == Recall of the Negative Class.\n")
 f. write ("-----------------------------------------------------\n")
 f.close()
-plt.savefig("Feature Importance.png")
-plt.show()
+plt.savefig("run8_Feature Importance.png")
+# plt.show()
 
 
 # plot ROC curve
@@ -311,13 +311,13 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver operating Characteristic (Micro) Curve')
 plt.legend(loc="lower right")
-plt.savefig("Roc Curve.png")
-plt.show()
+plt.savefig("run8_Roc Curve.png")
+# plt.show()
 
 mpl.rcParams['figure.dpi']= 300
-img = mpimg.imread('Decision_Tree.png')
+img = mpimg.imread('run8_Decision_Tree.png')
 plot_im(img)
-plt.show()
+# plt.show()
 
 #print ()
 #get_code(clf, features, targets)

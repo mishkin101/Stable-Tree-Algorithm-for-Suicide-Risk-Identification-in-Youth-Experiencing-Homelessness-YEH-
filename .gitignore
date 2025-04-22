@@ -1,4 +1,4 @@
-*.DS_Store
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -190,3 +190,4 @@ suicide_project/stable_tree_bertsimas_files/libs/quarto-html/quarto-syntax-highl
 suicide_project/stable_tree_bertsimas_files/libs/quarto-html/quarto.js
 suicide_project/stable_tree_bertsimas_files/libs/quarto-html/tippy.css
 suicide_project/stable_tree_bertsimas_files/libs/quarto-html/tippy.umd.min.js
+reference/~$otoftheProblem_ACCEPTEDVERSION.docx
