@@ -14,10 +14,9 @@ class StableTrainer:
     A class implementing the basic steps from
     Bertsimas & Digalakis for training stable trees.
     """
-
     def __init__(self,
-                 depths=[3, 5, 7],
-                 min_samples_leaf=[5, 10],
+                 depths= [3,4,5,6,7,8,9,10,11,12],
+                 min_samples_leaf=[3,5,10,30,50],
                  random_state=42,
                  max_depth_for_lambda=7):
         """
@@ -35,6 +34,7 @@ class StableTrainer:
         self.depths = depths
         self.min_samples_leaf = min_samples_leaf
         self.random_state = random_state
+
         # This sets how heavily to penalize differences in class labels
         # in the path distance metric (lambda_val).
         self.lambda_val = 2 * max_depth_for_lambda
@@ -78,14 +78,14 @@ class StableTrainer:
             trees.append(clf)
         return trees
 
+    '''Updated 2) to be (X_train, y_train)'''
     def fit(self, X0, y0, X_full, y_full, X_test=None, y_test=None):
         """
         The main interface method that:
          1) Trains collection T0 from (X0, y0)
-         2) Trains collection T  from (X_full, y_full)
+         2) Trains collection T  from (X_train, y_train)
          3) Computes distances from each tree in T to T0
-         4) Computes performance (accuracy) on (X_test, y_test) if provided,
-            otherwise on (X_full, y_full).
+         4) Computes performance (accuracy) on (X_test, y_test) 
          5) Identifies Pareto frontier in (distance, performance) space
          6) Selects a final stable tree (self.stable_tree_)
 
