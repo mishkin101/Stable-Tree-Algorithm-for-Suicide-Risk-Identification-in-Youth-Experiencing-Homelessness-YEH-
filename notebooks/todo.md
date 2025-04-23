@@ -1,2 +1,4 @@
 - [ ] Implement stable tree algo from paper here (refactor from bertimas_code). Fix test-split + make pareto optimal algo
+    - [ ] paretmo optimal
+    - [ ] bipartite matching for distance computation (check if in dt-distance)
 - [ ] Create pipeline to run refactored.py code and stable tree algo to compare accuracy/AUC on suicide dataset. (change prepare_data to inject randomization in train-test-split)
