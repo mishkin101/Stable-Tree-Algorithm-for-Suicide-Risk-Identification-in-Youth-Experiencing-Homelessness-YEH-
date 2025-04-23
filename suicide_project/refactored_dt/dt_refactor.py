@@ -32,9 +32,8 @@ from sklearn.preprocessing import label_binarize
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.utils.class_weight import compute_class_weight
 
-###############################################################################
-# -----------------------------  CONFIGURATION  ----------------------------- #
-###############################################################################
+## config and constants
+
 DATA = Path("data/DataSet_Combined_SI_SNI_Baseline_FE.csv")
 DATA_PATH = DATA.resolve()
 OUTPUT_DIR = Path("outputs")
@@ -54,10 +53,7 @@ MODEL_PARAMS = {
     "suicattempt": dict(min_samples_leaf=10, min_samples_split=30, max_depth=4),
 }
 
-###############################################################################
-# ----------------------------  UTILITY FUNCTIONS  -------------------------- #
-###############################################################################
-
+## util functions
 
 def setup_logging() -> None:
     """Configure root logger the same way both original scripts did."""
@@ -175,13 +171,11 @@ def write_metrics(
         f.write("-" * 53 + "\n")
     logging.info("Metrics written to %s", metrics_path)
 
-###############################################################################
-# ---------------------------  PIPELINE FUNCTIONS  -------------------------- #
-###############################################################################
 
+## Pipeline functions
 
 def prepare_data(df: pd.DataFrame, features: List[str], label: str):
-    """Drop NA, split 75 / 25 exactly like the originals (no shuffle)."""
+    """Drop NA, split 75 / 25, no shuffle."""
     subset = df[features + [label]].dropna().copy()
     cutoff = int(round(len(subset) * 0.75))
     X_train = subset.iloc[:cutoff, :-1].values
@@ -206,21 +200,12 @@ def fit_model(X_train: np.ndarray, y_train: np.ndarray, *, params: dict, y_full:
 def run_experiment(label: str) -> None:
     logging.info("==== Running experiment for %s ====", label)
 
-    # ---------------------------------------------------------------------
-    # Load & prepare data
-    # ---------------------------------------------------------------------
     df = pd.read_csv(DATA_PATH)
     features = FEATURE_SETS[label]
     subset, X_train, X_test, y_train, y_test = prepare_data(df, features, label)
-
-    # ---------------------------------------------------------------------
-    # Fit model
-    # ---------------------------------------------------------------------
+    
     clf = fit_model(X_train, y_train, params=MODEL_PARAMS[label], y_full=subset[label].values)
 
-    # ---------------------------------------------------------------------
-    # Visualisations & metrics
-    # ---------------------------------------------------------------------
     tree_img = visualize_tree(clf, features, label=label)
     logging.info("Tree visual saved at %s", tree_img)
 
@@ -246,10 +231,7 @@ def run_experiment(label: str) -> None:
     mpl.rcParams["figure.dpi"] = 300
     plot_im(mpimg.imread(tree_img))
 
-###############################################################################
-# ---------------------------------- MAIN ----------------------------------- #
-###############################################################################
-
+## main
 
 def main():
     import argparse
