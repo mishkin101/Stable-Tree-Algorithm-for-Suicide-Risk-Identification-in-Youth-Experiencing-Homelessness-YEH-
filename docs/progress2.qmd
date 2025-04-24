@@ -438,4 +438,4 @@ plot_pareto_frontier(distances, auc_scores, pareto_trees)
 
 > The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. They measure the path distance between two trees by considering differences in predictors, cut-off values, and predictions corresponding to every path of two trees, where a path is defined as a set of split conditions from the root node to a leaf node. However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.
 
-2. 
+2. Stability-performance trade-off when selecting Pareto Optimal tree?
