@@ -1,0 +1,496 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Decision Tree Stability for Suicide Experience Prediction\"\n",
+        "subtitle: \"ISE 625 Project Progress\"\n",
+        "format:\n",
+        "    revealjs:\n",
+        "        theme: [default, template/custom.scss]\n",
+        "#   clean-revealjs:\n",
+        "#     theme: [default, template/code.scss]\n",
+        "#     self-contained: true\n",
+        "html-math-method:\n",
+        "  method: mathjax\n",
+        "  url: \"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"\n",
+        "author:\n",
+        "  - name: Adhithya Bhaskar\n",
+        "  - name: Michelle Gelman\n",
+        "execute: \n",
+        "  cache: true\n",
+        "jupyter: python3\n",
+        "df-print: paged\n",
+        "date: last-modified\n",
+        "code-line-numbers: false\n",
+        "bibliography: refs.bib\n",
+        "---\n",
+        "\n",
+        "\n",
+        "## Introduction and Setup\n"
+      ],
+      "id": "df7e4373"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import sys\n",
+        "import itertools\n",
+        "from pathlib import Path\n",
+        "from typing import Dict, List\n",
+        "from itables import show\n",
+        "from IPython.display import Markdown\n",
+        "src_path = Path(\"../src/dt-distance\").resolve()\n",
+        "data_path = Path(\"../data\").resolve()\n",
+        "sys.path.append(str(data_path))\n",
+        "sys.path.append(str(src_path))\n",
+        "\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "from sklearn.tree import DecisionTreeClassifier, plot_tree\n",
+        "from sklearn.metrics import roc_auc_score\n",
+        "from sklearn.utils import resample\n",
+        "from sklearn.datasets import load_breast_cancer\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from dt_distance.distance_calculator import DistanceCalculator\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "# set seed for reproducibility\n",
+        "np.random.seed(42)"
+      ],
+      "id": "8f58c0f5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Configuration Parameters\n"
+      ],
+      "id": "8b1a3d9f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: True\n",
+        "DEPTHS = list(range(3, 13))\n",
+        "MIN_SAMPLES = [3, 5, 10, 30, 50]\n",
+        "\n",
+        "NUM_BOOTSTRAPS = 50\n",
+        "DATA_PATH = \"../data/DataSet_Combined_SI_SNI_Baseline_FE.csv\"\n",
+        "\n",
+        "FEATURE_SETS: Dict[str, List[str]] = {\n",
+        "    \"suicidea\": [\n",
+        "        \"age\", \"gender\", \"sexori\", \"raceall\", \"trauma_sum\", \"cesd_score\", \"harddrug_life\", \"school\", \"degree\", \"job\", \"sex\", \"concurrent\", \"exchange\", \"children\", \"weapon\", \"fight\", \"fighthurt\", \"ipv\", \"ptsd_score\", \"alcfirst\", \"potfirst\", \"staycurrent\", \"homelage\", \"time_homeless_month\", \"jail\", \"jailkid\", \"gettherapy\", \"sum_alter\", \"sum_family\", \"sum_home_friends\", \"sum_street_friends\", \"sum_unknown_alter\", \"sum_talk_once_week\", \"sum_alter3close\", \"prop_family_harddrug\", \"prop_friends_harddrug\", \"prop_friends_home_harddrug\", \"prop_friends_street_harddrug\", \"prop_alter_all_harddrug\", \"prop_enc_badbehave\", \"prop_alter_homeless\", \"prop_family_emosup\", \"prop_friends_emosup\", \"prop_friends_home_emosup\", \"prop_friends_street_emosup\", \"prop_alter_all_emosup\", \"prop_family_othersupport\", \"prop_friends_othersupport\", \"prop_friends_home_othersupport\", \"prop_friends_street_othersupport\", \"prop_alter_all_othersupport\", \"sum_alter_staff\", \"prop_object_badbehave\", \"prop_enc_goodbehave\", \"prop_alter_school_job\", \"sum_alter_borrow\"],\n",
+        "    \"suicattempt\": [\n",
+        "        \"age\", \"gender\", \"sexori\", \"raceall\", \"trauma_sum\", \"cesd_score\", \"harddrug_life\", \"school\", \"degree\", \"job\", \"sex\", \"concurrent\", \"exchange\", \"children\", \"weapon\", \"fight\", \"fighthurt\", \"ipv\", \"ptsd_score\", \"alcfirst\", \"potfirst\", \"staycurrent\", \"homelage\", \"time_homeless_month\", \"jail\", \"jailkid\", \"gettherapy\", \"sum_alter\", \"prop_family\", \"prop_home_friends\", \"prop_street_friends\", \"prop_unknown_alter\", \"sum_talk_once_week\", \"sum_alter3close\", \"prop_family_harddrug\", \"prop_friends_harddrug\", \"prop_friends_home_harddrug\", \"prop_friends_street_harddrug\", \"prop_alter_all_harddrug\", \"prop_enc_badbehave\", \"prop_alter_homeless\", \"prop_family_emosup\", \"prop_friends_emosup\", \"prop_friends_home_emosup\", \"prop_friends_street_emosup\", \"prop_alter_all_emosup\", \"prop_family_othersupport\", \"prop_friends_othersupport\", \"prop_friends_home_othersupport\", \"prop_friends_street_othersupport\", \"prop_alter_all_othersupport\", \"sum_alter_staff\", \"prop_object_badbehave\", \"prop_enc_goodbehave\", \"prop_alter_school_job\", \"sum_alter_borrow\"],\n",
+        "}\n",
+        "\n",
+        "MODEL_PARAMS = {\n",
+        "    \"suicidea\": dict(min_samples_leaf=10, min_samples_split=20, max_depth=4),\n",
+        "    \"suicattempt\": dict(min_samples_leaf=10, min_samples_split=30, max_depth=4),\n",
+        "}\n",
+        "\n",
+        "LABELS = [\"suicidea\", \"suicattempt\"]"
+      ],
+      "id": "7a530d2d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Data Import and Preparation\n"
+      ],
+      "id": "0b1b3845"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: import-data\n",
+        "#| echo: true\n",
+        "def prepare_data(df: pd.DataFrame, features: List[str], label: str):\n",
+        "    df = df.replace('NaN', pd.NA)  # replace the string 'NaN' with actual NaN values\n",
+        "    df_full_cleaned = df[features + [label]].dropna().copy()\n",
+        "    X = df_full_cleaned[features]\n",
+        "    y = df_full_cleaned[label]\n",
+        "    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)\n",
+        "    X_full = df_full_cleaned[features]\n",
+        "    y_full = df_full_cleaned[label]\n",
+        "    return X_full, y_full, X_train, X_test, y_train, y_test\n",
+        "\n",
+        "df = pd.read_csv(DATA_PATH)\n",
+        "X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(df, FEATURE_SETS[\"suicidea\"], \"suicidea\")"
+      ],
+      "id": "import-data",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "print(f\"Number of samples in the full dataset: {len(X_full)}\")\n",
+        "print(f\"Number of samples in the training set: {len(X_train)}\")\n",
+        "print(f\"Number of samples in the test set: {len(X_test)}\")\n",
+        "print(f\"Shape of training set: {X_train.shape}\")"
+      ],
+      "id": "aeeb841a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## A peek at the data {.smaller}\n"
+      ],
+      "id": "2617d344"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#! echo: true\n",
+        "show(X_train, searching = False, paging = True,ordering = False, autoWidth = True)"
+      ],
+      "id": "f22c43e1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Random Train Split\n"
+      ],
+      "id": "5add4ff1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: train-test-split\n",
+        "#| echo: true\n",
+        "def random_train_split(X, y):\n",
+        "    N = X.shape[0]\n",
+        "    indices = np.random.permutation(N)\n",
+        "    X0, y0 = X[indices[:N // 2]], y[indices[:N // 2]]\n",
+        "    return X0, y0\n",
+        "\n",
+        "X0, y0 = random_train_split(X_train.values, y_train.values)\n",
+        "X0.shape, y0.shape"
+      ],
+      "id": "train-test-split",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Decision Tree Training Functions\n"
+      ],
+      "id": "97d14d74"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def train_decision_tree(X, y, depth, min_samples_leaf):\n",
+        "    clf = DecisionTreeClassifier(max_depth=depth, min_samples_leaf=min_samples_leaf)\n",
+        "    clf.fit(X, y)\n",
+        "    return clf\n",
+        "\n",
+        "def bootstrap_trees(X, y, depths, min_samples, B):\n",
+        "    '''\n",
+        "    Create B bootstrap trees by sampling with replacement from X_0\n",
+        "    '''\n",
+        "    trees = []\n",
+        "    for _ in range(B):\n",
+        "        X_sample, y_sample = resample(X, y, replace=True)\n",
+        "        depth = np.random.choice(depths)\n",
+        "        min_leaf = np.random.choice(min_samples)\n",
+        "        tree = train_decision_tree(X_sample, y_sample, depth, min_leaf)\n",
+        "        trees.append(tree)\n",
+        "    return trees"
+      ],
+      "id": "3e0b01db",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Bootstrapping Decision Trees\n"
+      ],
+      "id": "e65e86da"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "T0 = bootstrap_trees(X0, y0, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)\n",
+        "print(\"Number of trees in T0:\", len(T0))\n",
+        "\n",
+        "T = bootstrap_trees(X_train.values, y_train.values, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)\n",
+        "print(\"Number of trees in T:\", len(T))"
+      ],
+      "id": "90f6b29f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Computing Tree Distances\n"
+      ],
+      "id": "e0ed0c28"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "#| echo: true\n",
+        "def compute_average_distances(T0, T, X_train, y_train):\n",
+        "    X_train_values = X_train.values if hasattr(X_train, 'values') else X_train\n",
+        "    \n",
+        "    distances = []\n",
+        "    for i, tree_b in enumerate(T):\n",
+        "        d_b = 0.0\n",
+        "        for tree_beta in T0:\n",
+        "            distance_calculator = DistanceCalculator(tree_beta, tree_b, X=X_train_values, y=y_train)\n",
+        "            d_b += distance_calculator.compute_tree_distance()\n",
+        "        d_b /= len(T0)\n",
+        "        distances.append(d_b)\n",
+        "    \n",
+        "    return distances\n",
+        "\n",
+        "distances = compute_average_distances(T0, T, X_train, y_train)\n",
+        "print(\"Number of distances computed:\", len(distances))"
+      ],
+      "id": "3f232e6d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Evaluating Predictive Power\n"
+      ],
+      "id": "b74a9426"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "# save the distances into a csv\n",
+        "with open(\"distances.csv\", \"w\") as f:\n",
+        "    for distance in distances:\n",
+        "        f.write(f\"{distance}\\n\")"
+      ],
+      "id": "8297f7ba",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: true\n",
+        "# load the distances from a csv\n",
+        "distances = []\n",
+        "with open(\"distances.csv\", \"r\") as f:\n",
+        "    for line in f:\n",
+        "        distances.append(float(line.strip()))"
+      ],
+      "id": "c2ef585b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "def evaluate_predictive_power(trees, X_holdout, y_holdout):\n",
+        "    auc_scores = []\n",
+        "    for tree in trees:\n",
+        "        y_proba = tree.predict_proba(X_holdout)[:, 1]\n",
+        "        auc = roc_auc_score(y_holdout, y_proba)\n",
+        "        auc_scores.append(auc)\n",
+        "    return auc_scores\n",
+        "\n",
+        "auc_scores = evaluate_predictive_power(T, X_test.values, y_test.values)\n",
+        "print(\"Average AUC score:\", np.mean(auc_scores))"
+      ],
+      "id": "8a4d7cb4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Finding Pareto Optimal Trees\n"
+      ],
+      "id": "e76be643"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "def pareto_optimal_trees(distances, auc_scores):\n",
+        "    pareto_trees = []\n",
+        "    for i, (d_i, a_i) in enumerate(zip(distances, auc_scores)):\n",
+        "        dominated = False\n",
+        "        for j, (d_j, a_j) in enumerate(zip(distances, auc_scores)):\n",
+        "            if i != j and ((d_j <= d_i and a_j > a_i) or (d_j < d_i and a_j >= a_i)):\n",
+        "                dominated = True\n",
+        "                break\n",
+        "        if not dominated:\n",
+        "            pareto_trees.append(i)\n",
+        "    return pareto_trees\n",
+        "\n",
+        "pareto_trees = pareto_optimal_trees(distances, auc_scores)\n",
+        "print(\"Number of Pareto optimal trees:\", len(pareto_trees))"
+      ],
+      "id": "c4ba8449",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Tree Selection Strategy\n"
+      ],
+      "id": "08e4c31d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "def select_final_tree(distances, auc_scores, pareto_indices, epsilon=0.01):\n",
+        "    best_auc = max(auc_scores)\n",
+        "    candidates = [i for i in pareto_indices if auc_scores[i] >= (1 - epsilon) * best_auc]\n",
+        "    if not candidates:\n",
+        "        candidates = pareto_indices\n",
+        "    best_idx = max(candidates, key=lambda i: auc_scores[i] - distances[i])\n",
+        "    return best_idx\n",
+        "\n",
+        "selected_tree_index = select_final_tree(distances, auc_scores, pareto_trees)\n",
+        "print(\"Selected tree index:\", selected_tree_index)"
+      ],
+      "id": "e251c1db",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Visualizing Selected Tree\n"
+      ],
+      "id": "df367366"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-selected-tree\n",
+        "#| fig-cap: Pareto Optimal Tree for Suicide Ideation Prediction\n",
+        "\n",
+        "selected_tree = T[selected_tree_index]\n",
+        "plt.figure(figsize=(12, 8))\n",
+        "plot_tree(selected_tree, \n",
+        "          feature_names=X_full.columns,\n",
+        "          class_names=[\"No Suicide Ideation\", \"Suicide Ideation\"],\n",
+        "          filled=True)\n",
+        "plt.title(\"Pareto Optimal Tree\")\n",
+        "plt.tight_layout()"
+      ],
+      "id": "fig-selected-tree",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Pareto Frontier Visualization\n"
+      ],
+      "id": "4b6c843a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-pareto-frontier\n",
+        "#| fig-cap: Pareto Frontier of Decision Trees - Stability vs. Performance\n",
+        "\n",
+        "def plot_pareto_frontier(distances, auc_scores, pareto_indices):\n",
+        "    distances = np.array(distances)\n",
+        "    auc_scores = np.array(auc_scores)\n",
+        "    pareto_indices = set(pareto_indices)\n",
+        "    is_pareto = np.array([i in pareto_indices for i in range(len(distances))])\n",
+        "    # Plotting\n",
+        "    plt.figure(figsize=(8, 6))\n",
+        "    plt.scatter(distances[~is_pareto], auc_scores[~is_pareto], c='blue', label='Dominated Trees', alpha=0.6)\n",
+        "    plt.scatter(distances[is_pareto], auc_scores[is_pareto], c='red', edgecolors='black', s=80, label='Pareto Optimal Trees')\n",
+        "    plt.xlabel(\"Stability (Lower is Better)\")\n",
+        "    plt.ylabel(\"AUC (Higher is Better)\")\n",
+        "    plt.title(\"Pareto Frontier of Decision Trees\")\n",
+        "    plt.legend()\n",
+        "    plt.grid(True)\n",
+        "    plt.tight_layout()\n",
+        "\n",
+        "plot_pareto_frontier(distances, auc_scores, pareto_trees)"
+      ],
+      "id": "fig-pareto-frontier",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Conclusion\n",
+        "\n",
+        "- We built a framework for creating stable and performant decision trees\n",
+        "- The approach uses:\n",
+        "  - Bootstrap sampling to create diverse trees\n",
+        "  - Tree distance calculations to measure stability\n",
+        "  - Pareto optimization to balance stability and predictive power\n",
+        "- The methodology identified optimal trees for suicide ideation prediction\n",
+        "- Pareto frontier analysis helps visualize the trade-off between stability and performance\n",
+        "```"
+      ],
+      "id": "be4b6a09"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

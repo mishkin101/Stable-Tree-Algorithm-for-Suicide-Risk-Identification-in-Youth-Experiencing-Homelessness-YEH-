@@ -34,9 +34,6 @@ $$
 
 Each path $p$ corresponds to one leaf region in the feature space.
 
-$$
-𝒫(\mathbb{T}) = \{p_1, \dots, p_T\}
-$$
 
 
 ## Definition of a Split
@@ -61,42 +58,22 @@ It is represented by:
 
 Thus:  
 $$
-(\mathbf{u}^p,\mathbf{l}^p,\bm{C}^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
+(\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
 $$
 
-```{=html}
-<aside class="notes">
-Explain that numeric bounds and category masks fully define the leaf region.
-</aside>
-```    
 
----
 
-## Formal Path Representation
+## Explanations of components
 
-\[
-(p):
-\bigl(\mathbf{u}^p,\mathbf{l}^p,\bm{C}^p, k^p\bigr)
-\in
-\mathbb{R}^{|\mathcal{N}|}\times
-\mathbb{R}^{|\mathcal{N}|}\times
-\{0,1\}^{|\mathcal{C}| \times \max_j c_j}\times
-[K]
-\]
+- **$\mathbf{u}^p_j$**, **$\mathbf{l}^p_j$**: define the numeric interval for feature $j$  
+- **$c^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
+- **$C^p$**: matrix stacking all $c^p_j$  
+- **$k^p$**: class label predicted for this region
 
-- $\mathbf{u}^p_j, \mathbf{l}^p_j$ define numeric intervals.
-- $\bm{C}^p[j, :]$ indicates allowed categories for feature $j$.
-- $k^p$ is the predicted class for inputs in this region.
 
 ---
 
 ## Tree Representation & Non-Uniqueness
-
-- The tree $\mathbb{T}$ is the collection of its $T$ paths:
-
-$$
-\mathcal{P}(\mathbb{T}) = \{p_1, \dots, p_T\}
-$$
 
 - Order of splits is irrelevant; different trees can yield the same set of paths.
 - Desirable: identical path sets imply identical decision logic regardless of tree shape.
@@ -106,6 +83,7 @@ $$
 Emphasize that path-based representation abstracts away split order.
 </aside>
 ```    
+
 
 
 

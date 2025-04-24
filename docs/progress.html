@@ -29,7 +29,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="progress_files/libs/revealjs/dist/theme/quarto-055352fc12c2178dab7a497a5dab96a3.css">
+  <link rel="stylesheet" href="progress_files/libs/revealjs/dist/theme/quarto-d348744953b3269144352a706dfa2072.css">
   <link href="progress_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="progress_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="progress_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -145,7 +145,7 @@ Adhithya Bhaskar, Michelle Gelman
 <li><a href="#/decision-tree-as-collection-of-paths" id="/toc-decision-tree-as-collection-of-paths">Decision Tree as Collection of Paths</a></li>
 <li><a href="#/definition-of-a-split" id="/toc-definition-of-a-split">Definition of a Split</a></li>
 <li><a href="#/definition-of-a-tree-path" id="/toc-definition-of-a-tree-path">Definition of a Tree Path</a></li>
-<li><a href="#/formal-path-representation" id="/toc-formal-path-representation">Formal Path Representation</a></li>
+<li><a href="#/explanations-of-components" id="/toc-explanations-of-components">Explanations of components</a></li>
 <li><a href="#/tree-representation-non-uniqueness" id="/toc-tree-representation-non-uniqueness">Tree Representation &amp; Non-Uniqueness</a></li>
 </ul>
 </nav>
@@ -157,9 +157,6 @@ Adhithya Bhaskar, Michelle Gelman
 𝒫(𝕋) = \{p_1, \dots, p_T\}
 \]</span></p>
 <p>Each path <span class="math inline">\(p\)</span> corresponds to one leaf region in the feature space.</p>
-<p><span class="math display">\[
-𝒫(\mathbb{T}) = \{p_1, \dots, p_T\}
-\]</span></p>
 </section>
 <section id="definition-of-a-split" class="slide level2">
 <h2>Definition of a Split</h2>
@@ -191,39 +188,23 @@ Adhithya Bhaskar, Michelle Gelman
 </ul>
 <p>Thus:<br>
 <span class="math display">\[
-(\mathbf{u}^p,\mathbf{l}^p,\bm{C}^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
+(\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
 \]</span></p>
-<aside class="notes">
-Explain that numeric bounds and category masks fully define the leaf region.
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
-<section id="formal-path-representation" class="slide level2">
-<h2>Formal Path Representation</h2>
-<p>[ (p): (<sup>p,</sup>p,^p, k^p) ^{||} ^{||} {0,1}^{|| _j c_j}]</p>
+<section id="explanations-of-components" class="slide level2">
+<h2>Explanations of components</h2>
 <ul>
-<li><span class="math inline">\(\mathbf{u}^p_j, \mathbf{l}^p_j\)</span> define numeric intervals.</li>
-<li><span class="math inline">\(\bm{C}^p[j, :]\)</span> indicates allowed categories for feature <span class="math inline">\(j\)</span>.</li>
-<li><span class="math inline">\(k^p\)</span> is the predicted class for inputs in this region.</li>
+<li><strong><span class="math inline">\(\mathbf{u}^p_j\)</span></strong>, <strong><span class="math inline">\(\mathbf{l}^p_j\)</span></strong>: define the numeric interval for feature <span class="math inline">\(j\)</span><br>
+</li>
+<li><strong><span class="math inline">\(c^p_j\)</span></strong>: binary vector indicating which categories of feature <span class="math inline">\(j\)</span> satisfy the splits<br>
+</li>
+<li><strong><span class="math inline">\(C^p\)</span></strong>: matrix stacking all <span class="math inline">\(c^p_j\)</span><br>
+</li>
+<li><strong><span class="math inline">\(k^p\)</span></strong>: class label predicted for this region</li>
 </ul>
 </section>
 <section id="tree-representation-non-uniqueness" class="slide level2">
 <h2>Tree Representation &amp; Non-Uniqueness</h2>
-<ul>
-<li>The tree <span class="math inline">\(\mathbb{T}\)</span> is the collection of its <span class="math inline">\(T\)</span> paths:</li>
-</ul>
-<p><span class="math display">\[
-\mathcal{P}(\mathbb{T}) = \{p_1, \dots, p_T\}
-\]</span></p>
 <ul>
 <li>Order of splits is irrelevant; different trees can yield the same set of paths.</li>
 <li>Desirable: identical path sets imply identical decision logic regardless of tree shape.</li>
