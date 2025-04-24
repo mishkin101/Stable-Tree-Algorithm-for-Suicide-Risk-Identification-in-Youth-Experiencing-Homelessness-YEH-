@@ -308,6 +308,40 @@ Michelle Gelman
 <li>Desirable: identical path sets imply identical decision logic regardless of tree shape.</li>
 </ul>
 </section>
+<section id="path-distance" class="slide level2 smaller">
+<h2>Path Distance</h2>
+<p>Compare feature ranges and class weight <span class="math display">\[
+    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
+\]</span></p>
+</section>
+<section id="path-weight" class="slide level2 smaller">
+<h2>Path Weight</h2>
+<ul>
+<li>Portion of feature ranges captured by the path <span class="math display">\[
+  d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
+\]</span></li>
+</ul>
+</section>
+<section id="tree-distance" class="slide level2 smaller">
+<h2>Tree Distance</h2>
+<p><span class="math display">\[
+\begin{align*}
+d({T}_1, {T}_2)
+&amp;= \min_{{x}} \Bigg[
+    \sum_{p \in \mathcal{P}({T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) \, x_{pq}
+    + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) \, x_{p}
+\Bigg] \\
+\text{s.t.} \quad
+&amp; \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1,
+\quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
+&amp; \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1,
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
+&amp; x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
+\quad \forall p \in \mathcal{P}(\mathbb{T}_1),
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2)
+\end{align*}
+\]</span></p>
+</section>
 <section id="configuration-parameters" class="slide level2">
 <h2>Configuration Parameters</h2>
 <div id="f667849e" class="cell" data-execution_count="3">
