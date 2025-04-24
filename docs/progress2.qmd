@@ -19,10 +19,22 @@ jupyter: python3
 df-print: paged
 date: last-modified
 code-line-numbers: false
-bibliography: refs.bib
+highlight-style: a11y
 ---
 
-## Introduction and Setup
+## Introduction {.smaller}
+
+1. **Initial Training (T0):** Train initial set of decision trees on subset
+2. **Full Data Training (T):** Train a second set on full training data 
+3. **Distance Computation:**  Calulate average distance between trees in **T** and the trees in **T0**
+  $$
+  d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) \;=\;\min_{\{x\}}\ \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q} \;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+  $$
+1. **Performance Metrics:** Compute AUC ROC on test set
+2. **Pareto Optimization:** Select Pareto optimal trees that balance predictive performance and stability
+  $$
+  \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
+  $$
 
 ```{python}
 import sys
@@ -50,6 +62,53 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 ```
 
+## Decision Tree as Collection of Paths
+
+We represent a decision tree $𝕋$ as a set of paths:
+$$
+𝒫(𝕋) = \{p_1, \dots, p_T\}
+$$
+
+Each path $p$ corresponds to one leaf region in the feature space.
+
+## Definition of a Split
+
+- **Numerical split** on feature $j \in \mathcal{N}$ threshold $t \in [l_j,u_j]$:
+  - Test: $x_j < t$ or $x_j \ge t$  
+- **Categorical split** on feature $j \in \mathcal{C}$ with categories $\mathcal{C}' \subseteq [c_j]$:
+  - Test: $x_j \in \mathcal{C}'$ or $x_j \notin \mathcal{C}'$
+
+Each split partitions the feature space into two disjoint regions.
+
+## Definition of a Tree Path
+
+A **path** $p$ is a sequence of splits from the root to a leaf, plus the class label $k^p$.
+
+- $\mathbf{u}^p \in \mathbb{R}^{|\mathcal{N}|}$: upper bounds for numerical features  
+- $\mathbf{l}^p \in \mathbb{R}^{|\mathcal{N}|}$: lower bounds for numerical features  
+- $C^p \in \{0,1\}^{|\mathcal{C}| \times \max_j c_j}$: category masks  
+- $k^p \in [K]$: assigned class label
+
+Thus:  
+$$
+(\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
+$$
+
+## Explanations of components
+
+- **$\mathbf{u}^p_j$**, **$\mathbf{l}^p_j$**: define the numeric interval for feature $j$  
+- **$c^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
+- **$C^p$**: matrix stacking all $c^p_j$  
+- **$k^p$**: class label predicted for this region
+
+---
+
+## Tree Representation & Non-Uniqueness
+
+- Order of splits is irrelevant; different trees can yield the same set of paths.
+- Desirable: identical path sets imply identical decision logic regardless of tree shape.
+
+
 ## Configuration Parameters
 
 ```{python}
@@ -57,7 +116,7 @@ np.random.seed(42)
 DEPTHS = list(range(3, 13))
 MIN_SAMPLES = [3, 5, 10, 30, 50]
 
-NUM_BOOTSTRAPS = 50
+NUM_BOOTSTRAPS = 25
 DATA_PATH = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 FEATURE_SETS: Dict[str, List[str]] = {
@@ -125,16 +184,17 @@ X0.shape, y0.shape
 
 ## Decision Tree Training Functions
 
+
 ```{python}
+#| echo: true
+#| code-line-numbers: "|6,7|10|11,12"
 def train_decision_tree(X, y, depth, min_samples_leaf):
     clf = DecisionTreeClassifier(max_depth=depth, min_samples_leaf=min_samples_leaf)
     clf.fit(X, y)
     return clf
 
 def bootstrap_trees(X, y, depths, min_samples, B):
-    '''
-    Create B bootstrap trees by sampling with replacement from X_0
-    '''
+    # Create B bootstrap trees by sampling with replacement from X_0
     trees = []
     for _ in range(B):
         X_sample, y_sample = resample(X, y, replace=True)
@@ -148,6 +208,7 @@ def bootstrap_trees(X, y, depths, min_samples, B):
 ## Bootstrapping Decision Trees
 
 ```{python}
+#| echo: true
 T0 = bootstrap_trees(X0, y0, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)
 print("Number of trees in T0:", len(T0))
 
@@ -160,6 +221,7 @@ print("Number of trees in T:", len(T))
 ```{python}
 #| eval: false
 #| echo: true
+#| code-line-numbers: "|5|8,9"
 def compute_average_distances(T0, T, X_train, y_train):
     X_train_values = X_train.values if hasattr(X_train, 'values') else X_train
     
@@ -173,20 +235,10 @@ def compute_average_distances(T0, T, X_train, y_train):
         distances.append(d_b)
     
     return distances
-
 distances = compute_average_distances(T0, T, X_train, y_train)
-print("Number of distances computed:", len(distances))
 ```
 
 ## Evaluating Predictive Power
-
-```{python}
-#| eval: false
-# save the distances into a csv
-with open("distances.csv", "w") as f:
-    for distance in distances:
-        f.write(f"{distance}\n")
-```
 
 ```{python}
 #| eval: true
@@ -198,12 +250,20 @@ with open("distances.csv", "r") as f:
 ```
 
 ```{python}
+#| eval: false
+# save the distances into a csv
+with open("distances.csv", "w") as f:
+    for distance in distances:
+        f.write(f"{distance}\n")
+```
+
+```{python}
 #| echo: true
 def evaluate_predictive_power(trees, X_holdout, y_holdout):
     auc_scores = []
     for tree in trees:
-        y_proba = tree.predict_proba(X_holdout)[:, 1]
-        auc = roc_auc_score(y_holdout, y_proba)
+        y_prob = tree.predict_proba(X_holdout)[:, 1]
+        auc = roc_auc_score(y_holdout, y_prob)
         auc_scores.append(auc)
     return auc_scores
 
@@ -213,8 +273,11 @@ print("Average AUC score:", np.mean(auc_scores))
 
 ## Finding Pareto Optimal Trees
 
+- **Pareto Optimal:** $(d_{b'} \leq d_b \text{ and } \alpha_{b'} > \alpha_b) \text{ or } (d_{b'} < d_b \text{ and } \alpha_{b'} \geq \alpha_b)$
+
 ```{python}
 #| echo: true
+#| code-line-numbers: "|5,6"
 def pareto_optimal_trees(distances, auc_scores):
     pareto_trees = []
     for i, (d_i, a_i) in enumerate(zip(distances, auc_scores)):
@@ -233,8 +296,13 @@ print("Number of Pareto optimal trees:", len(pareto_trees))
 
 ## Tree Selection Strategy
 
+-  $\mathbb{T}^\star = \underset{\mathbb{T}_b \in \mathcal{T}^\star}{\text{argmax}} \ f(d_b, \alpha_b)$
+- Stability or predictive power?
+- Indicator function: $\alpha_{b}$ is within ε of the best score
+
 ```{python}
 #| echo: true
+#| code-line-numbers: "|3"
 def select_final_tree(distances, auc_scores, pareto_indices, epsilon=0.01):
     best_auc = max(auc_scores)
     candidates = [i for i in pareto_indices if auc_scores[i] >= (1 - epsilon) * best_auc]
@@ -250,32 +318,28 @@ print("Selected tree index:", selected_tree_index)
 ## Visualizing Selected Tree
 
 ```{python}
-#| label: fig-selected-tree
-#| fig-cap: "Pareto Optimal Tree for Suicide Ideation Prediction"
-
 selected_tree = T[selected_tree_index]
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(12, 8), dpi=300)
 plot_tree(selected_tree, 
           feature_names=X_full.columns,
           class_names=["No Suicide Ideation", "Suicide Ideation"],
           filled=True)
-plt.title("Pareto Optimal Tree")
 plt.tight_layout()
 ```
 
 ## Pareto Frontier Visualization
 
-```{python}
-#| label: fig-pareto-frontier
-#| fig-cap: "Pareto Frontier of Decision Trees - Stability vs. Performance"
+:::: {.columns}
 
+::: {.column width="50%"}
+```{python}
 def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     distances = np.array(distances)
     auc_scores = np.array(auc_scores)
     pareto_indices = set(pareto_indices)
     is_pareto = np.array([i in pareto_indices for i in range(len(distances))])
     # Plotting
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 6), dpi=300)
     plt.scatter(distances[~is_pareto], auc_scores[~is_pareto], c='blue', label='Dominated Trees', alpha=0.6)
     plt.scatter(distances[is_pareto], auc_scores[is_pareto], c='red', edgecolors='black', s=80, label='Pareto Optimal Trees')
     plt.xlabel("Stability (Lower is Better)")
@@ -287,14 +351,18 @@ def plot_pareto_frontier(distances, auc_scores, pareto_indices):
 
 plot_pareto_frontier(distances, auc_scores, pareto_trees)
 ```
+:::
 
-## Conclusion
+::: {.column width="50%"}
 
-- We built a framework for creating stable and performant decision trees
-- The approach uses:
-  - Bootstrap sampling to create diverse trees
-  - Tree distance calculations to measure stability
-  - Pareto optimization to balance stability and predictive power
-- The methodology identified optimal trees for suicide ideation prediction
-- Pareto frontier analysis helps visualize the trade-off between stability and performance
-```
+- $d_{b}$ , $\forall b \in \mathcal{T}$: Average distance
+- $a_{b}$, $\forall b \in \mathcal{T}$: Out-of-sample AUCROC
+:::
+
+::::
+
+## Experiment runner
+
+![](img/carbon.png){height=600, fig-align="center"}
+
+## Next Steps

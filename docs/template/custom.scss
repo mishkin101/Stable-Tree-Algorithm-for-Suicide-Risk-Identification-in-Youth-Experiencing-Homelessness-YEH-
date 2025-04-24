@@ -30,7 +30,7 @@
 }
 
 // Define font-family variables
-$font-family-fira-code: 'Fira Code', monospace;
+$font-family-fira-code: 'Fantasque Sans Mono', regular;
 $font-family-fira-sans: 'Fira Sans', regular;
 $font-family-inter: 'Inter', sans-serif;
 $font-family-ibm-plex-sans: 'IBM Plex Sans', sans-serif;
@@ -160,7 +160,7 @@ $body-bg: $theme-sand;
   margin: auto !important;
 }
 
-code span.er {
-  color: #ebcb8b;
-  text-decoration: none;
-}
+// code span.er {
+//   color: #ebcb8b;
+//   text-decoration: none;
+// }
