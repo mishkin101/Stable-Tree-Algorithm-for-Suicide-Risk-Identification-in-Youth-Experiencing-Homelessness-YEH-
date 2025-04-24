@@ -1,0 +1,9 @@
+{
+  "group_name": "suicidea_comparison",
+  "created_at": "2025-04-23T17:12:14.170413",
+  "experiments": [
+    "experiment_20250423_171200_seed_42",
+    "experiment_20250423_171206_seed_123",
+    "experiment_20250423_171214_seed_456"
+  ]
+}
