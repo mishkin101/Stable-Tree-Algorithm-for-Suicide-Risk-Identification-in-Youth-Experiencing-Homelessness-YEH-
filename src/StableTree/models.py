@@ -40,7 +40,7 @@ def bootstrap_trees(X, y, depths, min_samples, B):
         X_sample, y_sample = resample(X, y, replace=True)
         depth = np.random.choice(depths)
         min_leaf = np.random.choice(min_samples)
-        print(f"Training tree with depth {depth} and min_samples_leaf {min_leaf}")
+        # print(f"Training tree with depth {depth} and min_samples_leaf {min_leaf}")
         tree = train_decision_tree(X_sample, y_sample, depth, min_leaf)
         trees.append(tree)
     return trees

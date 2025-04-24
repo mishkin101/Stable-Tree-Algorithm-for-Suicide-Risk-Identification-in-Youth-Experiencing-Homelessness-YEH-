@@ -3,7 +3,8 @@ repo_url: https://github.com/mishkin101/Interpretability_Suicide_Project
 
 nav:
   - Home: index.md
-  - final_bertsimas_tree: final_bertsimas_tree_report.ipynb
+  - bertsimas_method_breast_cancer: final_bertsimas_tree_report.ipynb
+  - bertsimas_method_suicide: stable_suicide_data.ipynb
   - Usage: usage.md
 
 theme:
