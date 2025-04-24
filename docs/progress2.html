@@ -237,7 +237,7 @@ Michelle Gelman
 </section>
 <section id="introduction" class="slide level2 smaller">
 <h2>Introduction</h2>
-<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023">Bertsimas and Jr (<a href="#/thoughts-and-points-of-dicussion" role="doc-biblioref" onclick="">2023</a>)</span></p>
+<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023">Bertsimas and Jr (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></p>
 <ol type="1">
 <li><strong>Initial Training (T0):</strong> Train initial set of decision trees on subset</li>
 <li><strong>Full Data Training (T):</strong> Train a second set on full training data</li>
@@ -728,17 +728,20 @@ Number of trees in T: 25</code></pre>
 <p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
-<section id="thoughts-and-points-of-dicussion" class="slide level2 smaller scrollable">
+<section id="thoughts-and-points-of-dicussion" class="slide level2 smaller">
 <h2>Thoughts and points of dicussion</h2>
 <ol type="1">
-<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918">Lee, Sim, and Hong (<a href="#/thoughts-and-points-of-dicussion" role="doc-biblioref" onclick="">2024</a>)</span></li>
+<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918">Lee, Sim, and Hong (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
 </ol>
 <blockquote>
-<p>The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. They measure the path distance between two trees by considering differences in predictors, cut-off values, and predictions corresponding to every path of two trees, where a path is defined as a set of split conditions from the root node to a leaf node. However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.</p>
+<p>The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. … However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.</p>
 </blockquote>
 <ol start="2" type="1">
-<li></li>
+<li>Stability-performance trade-off when selecting Pareto Optimal tree?</li>
 </ol>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-bertsimasImprovingStabilityDecision2023" class="csl-entry" role="listitem">
