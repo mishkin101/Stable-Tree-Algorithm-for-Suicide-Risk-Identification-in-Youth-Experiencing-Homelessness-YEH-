@@ -18,6 +18,7 @@ execute:
 jupyter: python3
 df-print: paged
 date: last-modified
+code-line-numbers: false
 bibliography: refs.bib
 ---
 
@@ -197,6 +198,7 @@ with open("distances.csv", "r") as f:
 ```
 
 ```{python}
+#| echo: true
 def evaluate_predictive_power(trees, X_holdout, y_holdout):
     auc_scores = []
     for tree in trees:
@@ -212,6 +214,7 @@ print("Average AUC score:", np.mean(auc_scores))
 ## Finding Pareto Optimal Trees
 
 ```{python}
+#| echo: true
 def pareto_optimal_trees(distances, auc_scores):
     pareto_trees = []
     for i, (d_i, a_i) in enumerate(zip(distances, auc_scores)):
@@ -231,6 +234,7 @@ print("Number of Pareto optimal trees:", len(pareto_trees))
 ## Tree Selection Strategy
 
 ```{python}
+#| echo: true
 def select_final_tree(distances, auc_scores, pareto_indices, epsilon=0.01):
     best_auc = max(auc_scores)
     candidates = [i for i in pareto_indices if auc_scores[i] >= (1 - epsilon) * best_auc]

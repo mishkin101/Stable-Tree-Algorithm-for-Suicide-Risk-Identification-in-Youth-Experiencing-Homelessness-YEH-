@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&family=Fira+Code:wght@300..700&display=swap');
 
 // Define font-face for Fira Sans
 @font-face {
@@ -19,16 +20,26 @@
     src: url('https://fonts.gstatic.com/s/inter/v2/UcCO3qz-xs5Ao_KGZ-QwiqZsxCi7Cw.woff2') format('woff2');
 }
 
+// fira code font face
+@font-face{
+    font-family: 'Fira Code';
+    font-weight: 400;
+    font-style: normal;
+    src: url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap')
+    format('woff2');
+}
+
 // Define font-family variables
-$font-family-fira-sans: 'Fira Sans', sans-serif;
+$font-family-fira-code: 'Fira Code', monospace;
+$font-family-fira-sans: 'Fira Sans', regular;
 $font-family-inter: 'Inter', sans-serif;
 $font-family-ibm-plex-sans: 'IBM Plex Sans', sans-serif;
 
 // fonts
 $font-family-sans-serif: $font-family-fira-sans;
-
+$font-family-monospace: $font-family-fira-code;
 // colors
-$body-bg: #f0f1eb !default;
+$body-bg: #ffffff !default;
 $body-color: #272727 !default;
 $link-color: #5549c3 !default;
 $selection-bg: #9c4436 !default;
@@ -66,9 +77,9 @@ b,
     color: $bold-color;
 }
 
-.reveal a {
-    line-height: 1.3em;
-}
+// .reveal a {
+//     line-height: 1.3em;
+// }
 
 /* custom rules */
 
@@ -86,7 +97,6 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: $presentation-heading-font;
     color: $presentation-heading-color;
 }
 
@@ -106,20 +116,51 @@ h1, h2, h3, h4, h5, h6 {
     color: $error-color;
 }
 
-code span.er {
-    color: #ebcb8b;
-    text-decoration: none;
-}
+// code span.er {
+//     color: #ebcb8b;
+//     text-decoration: none;
+// }
 
-.reveal div.sourceCode {
-    border: none;
-    border-radius: 5px;
-    margin-bottom: 10px !important;
-    box-shadow: 0 20px 47px rgb(0 0 0 / 55%);
-    width: fit-content;
-    margin: auto !important;
+// .reveal div.sourceCode {
+//     border: none;
+//     border-radius: 5px;
+//     margin-bottom: 10px !important;
+//     box-shadow: 0 20px 47px rgb(0 0 0 / 55%);
+//     width: fit-content;
+//     margin: auto !important;
+// }
+
+// .reveal div.sourceCode pre code {
+//     padding: 25px;
+// }
+
+
+
+
+
+$theme-sand: #F1EAE5;
+$theme-white: #FFFFFF;
+
+$body-bg: $theme-sand;
+
+/*-- scss:rules --*/
+
+.reveal pre code {
+  background-color: #232525;
+  color: #A9B7C6;
 }
 
 .reveal div.sourceCode pre code {
-    padding: 25px;
+  padding: 25px;
+}
+
+.reveal div.sourceCode {
+  border-radius: 5px;
+  margin-bottom: 10px !important;
+  margin: auto !important;
+}
+
+code span.er {
+  color: #ebcb8b;
+  text-decoration: none;
 }
