@@ -7,7 +7,7 @@ from pathlib import Path
 # Configuration
 DEPTHS = list(range(3, 13))
 MIN_SAMPLES = [3, 5, 10, 30, 50]
-NUM_BOOTSTRAPS = 50
+NUM_BOOTSTRAPS = 20
 
 # Feature sets for different tasks
 FEATURE_SETS: Dict[str, List[str]] = {

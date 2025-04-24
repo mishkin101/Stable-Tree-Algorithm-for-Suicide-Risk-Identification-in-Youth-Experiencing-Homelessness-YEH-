@@ -1,0 +1,24 @@
+{
+    "num_samples_full": 586,
+    "num_samples_train": 439,
+    "num_samples_test": 147,
+    "train_shape": [
+        439,
+        56
+    ],
+    "random_split_shape": [
+        [
+            219,
+            56
+        ],
+        [
+            219
+        ]
+    ],
+    "num_trees_T0": 50,
+    "num_trees_T": 50,
+    "num_distances": 50,
+    "average_auc": 0.607809917355372,
+    "num_pareto_trees": 5,
+    "selected_tree_index": 43
+}

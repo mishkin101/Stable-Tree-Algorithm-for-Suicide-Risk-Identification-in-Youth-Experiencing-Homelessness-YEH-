@@ -1,3 +1,4 @@
+# src/StableTree/visualization.py
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
@@ -26,7 +27,7 @@ def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    # plt.show()
+    # Don't call plt.show() so the figure can be saved by the logger
 
 def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tree"):
     """
@@ -44,4 +45,4 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
             class_names=class_names,
             filled=True)
     plt.title(title)
-    # plt.show()
+    # Don't call plt.show() so the figure can be saved by the logger
