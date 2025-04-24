@@ -4,6 +4,7 @@ subtitle: "ISE 625 Project Progress"
 format:
     revealjs:
         theme: [default, template/custom.scss]
+        slide-number: c/t
 #   clean-revealjs:
 #     theme: [default, template/code.scss]
 #     self-contained: true
@@ -38,6 +39,10 @@ Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingS
   $$
   \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
   $$
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ```{python}
 import sys
@@ -167,6 +172,10 @@ MODEL_PARAMS = {
 LABELS = ["suicidea", "suicattempt"]
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
 ## Data Import and Preparation
 
 ```{python}
@@ -193,12 +202,20 @@ print(f"Number of samples in the test set: {len(X_test)}")
 print(f"Shape of training set: {X_train.shape}")
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
 ## A peek at the data {.smaller}
 
 ```{python}     
 #! echo: true
 show(X_train, searching = False, paging = True,ordering = False, autoWidth = True)
 ```
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ## Random Train Split
 
@@ -214,6 +231,10 @@ def random_train_split(X, y):
 X0, y0 = random_train_split(X_train.values, y_train.values)
 X0.shape, y0.shape
 ```
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ## Decision Tree Training Functions
 
@@ -238,6 +259,10 @@ def bootstrap_trees(X, y, depths, min_samples, B):
     return trees
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
 ## Bootstrapping Decision Trees
 
 ```{python}
@@ -248,6 +273,10 @@ print("Number of trees in T0:", len(T0))
 T = bootstrap_trees(X_train.values, y_train.values, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)
 print("Number of trees in T:", len(T))
 ```
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ## Computing Tree Distances
 
@@ -398,6 +427,10 @@ plot_pareto_frontier(distances, auc_scores, pareto_trees)
 ## Experiment runner
 
 ![](img/carbon.png){height=600, fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ## Thoughts and points of dicussion
 
