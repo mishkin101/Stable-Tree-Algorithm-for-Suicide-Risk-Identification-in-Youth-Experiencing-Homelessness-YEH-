@@ -1,0 +1,30 @@
+site_name: Interpretability project - Suicide experiences in YEH
+repo_url: https://github.com/mishkin101/Interpretability_Suicide_Project
+
+nav:
+  - Home: index.md
+  - bertsimas_method_breast_cancer: final_bertsimas_tree_report.ipynb
+  - bertsimas_method_suicide: stable_suicide_data.ipynb
+  - Usage: usage.md
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: deep purple
+    accent: red
+  font: 
+    text: Fira Sans
+    code: Fira Code
+  features:
+    - toc.follow
+    - toc.integrate
+    - navigation.top
+    - navigation.tracking
+    - content.code.copy
+
+plugins:
+  - mkdocs-jupyter:
+      theme: dark
+      execute: false
+  - search
