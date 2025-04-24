@@ -20,9 +20,12 @@ df-print: paged
 date: last-modified
 code-line-numbers: false
 highlight-style: a11y
+bibliography: refs.bib
 ---
 
 ## Introduction {.smaller}
+
+Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingStabilityDecision2023
 
 1. **Initial Training (T0):** Train initial set of decision trees on subset
 2. **Full Data Training (T):** Train a second set on full training data 
@@ -318,6 +321,7 @@ print("Selected tree index:", selected_tree_index)
 ## Visualizing Selected Tree
 
 ```{python}
+#| align: center
 selected_tree = T[selected_tree_index]
 plt.figure(figsize=(12, 8), dpi=300)
 plot_tree(selected_tree, 
@@ -365,4 +369,10 @@ plot_pareto_frontier(distances, auc_scores, pareto_trees)
 
 ![](img/carbon.png){height=600, fig-align="center"}
 
-## Next Steps
+## Thoughts and points of dicussion
+
+1. Does the sequence of paths matter? @10571918
+
+> The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. They measure the path distance between two trees by considering differences in predictors, cut-off values, and predictions corresponding to every path of two trees, where a path is defined as a set of split conditions from the root node to a leaf node. However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.
+
+2. 
