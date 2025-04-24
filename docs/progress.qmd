@@ -1,0 +1,143 @@
+---
+title: "ISE 625 Project Progress"
+# date: "5/22/2021"
+subtitle: "Stable decision trees for suicide experience prediction"
+format: 
+  revealjs:
+    slide-number: c/t
+    theme: [default, template/custom.scss]
+    toc: true
+    progress: true
+    # mouse-wheel: true
+    controls: true
+author: "Adhithya Bhaskar, Michelle Gelman"
+# lightbox: true
+# embed-resources: true
+# bibliography: template/references.bib
+# incremental: true
+# csl: template/ieee.csl
+# width: 
+# height: 816
+editor:
+    render-on-save: true
+---
+
+
+
+## Decision Tree as Collection of Paths
+
+We represent a decision tree $𝕋$ as a set of paths:
+
+$$
+𝒫(𝕋) = \{p_1, \dots, p_T\}
+$$
+
+Each path $p$ corresponds to one leaf region in the feature space.
+
+$$
+𝒫(\mathbb{T}) = \{p_1, \dots, p_T\}
+$$
+
+
+## Definition of a Split
+
+- **Numerical split** on feature $j \in \mathcal{N}$ at threshold $t \in [l_j,u_j]$:
+  - Test: $x_j < t$ or $x_j \ge t$  
+- **Categorical split** on feature $j \in \mathcal{C}$ with categories $\mathcal{C}' \subseteq [c_j]$:
+  - Test: $x_j \in \mathcal{C}'$ or $x_j \notin \mathcal{C}'$
+
+Each split partitions the feature space into two disjoint regions.
+
+## Definition of a Tree Path
+
+A **path** $p$ is a sequence of splits from the root to a leaf, plus the class label $k^p$.
+
+It is represented by:
+
+- $\mathbf{u}^p \in \mathbb{R}^{|\mathcal{N}|}$: upper bounds for numerical features  
+- $\mathbf{l}^p \in \mathbb{R}^{|\mathcal{N}|}$: lower bounds for numerical features  
+- $C^p \in \{0,1\}^{|\mathcal{C}| \times \max_j c_j}$: category masks  
+- $k^p \in [K]$: assigned class label
+
+Thus:  
+$$
+(\mathbf{u}^p,\mathbf{l}^p,\bm{C}^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
+$$
+
+```{=html}
+<aside class="notes">
+Explain that numeric bounds and category masks fully define the leaf region.
+</aside>
+```    
+
+---
+
+## Formal Path Representation
+
+\[
+(p):
+\bigl(\mathbf{u}^p,\mathbf{l}^p,\bm{C}^p, k^p\bigr)
+\in
+\mathbb{R}^{|\mathcal{N}|}\times
+\mathbb{R}^{|\mathcal{N}|}\times
+\{0,1\}^{|\mathcal{C}| \times \max_j c_j}\times
+[K]
+\]
+
+- $\mathbf{u}^p_j, \mathbf{l}^p_j$ define numeric intervals.
+- $\bm{C}^p[j, :]$ indicates allowed categories for feature $j$.
+- $k^p$ is the predicted class for inputs in this region.
+
+---
+
+## Tree Representation & Non-Uniqueness
+
+- The tree $\mathbb{T}$ is the collection of its $T$ paths:
+
+$$
+\mathcal{P}(\mathbb{T}) = \{p_1, \dots, p_T\}
+$$
+
+- Order of splits is irrelevant; different trees can yield the same set of paths.
+- Desirable: identical path sets imply identical decision logic regardless of tree shape.
+
+```{=html}
+<aside class="notes">
+Emphasize that path-based representation abstracts away split order.
+</aside>
+```    
+
+
+
+
+
+<!-- The project proposal and presentation will be evaluated based on the following criteria:
+    Relevance to class topic
+    Clarity of the project proposal (1 page) and presentation.
+    Feasibility of the proposed work based on data availability and proposed plan for solving the problem.
+    Potential for social impact. -->
+
+<!-- ### Proposal Outline
+## 1. Problem Context and Background
+## 2. Pre-processing Data
+
+- Dataset Considerations
+- Compare/contrast old pre-processing steps with new proposal
+
+## 3. Data Analysis      
+- Criteria for Ideal deal dataset
+- Defining Stability
+- Defining Generalizability
+- Defining Fairness
+## 3. Model Background
+- Literature Review
+- Hyperparameter Considerations
+- Mathematical Formulation
+## 1. Implementation
+-  Defining Tree Pipeline  
+- Mathematical Details
+## 4. Training ML Model
+## 5. Testing and Results 
+## 6. Discussion 
+## 7. Future Work -->
+<!-- https://quarto.org/docs/presentations/ -->

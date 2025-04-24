@@ -9,7 +9,7 @@ from constants import (
 from data import prepare_data, random_train_split
 from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
-from pareto import pareto_optimal_trees, select_final_tree
+from Pareto import pareto_optimal_trees, select_final_tree
 from visualization import plot_pareto_frontier, plot_decision_tree
 from logging_utils import ExperimentLogger
 
