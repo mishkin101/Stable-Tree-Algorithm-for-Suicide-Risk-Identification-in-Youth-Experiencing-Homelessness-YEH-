@@ -108,6 +108,29 @@ $$
 - Order of splits is irrelevant; different trees can yield the same set of paths.
 - Desirable: identical path sets imply identical decision logic regardless of tree shape.
 
+## Path Distance
+$$
+    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
+$$
+- compare feature ranges and class weight
+
+## Path Weight
+$$
+    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
+$$
+    
+    - portion of feature ranges captured by the path
+
+## Tree Distance
+ $$
+ d(\mathbbm{T}_1, \mathbbm{T}_2)
+        \ =\ \min_{\bm x} & \quad \sum_{p \in \mathcal{P}(\mathbb{T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) x_{pq} 
+        + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) x_{p}\\
+        \text{s.t.} & \quad \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1, \quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
+        & \quad \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1, \quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
+        & \quad x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\}, \qquad \forall p \in \mathcal{P}(\mathbb{T}_1), \quad \forall q \in \mathcal{P}(\mathbb{T}_2)
+    
+$$
 
 ## Configuration Parameters
 
@@ -366,3 +389,4 @@ plot_pareto_frontier(distances, auc_scores, pareto_trees)
 ![](img/carbon.png){height=600, fig-align="center"}
 
 ## Next Steps
+- 
