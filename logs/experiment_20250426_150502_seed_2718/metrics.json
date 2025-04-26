@@ -1,0 +1,54 @@
+{
+    "num_samples_full": 586,
+    "num_samples_train": 439,
+    "num_samples_test": 147,
+    "train_shape": [
+        439,
+        56
+    ],
+    "random_split_shape": [
+        219,
+        219
+    ],
+    "num_trees_T0": 20,
+    "num_trees_T": 20,
+    "num_distances": 20,
+    "average_auc": 0.591369993642721,
+    "num_pareto_trees": 3,
+    "common_feature_freq": [
+        [
+            [
+                6,
+                40.0
+            ],
+            [
+                4,
+                25.0
+            ]
+        ],
+        [
+            [
+                5,
+                15.0
+            ],
+            [
+                4,
+                15.0
+            ]
+        ],
+        [
+            [
+                4,
+                15.0
+            ],
+            [
+                6,
+                10.0
+            ]
+        ]
+    ],
+    "selected_tree_index": 1,
+    "selected_tree_distance": 0.07315,
+    "selected_tree_auc": 0.7043865225683408,
+    "std_gini_importance": 0.052795718010455094
+}

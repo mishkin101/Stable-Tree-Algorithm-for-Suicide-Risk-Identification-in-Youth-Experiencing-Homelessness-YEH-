@@ -12,6 +12,7 @@ from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree
 from visualization import plot_pareto_frontier, plot_decision_tree
 from logging_utils import ExperimentLogger
+from evaluation import common_features, gini_importance
 
 import numpy as np
 import pandas as pd
@@ -82,8 +83,12 @@ class ExperimentGroup:
                     "name": exp_name,
                     "metrics": metrics
                 })
+    
+    def aggregate_statistcs(self, meta_key):
+    
         
         return summary
+    
 
 
 def run_experiment(seed, label="suicidea", experiment_group=None):
@@ -169,6 +174,11 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.log_metrics({"num_pareto_trees": len(pareto_trees)})
     print(f"Number of Pareto optimal trees: {len(pareto_trees)}")
 
+    # Find the most common features
+    common_feat_list = common_features(T)
+    logger.log_metrics({"common_feature_freq": common_feat_list})
+    print(f"Frequenicies of top 2 common features: {common_feat_list}")
+
     # Select the final tree
     selected_tree_index = select_final_tree(distances, auc_scores, pareto_trees)
     logger.log_metrics({
@@ -178,9 +188,14 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     })
     print(f"Selected tree index: {selected_tree_index}")
     #//TODO #22 new issues test @mishkin101
+    selected_tree = T[selected_tree_index]
+
+    #find the gini importance
+    std_gini_importance = gini_importance(selected_tree)
+    logger.log_metrics({"std_gini_importance": float(std_gini_importance)})
+    print(f"Standard deviation of Gini Importance: {selected_tree_index}")
 
     # Visualize results
-    selected_tree = T[selected_tree_index]
     plot_decision_tree(
         selected_tree,
         feature_names=X_full.columns,
@@ -193,6 +208,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.save_figure("pareto_frontier")
     
     return experiment_name
+
 
 
 def main():

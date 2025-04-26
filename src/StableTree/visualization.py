@@ -29,6 +29,7 @@ def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     plt.tight_layout()
     # Don't call plt.show() so the figure can be saved by the logger
 
+
 def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tree"):
     """
     Plot a decision tree.
@@ -53,4 +54,6 @@ def plot_common_features(trees, title ="Common Features for all Trees"):
     return
 
 
-def 
+# \\TODO #23 Make plot to show stf across gini std @mishkin101
+def avg_gini_importance_std(std_gini_importance_list):
+    return 

@@ -1,0 +1,54 @@
+Experiment started at: 2025-04-26 15:05:10
+
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 8284
+DATA_PATH: data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 8284
+DATA_PATH: data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+label: suicidea
+
+=== Metrics ===
+num_samples_full: 586
+num_samples_train: 439
+num_samples_test: 147
+train_shape: (439, 56)
+
+=== Metrics ===
+random_split_shape: (219, 219)
+
+=== Metrics ===
+num_trees_T0: 20
+
+=== Metrics ===
+num_trees_T: 20
+
+=== Metrics ===
+num_distances: 20
+
+=== Metrics ===
+average_auc: 0.6090511760966307
+
+=== Metrics ===
+num_pareto_trees: 3
+
+=== Metrics ===
+common_feature_freq: [[(6, 30.0), (4, 20.0)], [(6, 30.0), (4, 15.0)], [(44, 20.0), (6, 10.0)]]
+
+=== Metrics ===
+selected_tree_index: 2
+selected_tree_distance: 0.024130000000000002
+selected_tree_auc: 0.7066115702479339
+
+=== Metrics ===
+std_gini_importance: 0.03260357970648476
+
+Saved figure: decision_tree.png
+Saved figure: pareto_frontier.png
