@@ -8,5 +8,11 @@
 
 '''we record the two most commonly selected features in each of the
   first three splits, along with their selection frequencies.'''
-def common_pareto_features(split_depth= None, pareto_set=None):
+def common_features(split_depth, T_set):
     return
+
+
+def gini_importance(tree_set):
+
+    
+    return 

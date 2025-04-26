@@ -177,6 +177,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         "selected_tree_auc": float(auc_scores[selected_tree_index])
     })
     print(f"Selected tree index: {selected_tree_index}")
+    '''//TODO  add metrics for gini importance @mishkin101'''
 
     # Visualize results
     selected_tree = T[selected_tree_index]
@@ -217,6 +218,10 @@ def main():
         experiment_name = run_experiment(seed, args.label, group)
         print(f"Completed experiment: {experiment_name}")
     
+    '''======TODO=======
+    Compute aggregate statistics on experiment group 
+    Sve plot of aggregate metrics to experiment group
+    '''
     # Generate and save group summary
     summary = group.get_summary()
     summary_path = group.group_path / "group_summary.json"

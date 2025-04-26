@@ -46,3 +46,11 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
             filled=True)
     plt.title(title)
     # Don't call plt.show() so the figure can be saved by the logger
+
+
+
+def plot_common_features(trees, title ="Common Features for all Trees"):
+    return
+
+
+def 
