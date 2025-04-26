@@ -177,7 +177,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         "selected_tree_auc": float(auc_scores[selected_tree_index])
     })
     print(f"Selected tree index: {selected_tree_index}")
-    '''\\TODO Creating new issues''' #20@mishkin101
+    #TODO new issues test @mishkin101
 
     # Visualize results
     selected_tree = T[selected_tree_index]
