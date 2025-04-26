@@ -10,7 +10,9 @@ class ExperimentLogger:
     def __init__(self, experiment_name=None):
         """Initialize a logger for the experiment."""
         # Create logs directory if it doesn't exist
-        self.logs_dir = Path("logs").resolve()
+        self.lo
+        
+        gs_dir = Path("logs").resolve()
         self.logs_dir.mkdir(exist_ok=True)
         
         # Create a unique experiment name if not provided

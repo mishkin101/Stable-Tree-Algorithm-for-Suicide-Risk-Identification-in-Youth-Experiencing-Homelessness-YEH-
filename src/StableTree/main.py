@@ -177,7 +177,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         "selected_tree_auc": float(auc_scores[selected_tree_index])
     })
     print(f"Selected tree index: {selected_tree_index}")
-    '''//TODO  add metrics for gini importance @mishkin101'''
+    #19 what is this 
 
     # Visualize results
     selected_tree = T[selected_tree_index]
