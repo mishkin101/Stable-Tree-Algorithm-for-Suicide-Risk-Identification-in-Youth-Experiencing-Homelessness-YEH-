@@ -30,7 +30,7 @@ def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     # Don't call plt.show() so the figure can be saved by the logger
 
 
-def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tree"):
+def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tree", max_depth=None):
     """
     Plot a decision tree.
     
@@ -44,10 +44,10 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
     plot_tree(tree, 
             feature_names=feature_names,
             class_names=class_names,
-            filled=True)
+            filled=True,
+            rounded=True,
+            max_depth=max_depth)
     plt.title(title)
-    # Don't call plt.show() so the figure can be saved by the logger
-
 
 
 def plot_common_features(trees, title ="Common Features for all Trees"):
