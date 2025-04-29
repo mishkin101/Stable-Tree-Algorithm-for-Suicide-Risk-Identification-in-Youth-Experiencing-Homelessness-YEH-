@@ -88,16 +88,17 @@ Each path $p$ corresponds to one leaf region in the feature space.
 
 Each split partitions the feature space into two disjoint regions.
 
-## Definition of a Tree Path
+## Tree Path
 
-A **path** $p$ is a sequence of splits from the root to a leaf, plus the class label $k^p$.
+::: {.callout-important title="Definition" appearance="simple" icon=false}
+Sequence of splits from the root to a leaf & class label $k^p$
+:::
 
 - $\mathbf{u}^p \in \mathbb{R}^{|\mathcal{N}|}$: upper bounds for numerical features  
 - $\mathbf{l}^p \in \mathbb{R}^{|\mathcal{N}|}$: lower bounds for numerical features  
 - $C^p \in \{0,1\}^{|\mathcal{C}| \times \max_j c_j}$: category masks  
 - $k^p \in [K]$: assigned class label
 
-Thus:  
 $$
 (\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
 $$

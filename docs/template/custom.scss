@@ -49,7 +49,7 @@ $primary-color: #798478;
 $secondary-color: #4d6a6d;
 $white-color: #ffffff;
 $error-color: #7678ED;
-$bold-color: #C05746;
+$bold-color: #CA1551;
 $italic-color: #3D348B;
 
 // headings
@@ -156,6 +156,13 @@ $body-bg: $theme-sand;
   border-radius: 5px;
   margin-bottom: 10px !important;
   margin: auto !important;
+}
+
+$callout-color-tip: $bold-color;
+
+// callout colors
+div.callout-tip .callout-body{
+    $body-color: $bold-color;
 }
 
 // code span.er {
