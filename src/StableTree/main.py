@@ -217,10 +217,10 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     y_test_bin=y_test_bin,
     )
     
-    #find the gini importance
-    std_gini_importance = gini_importance(selected_tree)
-    logger.log_metrics({"std_gini_importance": float(std_gini_importance)})
-    print(f"Standard deviation of Gini Importance: {std_gini_importance}")
+    # #find the gini importance
+    # std_gini_importance = gini_importance(selected_tree)
+    # logger.log_metrics({"std_gini_importance": float(std_gini_importance)})
+    # print(f"Standard deviation of Gini Importance: {std_gini_importance}")
 
     # Visualize results
     plot_decision_tree(
