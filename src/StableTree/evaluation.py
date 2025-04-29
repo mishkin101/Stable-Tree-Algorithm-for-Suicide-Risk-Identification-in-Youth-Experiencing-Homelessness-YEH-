@@ -29,8 +29,18 @@ def common_features(tree_set, n_splits=3, top_k=2):
     return results
 
 def gini_importance(tree):
-    importances = tree.feature_importances_
-    std = np.std(importances)
-    return float(std)
+  import numpy as np
+
+def feature_importance_std_across_trees(trees):
+    all_imps = []
+    for tree in trees:
+        imps = tree.feature_importances_
+        all_imps.append(np.asarray(imps))
+    # Stack into shape (n_trees (1 tree = 1 row), n_features)
+    all_imps = np.vstack(all_imps)
+    # Compute std dev across the first axis (over trees)
+    stds = np.std(all_imps, axis=0)
+    return stds
+
 
 
