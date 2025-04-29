@@ -1,20 +1,11 @@
-'''
-=====Imports=======
-
-=====structure=====
--- all functions need access to pareto trees from main.py
-
-'''
 import numpy as np 
-import pandas as pd
 from collections import Counter
 
-'''we record the two most commonly selected features in each of the
-  first three splits, along with their selection frequencies.'''
 def common_features(tree_set, n_splits=3, top_k=2):
     """
     Record the two most commonly selected features in each of the
     first three splits, along with their selection frequencies.
+    Output example: Frequenicies of top 2 common features: [[(5, 40.0), (6, 20.0)], [(6, 20.0), (0, 15.0)], [(52, 15.0), (5, 10.0)]]
     """
     n_trees = len(tree_set)
     split_counters = [Counter() for _ in range(n_splits)]
@@ -37,33 +28,8 @@ def common_features(tree_set, n_splits=3, top_k=2):
         results.append(sanitized)
     return results
 
-
-
 def gini_importance(tree):
-    """
-    Compute the standard deviation of Gini importances for a single fitted tree.
-
-    Parameters:
-    ----------
-    tree : object
-        A fitted sklearn DecisionTree estimator exposing `feature_importances_`.
-
-    Returns:
-    -------
-    float
-        The standard deviation of the feature_importances_ vector for the tree.
-    """
-    # Extract the importance vector
-    if hasattr(tree, 'feature_importances_'):
-        importances = tree.feature_importances_
-    elif hasattr(tree, 'feature_importance'):
-        importances = tree.feature_importance()
-    else:
-        raise AttributeError(
-            f"Tree object {type(tree).__name__} must have `feature_importances_` or `feature_importance()`"
-        )
-
-    # Compute and return the standard deviation across features
+    importances = tree.feature_importances_
     std = np.std(importances)
     return float(std)
 

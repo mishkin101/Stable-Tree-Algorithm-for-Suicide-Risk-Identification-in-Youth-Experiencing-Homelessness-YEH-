@@ -145,7 +145,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Shape of training set: {X_train.shape}")
 
     # Create random split for baseline trees
-    X0, y0 = random_train_split(X_train.values, y_train.values, rng)
+    X0, y0 = random_train_split(X_train.values, y_train.values)
     logger.log_metrics({"random_split_shape": (X0.shape[0], y0.shape[0])})
     print(f"Shape of random split: {X0.shape}, {y0.shape}")
 
@@ -194,7 +194,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     #find the gini importance
     std_gini_importance = gini_importance(selected_tree)
     logger.log_metrics({"std_gini_importance": float(std_gini_importance)})
-    print(f"Standard deviation of Gini Importance: {selected_tree_index}")
+    print(f"Standard deviation of Gini Importance: {std_gini_importance}")
 
     # Visualize results
     plot_decision_tree(
