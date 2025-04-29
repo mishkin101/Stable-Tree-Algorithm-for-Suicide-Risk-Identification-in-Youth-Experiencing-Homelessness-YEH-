@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 import sys
 from pathlib import Path
 
-def prepare_data(df: pd.DataFrame, features: List[str], label: str) -> Tuple:
+def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng) -> Tuple:
     """
     Prepare data for training and testing by cleaning and splitting.
     
@@ -21,7 +21,7 @@ def prepare_data(df: pd.DataFrame, features: List[str], label: str) -> Tuple:
     df_full_cleaned = df[features + [label]].dropna().copy()
     X = df_full_cleaned[features]
     y = df_full_cleaned[label]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=rng.integers(0, 2**32 - 1), stratify=y)
     X_full = df_full_cleaned[features]
     y_full = df_full_cleaned[label]
     return X_full, y_full, X_train, X_test, y_train, y_test

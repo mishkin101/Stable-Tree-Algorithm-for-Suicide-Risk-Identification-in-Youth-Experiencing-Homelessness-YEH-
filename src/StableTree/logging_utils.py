@@ -1,7 +1,5 @@
 # src/StableTree/logging_utils.py
-import os
 import json
-import time
 import matplotlib.pyplot as plt
 from datetime import datetime
 from pathlib import Path

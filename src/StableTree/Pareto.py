@@ -1,6 +1,3 @@
-import numpy as np
-from typing import List, Tuple
-
 def pareto_optimal_trees(distances, auc_scores):
     """
     Find Pareto optimal trees based on distances and AUC scores.

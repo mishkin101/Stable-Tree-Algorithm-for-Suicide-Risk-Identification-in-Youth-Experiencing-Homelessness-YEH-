@@ -85,15 +85,16 @@ class ExperimentGroup:
                 })
     
     def aggregate_statistcs(self, meta_key):
-    
         
-        return summary
+        return self
     
 
 
 def run_experiment(seed, label="suicidea", experiment_group=None):
     """Run a single experiment with the specified random seed."""
     # Create a unique experiment name based on timestamp and seed
+    rng = np.random.default_rng(seed)
+    
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     experiment_name = f"experiment_{timestamp}_seed_{seed}"
     
@@ -114,7 +115,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     })
     
     # Set random seed for reproducibility
-    np.random.seed(seed)
+    # np.random.seed(seed)
 
     DATA_PATH = "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
@@ -125,7 +126,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.log_config({"label": label})
     
     X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(
-        df, FEATURE_SETS[label], label
+        df, FEATURE_SETS[label], label, rng
     )
 
     # Log data metrics
@@ -144,7 +145,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Shape of training set: {X_train.shape}")
 
     # Create random split for baseline trees
-    X0, y0 = random_train_split(X_train.values, y_train.values)
+    X0, y0 = random_train_split(X_train.values, y_train.values, rng)
     logger.log_metrics({"random_split_shape": (X0.shape[0], y0.shape[0])})
     print(f"Shape of random split: {X0.shape}, {y0.shape}")
 

@@ -7,7 +7,7 @@ format:
         slide-number: c/t
 #   clean-revealjs:
 #     theme: [default, template/code.scss]
-#     self-contained: true
+    # self-contained: true
 html-math-method:
   method: mathjax
   url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
@@ -259,10 +259,6 @@ def bootstrap_trees(X, y, depths, min_samples, B):
     return trees
 ```
 
-::: footer
-<a style="opacity: 0.2;">A</a>
-:::
-
 ## Bootstrapping Decision Trees
 
 ```{python}
@@ -273,10 +269,6 @@ print("Number of trees in T0:", len(T0))
 T = bootstrap_trees(X_train.values, y_train.values, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)
 print("Number of trees in T:", len(T))
 ```
-
-::: footer
-<a style="opacity: 0.2;">A</a>
-:::
 
 ## Computing Tree Distances
 
