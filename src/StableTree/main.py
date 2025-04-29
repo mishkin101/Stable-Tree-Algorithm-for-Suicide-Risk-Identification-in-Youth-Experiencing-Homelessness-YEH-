@@ -13,6 +13,8 @@ from pareto import pareto_optimal_trees, select_final_tree
 from visualization import plot_pareto_frontier, plot_decision_tree
 from logging_utils import ExperimentLogger
 from evaluation import common_features, gini_importance
+from sklearn.preprocessing import label_binarize
+import visualize_like_orig as vis_orig
 
 import numpy as np
 import pandas as pd
@@ -190,7 +192,31 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Selected tree index: {selected_tree_index}")
     #//TODO #22 new issues test @mishkin101
     selected_tree = T[selected_tree_index]
+    
+    vis_orig.visualize_tree(selected_tree, X_full.columns, label=label)
+    vis_orig.save_feature_importance(selected_tree, X_full.columns.tolist(), label=label)
+    
+    # Predict labels and probabilities
+    y_pred_prob = selected_tree.predict_proba(X_test.values)
+    y_pred = selected_tree.predict(X_test.values)
+    y_test_bin = label_binarize(y_test.values, classes=np.unique(y_test))
+    
+    vis_orig.plot_roc_curve(
+    y_test_bin,
+    y_pred_prob,
+    label=label,
+    output_dir=logger.plots_dir,
+    )
 
+    vis_orig.write_metrics(
+    FEATURE_SETS[label],
+    label,
+    y_test=y_test,
+    y_pred=y_pred,
+    y_pred_prob=y_pred_prob,
+    y_test_bin=y_test_bin,
+    )
+    
     # #find the gini importance
     # std_gini_importance = gini_importance(selected_tree)
     # logger.log_metrics({"std_gini_importance": float(std_gini_importance)})
@@ -204,6 +230,16 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         title=f"Pareto Optimal Tree (Seed {seed})",
     )
     logger.save_figure("decision_tree")
+    
+    # Save trimmed tree (max depth = 2)
+    plot_decision_tree(
+        selected_tree,
+        feature_names=X_full.columns,
+        class_names=["No", "Yes"],
+        title=f"Trimmed Tree (Seed {seed})",
+        max_depth=1
+    )
+    logger.save_figure("trimmed_decision_tree")
 
     plot_pareto_frontier(distances, auc_scores, pareto_trees)
     logger.save_figure("pareto_frontier")

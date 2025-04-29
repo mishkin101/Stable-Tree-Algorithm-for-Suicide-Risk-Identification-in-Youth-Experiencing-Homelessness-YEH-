@@ -1,5 +1,9 @@
 ## suicide_project
 
+- trimmed tree in logs/experiment_name/
+- replication of anthony's plot style (feature importance plot, dt plot & metrics.txt) in outputs/
+- call using `uv run src/StableTree/main.py`
+
 ## useful links
 
 ### Trees
@@ -42,3 +46,4 @@ uv run run9.py
 - robust to distribution shifts? numerical diff in distribution
 - https://arxiv.org/abs/2310.17772
 - https://optimization-online.org/wp-content/uploads/2023/10/RobustTrees_arXiv-2.pdf
+
