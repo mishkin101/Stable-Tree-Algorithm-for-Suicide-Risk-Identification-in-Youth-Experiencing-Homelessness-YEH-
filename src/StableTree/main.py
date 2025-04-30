@@ -363,24 +363,27 @@ def main():
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
     parser.add_argument('--seeds', type=int, nargs='+', default=[RANDOM_SEED], 
                         help='List of random seeds to use for experiments')
-    parser.add_argument('--label', type=str,  nargs='+', default="suicidea", 
-                        help='Target label to predict (suicidea or suicattempt or target)')
+    parser.add_argument('--labels', nargs='+', required=True,
+                        help='One label per dataset (must match FEATURE_SETS keys)')
     parser.add_argument('--group-name', type=str, default= "suicide_test",
                         help='Name for the experiment group')
     parser.add_argument('--datasets', nargs='+', default = data_path_dict[1],
                         help='Path to the dataset CSVs')
     args = parser.parse_args()
+    if len(args.labels) != len(args.datasets):
+        parser.error(f"--labels ({len(args.labels)}) must match --datasets ({len(args.datasets)})")
     group = ExperimentGroup(args.group_name, args.datasets)
     print(f"Created experiment group: {group.group_name}")
+
     dataset_dict= {}
-    for ds in group.data_paths:
+    for ds, label in zip(group.data_paths, args.labels):
         try:
             # Run experiments for each seed
             for seed in args.seeds:
                 print(f"\n{"="}*50")
                 print(f"Running for dataset {ds.stem} with seed {seed}")
                 print(f"{"="}*50")
-                experiment_name = run_experiment(seed, args.label, ds, group)
+                experiment_name = run_experiment(seed, label, ds, group)
                 print(f"Completed experiment: {experiment_name}")
 
                 '''======Aggregate Statistics========='''
@@ -407,7 +410,7 @@ def main():
                 mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
                 '''================================='''
 
-            dataset_dict[ds_name] = {
+            dataset_dict[ds.name] = {
                 "feature_std":            mean_std_feature_dict,
                 "distinct_top_features":  distinct_feats_dict,
                 "tree_nodes": {
