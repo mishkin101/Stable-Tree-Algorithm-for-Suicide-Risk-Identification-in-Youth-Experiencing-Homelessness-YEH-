@@ -39,3 +39,9 @@ def select_final_tree(distances, auc_scores, pareto_indices, epsilon=0.01):
         candidates = pareto_indices
     best_idx = max(candidates, key=lambda i: auc_scores[i] - distances[i])
     return best_idx
+
+def select_auc_maximizing_tree(auc_scores, pareto_indices):
+    return max(pareto_indices, key=lambda i: auc_scores[i])
+
+def select_distance_minimizing_tree(distances, pareto_indices):
+    return min(pareto_indices, key=lambda i: distances[i])
