@@ -47,10 +47,10 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
 
 "=============Aggregation Metrics==================="
 
-def compute_avg_feature_std(group_path, exp_names, key):
+def compute_avg_feature_std(group, key):
     all_imps = []
-    for exp in exp_names:
-        mpath = group_path / exp / "metrics.json"
+    for exp in group.experiments:
+        mpath = group.group_path / exp / "metrics.json"
         with open(mpath, "r") as f:
             metrics = json.load(f)
         imp_list = metrics.get(key)
