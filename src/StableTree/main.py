@@ -9,7 +9,7 @@ from constants import (
 from data import prepare_data, random_train_split
 from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
-from pareto import pareto_optimal_trees, select_final_tree
+from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
 from visualization import plot_pareto_frontier, plot_decision_tree, plot_common_features
 from logging_utils import ExperimentLogger
 from evaluation import common_features, gini_importance
@@ -190,9 +190,28 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         "selected_tree_distance": float(distances[selected_tree_index]),
         "selected_tree_auc": float(auc_scores[selected_tree_index])
     })
-    print(f"Selected tree index: {selected_tree_index}")
-    #//TODO #22 new issues test @mishkin101
+    print(f"Selected stability-accuracy trade-off final tree index: {selected_tree_index}")
     selected_tree = T[selected_tree_index]
+
+    # select final auc tree
+    selected_auc_tree_index = select_auc_maximizing_tree(distances, auc_scores, pareto_trees)
+    logger.log_metrics({
+        "selected_auc_tree_index": int(selected_auc_tree_index),
+        "selected_auc_tree_distance": float(distances[selected_auc_tree_index]),
+        "selected_auc_tree_auc": float(auc_scores[selected_auc_tree_index])
+    })
+    print(f"Selected AUC maximizing tree index: {selected_auc_tree_index}")
+    selected_auc_tree = T[selected_auc_tree_index]
+
+    #select final distance tree
+    selected_dist_tree_index = select_final_tree(distances, auc_scores, pareto_trees)
+    logger.log_metrics({
+        "selected_dist_tree_index": int(selected_dist_tree_index),
+        "selected_dist_tree_distance": float(distances[selected_dist_tree_index]),
+        "selected_dist_tree_auc": float(auc_scores[selected_dist_tree_index])
+    })
+    print(f"Selected distance minimizing tree index: {selected_dist_tree_index}")
+    selected_auc_tree = T[selected_dist_tree_index]
     
     """======= Original Code Metrics======="""
     vis_orig.visualize_tree(selected_tree, X_full.columns, label=label, logger = logger, fig_name="original_decision_tree")
