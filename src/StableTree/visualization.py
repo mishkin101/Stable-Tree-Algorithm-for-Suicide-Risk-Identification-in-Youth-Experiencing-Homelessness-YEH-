@@ -118,7 +118,7 @@ def plot_common_features(results, dataset, title="Common Features for all Trees"
 def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std"):
    
     labels = list(mean_std_dict.keys())
-    means = [len(mean_std_dict[key]) for key in mean_std_dict.keys()]
+    means = [mean_std_dict[key] for key in mean_std_dict.keys()]
 
     x = np.arange(len(labels))
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -145,8 +145,9 @@ def plot_distinct_top_features(distinct_count_dict: dict, group, output_name: st
     Plot and save a bar chart showing the number of distinct top-k features
     for each selection strategy in an experiment group.
     """
-    labels = list(distinct_count_dict.keys())
-    counts = [distinct_count_dict[label] for label in labels]
+    labels = ["Stability–Accuracy", "AUC‐maximizing", "Distance‐Minimizing"]
+
+    counts = [len(distinct_count_dict[label]) for label in labels]
 
     x = np.arange(len(labels))
     fig, ax = plt.subplots(figsize=(8, 5))

@@ -55,13 +55,14 @@ def compute_avg_feature_std(group, key):
         with open(mpath, "r") as f:
             metrics = json.load(f)
         imp_list = metrics.get(key)
+        print(imp_list)
         if imp_list is None:
             raise KeyError(f"{key} not found in {mpath}")
         all_imps.append(imp_list)
     arr = np.array(all_imps)                # shape = (n_experiments, n_features)
     per_feat_std = np.std(arr, axis=0)      # shape = (n_features,)
     mean_std = per_feat_std.mean()          # scalar
-    return mean_std, per_feat_std
+    return mean_std
 
 
 def count_distinct_top_features(group, keys,top_k: int = 3) -> dict[str, set[str]]:

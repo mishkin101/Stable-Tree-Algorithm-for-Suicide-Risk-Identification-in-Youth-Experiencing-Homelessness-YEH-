@@ -333,50 +333,67 @@ def main():
     parser.add_argument('--data-path', type=str,
                         help='Path to the dataset CSV', default = data_path_dict[1])
     args = parser.parse_args()
-
     group = ExperimentGroup(args.group_name, args.data_path)
     print(f"Created experiment group: {group.group_name}")
     
-    # Run experiments for each seed
-    for seed in args.seeds:
-        print(f"\n{'='*50}")
-        print(f"Running experiment with seed {seed}")
-        print(f"{'='*50}")
-        experiment_name = run_experiment(seed, args.label, group)
-        print(f"Completed experiment: {experiment_name}")
-    
-    '''======Aggregate Statistics======='''
+    try:
+        # Run experiments for each seed
+        for seed in args.seeds:
+            print(f"\n{'='*50}")
+            print(f"Running experiment with seed {seed}")
+            print(f"{'='*50}")
+            experiment_name = run_experiment(seed, args.label, group)
+            print(f"Completed experiment: {experiment_name}")
+        
+        '''======Aggregate Statistics======='''
 
-    # Compute the average standard deviation of Gini Importance across multiple experiments
-    keys = {
-        "stability–accuracy": "selected_stability_accuracy_trade_off_feature_importances",
-        "AUC‐maximizing"    : "selected_auc_tree_feature_importances",
-        "distance‐minimizing": "selected_dist_tree_feature_importances",
-    }
+        # Compute the average standard deviation of Gini Importance across multiple experiments
+        keys = {
+            "stability–accuracy": "selected_stability_accuracy_trade_off_feature_importances",
+            "AUC‐maximizing"    : "selected_auc_tree_feature_importances",
+            "distance‐minimizing": "selected_dist_tree_feature_importances",
+        }
 
-    print("\nAggregate feature‐importance stability across experiments:")
-    mean_std_dict = {}
-    for key, metrics_str in keys.items():
-        mean_std, per_feat_std = compute_avg_feature_std(group, metrics_str)
-        mean_std_dict[key] = mean_std
-        print(f"  {label:20s} mean(std) = {mean_std:.5f}")
-    plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std")
+        print("\nAggregate feature‐importance stability across experiments:")
+        mean_std_dict = {}
+        for key, metrics_str in keys.items():
+            print("this is metric_str:", metrics_str)
+            mean_std = compute_avg_feature_std(group, metrics_str)
+            mean_std_dict[key] = mean_std
+            print(f"  {key:20s} mean(std) = {mean_std:.5f}")
 
-    #Compute the top 3 distinct features in all experiments for every pareto selection strategy
-    features_dict = count_distinct_top_features(group, keys.values())
-    plot_distinct_top_features(features_dict, group)
+        plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std")
 
-    '''================================='''
+        #Compute the top 3 distinct features in all experiments for every pareto selection strategy
+        features_dict = count_distinct_top_features(group, keys.values())
+        plot_distinct_top_features(features_dict, group)
+
+        '''================================='''
 
 
-    # Generate and save group summary
-    summary = group.get_summary()
-    summary_path = group.group_path / "group_summary.json"
-    with open(summary_path, "w") as f:
-        json.dump(summary, f, indent=2)
-    
-    print(f"\nExperiment group summary saved to {summary_path}")
-    print(f"Total experiments run: {len(args.seeds)}")
+        # Generate and save group summary
+        summary = group.get_summary()
+        summary_path = group.group_path / "group_summary.json"
+        with open(summary_path, "w") as f:
+            json.dump(summary, f, indent=2)
+        print(f"\nExperiment group summary saved to {summary_path}")
+        print(f"Total experiments run: {len(args.seeds)}")
+    except:
+        print(f"\n❗ Error encountered: {e!r}\nCleaning up logs and experiment folder…")
+
+        # 1) remove logs/<each_experiment>
+        logs_root = Path("logs").resolve()
+        for exp_name in getattr(group, "experiments", []):
+            log_dir = logs_root / exp_name
+            if log_dir.exists():
+                rmtree(log_dir)
+
+        # 2) remove the experiments/<group_name> folder
+        if group.group_path.exists():
+            rmtree(group.group_path)
+
+        # re-raise so you still see the traceback
+        raise
 
 
 if __name__ == "__main__":
