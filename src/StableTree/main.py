@@ -177,6 +177,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     T = bootstrap_trees(
         X_train.values, y_train.values, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS
     )
+    
     logger.log_metrics({"num_trees_T": len(T)})
     print(f"Number of trees in T: {len(T)}")
 

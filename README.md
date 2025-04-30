@@ -55,3 +55,17 @@ uv run run9.py
 - https://arxiv.org/abs/2310.17772
 - https://optimization-online.org/wp-content/uploads/2023/10/RobustTrees_arXiv-2.pdf
 
+## Todo:
+
+- Dataset cleaning:
+Features in `suicidea` but not in `suicattempt`:
+ {'sum_family',
+  'sum_home_friends',
+  'sum_street_friends',
+  'sum_unknown_alter'}
+
+Features in `suicattempt` but not in `suicidea`:
+ {'prop_family',
+  'prop_home_friends',
+  'prop_street_friends',
+  'prop_unknown_alter'}
