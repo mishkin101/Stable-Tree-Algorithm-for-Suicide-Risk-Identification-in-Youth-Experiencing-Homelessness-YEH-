@@ -65,7 +65,7 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from dt_distance.distance_calculator import DistanceCalculator
 import matplotlib.pyplot as plt
-
+from alive_progress import alive_bar
 # set seed for reproducibility
 np.random.seed(42)
 ```
@@ -182,18 +182,18 @@ LABELS = ["suicidea", "suicattempt"]
 ```{python}
 #| label: import-data
 #| echo: true
-def prepare_data(df: pd.DataFrame, features: List[str], label: str):
-    df = df.replace('NaN', pd.NA)  # replace the string 'NaN' with actual NaN values
+def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng):
+    df = df.replace('NaN', pd.NA)
     df_full_cleaned = df[features + [label]].dropna().copy()
     X = df_full_cleaned[features]
     y = df_full_cleaned[label]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=rng.integers(0, 2**32 - 1), stratify=y)
     X_full = df_full_cleaned[features]
     y_full = df_full_cleaned[label]
     return X_full, y_full, X_train, X_test, y_train, y_test
 
 df = pd.read_csv(DATA_PATH)
-X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(df, FEATURE_SETS["suicidea"], "suicidea")
+X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(df, FEATURE_SETS["suicidea"], "suicidea", np.random.default_rng(1234))
 ```
 ```{python}
 #| echo: false
@@ -210,8 +210,8 @@ print(f"Shape of training set: {X_train.shape}")
 ## A peek at the data {.smaller}
 
 ```{python}     
-#! echo: true
-show(X_train, searching = False, paging = True,ordering = False, autoWidth = True)
+#| echo: false
+X_train
 ```
 
 ::: footer
@@ -224,9 +224,12 @@ show(X_train, searching = False, paging = True,ordering = False, autoWidth = Tru
 #| label: train-test-split
 #| echo: true
 def random_train_split(X, y):
-    N = X.shape[0]
+    X_values = X.values if hasattr(X, 'values') else X
+    y_values = y.values if hasattr(y, 'values') else y
+    
+    N = X_values.shape[0]
     indices = np.random.permutation(N)
-    X0, y0 = X[indices[:N // 2]], y[indices[:N // 2]]
+    X0, y0 = X_values[indices[:N // 2]], y_values[indices[:N // 2]]
     return X0, y0
 
 X0, y0 = random_train_split(X_train.values, y_train.values)
@@ -277,18 +280,22 @@ print("Number of trees in T:", len(T))
 #| eval: false
 #| echo: true
 #| code-line-numbers: "|5|8,9"
+
 def compute_average_distances(T0, T, X_train, y_train):
-    X_train_values = X_train.values if hasattr(X_train, 'values') else X_train
-    
-    distances = []
-    for i, tree_b in enumerate(T):
-        d_b = 0.0
-        for tree_beta in T0:
-            distance_calculator = DistanceCalculator(tree_beta, tree_b, X=X_train_values, y=y_train)
-            d_b += distance_calculator.compute_tree_distance()
-        d_b /= len(T0)
-        distances.append(d_b)
-    
+    X_train_values = X_train.values if hasattr(X_train, "values") else X_train
+    distances: list[float] = []
+
+    with alive_bar(len(T), title="Computing average tree distances", dual_line=True, spinner="waves", bar="smooth") as bar:
+        for tree_b in T:
+            d_b = 0.0
+            for tree_beta in T0:
+                calc = DistanceCalculator(tree_beta, tree_b, X=X_train_values, y=y_train)
+                d_b += calc.compute_tree_distance()
+
+            mean_dist = d_b / len(T0)
+            distances.append(mean_dist)
+            bar()
+
     return distances
 distances = compute_average_distances(T0, T, X_train, y_train)
 ```
@@ -373,9 +380,10 @@ print("Selected tree index:", selected_tree_index)
 ## Visualizing Selected Tree
 
 ```{python}
-#| align: center
+#| fig-align: center
+
 selected_tree = T[selected_tree_index]
-plt.figure(figsize=(12, 8), dpi=300)
+plt.figure(figsize=(12, 8), dpi=500)
 plot_tree(selected_tree, 
           feature_names=X_full.columns,
           class_names=["No Suicide Ideation", "Suicide Ideation"],
@@ -387,7 +395,7 @@ plt.tight_layout()
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="55%"}
 ```{python}
 def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     distances = np.array(distances)
@@ -395,7 +403,7 @@ def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     pareto_indices = set(pareto_indices)
     is_pareto = np.array([i in pareto_indices for i in range(len(distances))])
     # Plotting
-    plt.figure(figsize=(8, 6), dpi=300)
+    plt.figure(figsize=(8, 7), dpi=500)
     plt.scatter(distances[~is_pareto], auc_scores[~is_pareto], c='blue', label='Dominated Trees', alpha=0.6)
     plt.scatter(distances[is_pareto], auc_scores[is_pareto], c='red', edgecolors='black', s=80, label='Pareto Optimal Trees')
     plt.xlabel("Stability (Lower is Better)")
@@ -409,17 +417,72 @@ plot_pareto_frontier(distances, auc_scores, pareto_trees)
 ```
 :::
 
-::: {.column width="50%"}
+::: {.column width="45%"}
 
-- $d_{b}$ , $\forall b \in \mathcal{T}$: Average distance
-- $a_{b}$, $\forall b \in \mathcal{T}$: Out-of-sample AUCROC
+**Average distance**
+
+$d_{b}$ , $\forall b \in \mathcal{T}$
+
+\
+**Out-of-sample AUCROC**
+
+$a_{b}$, $\forall b \in \mathcal{T}$
 :::
 
 ::::
 
-## Experiment runner
+## Experiment runner {.smaller}
 
-![](img/carbon.png){height=600, fig-align="center"}
+::: {.panel-tabset}
+
+### seed=23
+```{bash}
+❯ uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
+Created experiment group: seed_checking
+==================================================
+Running experiment with seed 23
+==================================================
+Experiment: experiment_20250429_183236_seed_23 - Seed: 23
+Number of samples in the full dataset: 586
+Number of samples in the training set: 439
+Number of samples in the test set: 147
+Shape of training set: (439, 56)
+Shape of random split: (219, 56), (219,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.8s (1.76/s) 
+Number of distances computed: 20
+Average AUC score: 0.5955578512396694
+Number of Pareto optimal trees: 7
+Frequenicies of top 2 common features: [[(18, 30.0), (5, 20.0)], [(6, 40.0), (5, 20.0)], [(6, 20.0), (14, 10.0)]]
+Selected tree index: 16
+Completed experiment: experiment_20250429_183236_seed_23
+```
+
+### seed=28
+```{bash}
+==================================================
+Running experiment with seed 28
+==================================================
+Experiment: experiment_20250429_183249_seed_28 - Seed: 28
+Number of samples in the full dataset: 586
+Number of samples in the training set: 439
+Number of samples in the test set: 147
+Shape of training set: (439, 56)
+Shape of random split: (219, 56), (219,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Number of distances computed: 20
+Average AUC score: 0.6365702479338843
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
+Selected tree index: 3
+Completed experiment: experiment_20250429_183249_seed_28
+Experiment group summary saved to experiments/seed_checking/group_summary.json
+Total experiments run: 2
+```
+:::
 
 ::: footer
 <a style="opacity: 0.2;">A</a>

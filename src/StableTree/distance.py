@@ -23,24 +23,15 @@ def compute_average_distances(T0, T, X_train, y_train):
     X_train_values = X_train.values if hasattr(X_train, "values") else X_train
     distances: list[float] = []
 
-    with alive_bar(
-        len(T),
-        title="Computing average tree distances",
-        dual_line=True,
-        spinner="waves",  
-        bar="smooth"
-    ) as bar:
+    with alive_bar(len(T), title="Computing average tree distances", dual_line=True, spinner="waves", bar="smooth") as bar:
         for tree_b in T:
             d_b = 0.0
             for tree_beta in T0:
-                calc = DistanceCalculator(tree_beta, tree_b,
-                                           X=X_train_values, y=y_train)
+                calc = DistanceCalculator(tree_beta, tree_b, X=X_train_values, y=y_train)
                 d_b += calc.compute_tree_distance()
 
             mean_dist = d_b / len(T0)
             distances.append(mean_dist)
-
-            bar.text(f"last distance = {mean_dist:.4f}")
-            bar()           # advance progress bar by 1
+            bar()
 
     return distances

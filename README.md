@@ -1,5 +1,13 @@
 ## suicide_project
 
+potential fixes for quarto rendering issues:
+```bash
+uv venv
+source .venv/bin/activate
+uv sync
+uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
+```
+
 - trimmed tree in logs/experiment_name/
 - replication of anthony's plot style (feature importance plot, dt plot & metrics.txt) in outputs/
 - call using `uv run src/StableTree/main.py`
