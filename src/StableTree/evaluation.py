@@ -44,8 +44,8 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
     return results
 
 
-def gini_importance(tree):
-  import numpy as np
+
+
 
 def feature_importance_std_across_trees(trees):
     all_imps = []

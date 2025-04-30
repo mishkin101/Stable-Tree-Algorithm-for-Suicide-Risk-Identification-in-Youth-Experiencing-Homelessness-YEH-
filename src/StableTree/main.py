@@ -12,9 +12,14 @@ from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
 from visualization import plot_pareto_frontier, plot_decision_tree, plot_common_features
 from logging_utils import ExperimentLogger
-from evaluation import common_features, gini_importance
+from evaluation import common_features
 from sklearn.preprocessing import label_binarize
 import visualize_like_orig as vis_orig
+import warnings
+from sklearn.exceptions import UndefinedMetricWarning
+
+# Turn the warning into an exception
+warnings.filterwarnings('error', category=UndefinedMetricWarning)
 
 import numpy as np
 import pandas as pd
@@ -193,8 +198,15 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Selected stability-accuracy trade-off final tree index: {selected_tree_index}")
     selected_tree = T[selected_tree_index]
 
+    # log & print its feature importances
+    stab_feat_imp = selected_tree.feature_importances_
+    logger.log_metrics({
+        "selected_stability_accuracy_trade_off_feature_importances": stab_feat_imp.tolist()
+    })
+    print("Stability-accuracy trade-off tree feature importances:", stab_feat_imp)
+
     # select final auc tree
-    selected_auc_tree_index = select_auc_maximizing_tree(distances, auc_scores, pareto_trees)
+    selected_auc_tree_index = select_auc_maximizing_tree(auc_scores, pareto_trees)
     logger.log_metrics({
         "selected_auc_tree_index": int(selected_auc_tree_index),
         "selected_auc_tree_distance": float(distances[selected_auc_tree_index]),
@@ -203,15 +215,32 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Selected AUC maximizing tree index: {selected_auc_tree_index}")
     selected_auc_tree = T[selected_auc_tree_index]
 
+    # log & print its feature importances
+    auc_feat_imp = selected_auc_tree.feature_importances_
+    logger.log_metrics({
+        "selected_auc_tree_feature_importances": auc_feat_imp.tolist()
+    })
+    print("AUC-maximizing tree feature importances:", auc_feat_imp)
+
     #select final distance tree
-    selected_dist_tree_index = select_final_tree(distances, auc_scores, pareto_trees)
+    selected_dist_tree_index = select_distance_minimizing_tree(distances, pareto_trees)
     logger.log_metrics({
         "selected_dist_tree_index": int(selected_dist_tree_index),
         "selected_dist_tree_distance": float(distances[selected_dist_tree_index]),
         "selected_dist_tree_auc": float(auc_scores[selected_dist_tree_index])
     })
     print(f"Selected distance minimizing tree index: {selected_dist_tree_index}")
-    selected_auc_tree = T[selected_dist_tree_index]
+    selected_dist_tree = T[selected_dist_tree_index]
+
+    # log & print its feature importances
+    dist_feat_imp = selected_dist_tree.feature_importances_
+    logger.log_metrics({
+        "selected_dist_tree_feature_importances": dist_feat_imp.tolist()
+    })
+    print("Distance-minimizing tree feature importances:", dist_feat_imp)
+
+
+
     
     """======= Original Code Metrics======="""
     vis_orig.visualize_tree(selected_tree, X_full.columns, label=label, logger = logger, fig_name="original_decision_tree")
@@ -278,6 +307,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
 
 
 def main():
+    tree_dict = {}
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
     parser.add_argument('--seeds', type=int, nargs='+', default=[RANDOM_SEED], 
