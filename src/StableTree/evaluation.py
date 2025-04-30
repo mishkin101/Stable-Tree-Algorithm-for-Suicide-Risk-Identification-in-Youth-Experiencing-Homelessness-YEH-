@@ -1,8 +1,7 @@
 import numpy as np 
 from collections import Counter
-
-from collections import Counter
 import json
+from pathlib import Path
 
 def common_features(tree_set, feature_names, n_splits=3, top_k=2):
     """
@@ -46,12 +45,13 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
 
 
 
-"=============Aggregation Metrics==================="
+"============= Aggregation Metrics ==================="
 
 def compute_avg_feature_std(group, key):
     all_imps = []
+    logs_dir = Path("logs").resolve()
     for exp in group.experiments:
-        mpath = group.group_path / exp / "metrics.json"
+        mpath = logs_dir/exp/"metrics.json"
         with open(mpath, "r") as f:
             metrics = json.load(f)
         imp_list = metrics.get(key)
@@ -63,17 +63,19 @@ def compute_avg_feature_std(group, key):
     mean_std = per_feat_std.mean()          # scalar
     return mean_std, per_feat_std
 
+
 def count_distinct_top_features(group, keys,top_k: int = 3) -> dict[str, set[str]]:
     """
     For each selection strategy key, count and return the set of unique feature names
     that ever appear in the top_k importances across all experiments in the group.
     """
     result: dict[str, set[str]] = {}
+    logs_dir = Path("logs").resolve()
     gp = group.group_path
     for key in keys:
         distinct_idxs = set()
         for exp in group.experiments:
-            metrics_path = gp / exp / "metrics.json"
+            metrics_path = logs_dir/exp/"metrics.json"
             if not metrics_path.exists():
                 continue
             with open(metrics_path, "r") as f:

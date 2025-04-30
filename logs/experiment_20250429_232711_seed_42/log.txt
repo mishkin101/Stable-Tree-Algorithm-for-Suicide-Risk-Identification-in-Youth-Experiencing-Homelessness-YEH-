@@ -1,0 +1,78 @@
+Experiment started at: 2025-04-29 23:27:11
+
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 42
+DATA_PATH: data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 42
+DATA_PATH: /Users/mishkin/Desktop/Research/Suicide_Project/data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 42
+DATA_PATH: /Users/mishkin/Desktop/Research/Suicide_Project/data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+label: suicidea
+
+=== Metrics ===
+num_samples_full: 586
+num_samples_train: 439
+num_samples_test: 147
+train_shape: (439, 56)
+
+=== Metrics ===
+random_split_shape: (219, 219)
+
+=== Metrics ===
+num_trees_T0: 20
+
+=== Metrics ===
+num_trees_T: 20
+
+=== Metrics ===
+num_distances: 20
+
+=== Metrics ===
+average_auc: 0.6263509218054673
+
+=== Metrics ===
+num_pareto_trees: 8
+
+=== Metrics ===
+common_feature_freq: [[('trauma_sum', 30.0), ('ptsd_score', 30.0)], [('harddrug_life', 25.0), ('trauma_sum', 10.0)], [('harddrug_life', 20.0), ('LEAF_NODE', 20.0)]]
+
+=== Metrics ===
+selected_tree_index: 4
+selected_tree_distance: 0.077485
+selected_tree_auc: 0.7342657342657344
+
+=== Metrics ===
+selected_stability_accuracy_trade_off_feature_importances: [0.0, 0.0, 0.0, 0.0, 0.42119999157746224, 0.0, 0.3426190496287208, 0.0, 0.0, 0.0, 0.0, 0.11379385144413791, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03331985112358054, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.08906725622609836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+=== Metrics ===
+selected_auc_tree_index: 4
+selected_auc_tree_distance: 0.077485
+selected_auc_tree_auc: 0.7342657342657344
+
+=== Metrics ===
+selected_auc_tree_feature_importances: [0.0, 0.0, 0.0, 0.0, 0.42119999157746224, 0.0, 0.3426190496287208, 0.0, 0.0, 0.0, 0.0, 0.11379385144413791, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03331985112358054, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.08906725622609836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+=== Metrics ===
+selected_dist_tree_index: 10
+selected_dist_tree_distance: 0.005474999999999999
+selected_dist_tree_auc: 0.569135410044501
+
+=== Metrics ===
+selected_dist_tree_feature_importances: [0.0, 0.0, 0.0, 0.0, 0.02666032816910948, 0.0, 0.048553344009069785, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.07443045864666087, 0.0, 0.0, 0.16846762882715108, 0.0, 0.0, 0.0, 0.0, 0.01604418471957545, 0.0, 0.015926309076737758, 0.012582493832612668, 0.0, 0.0, 0.10204163339683427, 0.06733595253572208, 0.05320068034900075, 0.0036497791634190696, 0.0015797551602858497, 0.0, 0.0, 0.0, 0.0, 0.005781490839635799, 0.0027373343725643033, 0.14457292102233177, 0.05954277547660099, 0.0, 0.030931878409976615, 0.004610247364318833, 0.00928805869863197, 0.0, 0.0, 0.0, 0.004781288524530244, 0.0, 0.04403710711684594, 0.03496030012187121, 0.06828405016651312, 0.0, 0.0]
+
+Saved figure: original_decision_tree.png
+Saved figure: original_feature_importance.png
+Saved figure: original_roc_curve.png

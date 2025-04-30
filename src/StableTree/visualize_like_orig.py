@@ -179,6 +179,7 @@ def write_metrics(
     y_test_bin: np.ndarray,
     logger = ExperimentLogger,
 ) -> Path:
+    #\\TODO #24 check to see why classification.py has certain classes(0/1) where the model never predicts that class @adbX
     # This function is unchanged and writes metrics text files.
     metrics_path = logger.experiment_dir / f"original_metrics_{label}.txt"
     with metrics_path.open("w") as f:
@@ -196,7 +197,7 @@ def write_metrics(
             )
         f.write(f"AUC     : {auc_val:.4f}\n")
         f.write("Classification report:\n")
-        f.write(classification_report(y_test, y_pred, digits=3))
+        f.write(classification_report(y_test, y_pred, digits=3, zero_division=0))
         f.write(
             "\nNote:\n"
             "  Sensitivity == Recall of the positive class\n"

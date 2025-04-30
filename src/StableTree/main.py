@@ -42,7 +42,7 @@ sys.path.append(str(data_path))
 class ExperimentGroup:
     """Manages a group of related experiments with different random seeds."""
     
-    def __init__(self, group_name=None):
+    def __init__(self, group_name=None, data_path = None):
         """Initialize an experiment group with a unique name."""
         if group_name is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -215,7 +215,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.log_metrics({
         "selected_stability_accuracy_trade_off_feature_importances": stab_feat_imp.tolist()
     })
-    print("Stability-accuracy trade-off tree feature importances:", stab_feat_imp)
+    # print("Stability-accuracy trade-off tree feature importances:", stab_feat_imp)
 
     # select final auc tree
     selected_auc_tree_index = select_auc_maximizing_tree(auc_scores, pareto_trees)
@@ -232,7 +232,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.log_metrics({
         "selected_auc_tree_feature_importances": auc_feat_imp.tolist()
     })
-    print("AUC-maximizing tree feature importances:", auc_feat_imp)
+    # print("AUC-maximizing tree feature importances:", auc_feat_imp)
 
     #select final distance tree
     selected_dist_tree_index = select_distance_minimizing_tree(distances, pareto_trees)
@@ -249,7 +249,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.log_metrics({
         "selected_dist_tree_feature_importances": dist_feat_imp.tolist()
     })
-    print("Distance-minimizing tree feature importances:", dist_feat_imp)
+    # print("Distance-minimizing tree feature importances:", dist_feat_imp)
 
 
 
@@ -334,7 +334,7 @@ def main():
                         help='Path to the dataset CSV', default = data_path_dict[1])
     args = parser.parse_args()
 
-    group = ExperimentGroup(args.group_name, data_path=args.data_path)
+    group = ExperimentGroup(args.group_name, args.data_path)
     print(f"Created experiment group: {group.group_name}")
     
     # Run experiments for each seed
@@ -356,11 +356,11 @@ def main():
 
     print("\nAggregate feature‐importance stability across experiments:")
     mean_std_dict = {}
-    for label, key in keys.items():
-        mean_std, per_feat_std = compute_avg_feature_std(group,key)
+    for key, metrics_str in keys.items():
+        mean_std, per_feat_std = compute_avg_feature_std(group, metrics_str)
         mean_std_dict[key] = mean_std
         print(f"  {label:20s} mean(std) = {mean_std:.5f}")
-    plot_avg_feature_std_from_dict(mean_std_dict,group, output_name="avg_feature_std")
+    plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std")
 
     #Compute the top 3 distinct features in all experiments for every pareto selection strategy
     features_dict = count_distinct_top_features(group, keys.values())

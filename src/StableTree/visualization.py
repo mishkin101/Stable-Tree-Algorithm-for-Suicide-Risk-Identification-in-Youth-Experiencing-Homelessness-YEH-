@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 import pandas as pd
-from IPython.display import Image, display
-from pathlib import Path
+
 
 def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     """
@@ -119,7 +118,7 @@ def plot_common_features(results, dataset, title="Common Features for all Trees"
 def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std"):
    
     labels = list(mean_std_dict.keys())
-    means = [mean_std_dict[key] for key in mean_std_dict.values()]
+    means = [len(mean_std_dict[key]) for key in mean_std_dict.keys()]
 
     x = np.arange(len(labels))
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -135,7 +134,7 @@ def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_featur
     ax.set_title("Feature‐Importance Stability Across Strategies")
     ax.legend(loc="upper right")
 
-    out_path = group.group_path
+    out_path = group.group_path/ f"{output_name}.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     return out_path
