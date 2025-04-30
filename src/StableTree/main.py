@@ -11,9 +11,10 @@ from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
 from visualization import plot_pareto_frontier, plot_decision_tree, \
-plot_common_features, plot_avg_feature_std_from_dict, plot_distinct_top_features
+plot_common_features, plot_aggregate_metrics
 from logging_utils import ExperimentLogger
-from evaluation import common_features, compute_avg_feature_std, count_distinct_top_features
+from evaluation import common_features, compute_avg_feature_std, count_distinct_top_features, \
+aggregate_tree_depth, aggregate_tree_nodes , aggregate_optimal_auc, aggregate_optimal_distance
 from sklearn.preprocessing import label_binarize
 import visualize_like_orig as vis_orig
 import warnings
@@ -41,9 +42,9 @@ sys.path.append(str(data_path))
 
 
 class ExperimentGroup:
-    """Manages a group of related experiments with different random seeds."""
-    
-    def __init__(self, group_name=None, data_path = None):
+    """Manages experiments across multiple datasets and seeds."""
+
+    def __init__(self, group_name: str, data_paths: list[str]):
         """Initialize an experiment group with a unique name."""
         if group_name is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -53,9 +54,15 @@ class ExperimentGroup:
         self.group_path = Path(f"experiments/{group_name}")
         self.group_path.mkdir(parents=True, exist_ok=True)
 
-        # Store dataset path and feature names
-        self.data_path = Path(data_path) if data_path is not None else None
-        self.feature_names: list[str] = []
+        # # Store dataset path and feature names
+        # self.data_path = Path(data_path) if data_path is not None else None
+        # self.feature_names: list[str] = []
+
+        # store list of dataset path
+        self.data_paths = [Path(p) for p in data_paths]
+        # feature names per dataset
+        self.feature_names: dict[str, list[str]] = {}
+  
 
        # Create a metadata file for the group
         self.metadata_path = self.group_path / "group_metadata.json"
@@ -70,9 +77,10 @@ class ExperimentGroup:
         self._save_metadata()
         return experiment_name
 
-    def set_feature_names(self, feature_names: list[str]):
+    def set_feature_names(self, dataset: Path, feature_list: list[str]):
         """Store feature names used across this experiment group."""
-        self.feature_names = feature_names
+        key = dataset.name
+        self.feature_names[key] = feature_list
         self._save_metadata()
 
     def _save_metadata(self):
@@ -80,7 +88,7 @@ class ExperimentGroup:
         metadata = {
             "group_name": self.group_name,
             "created_at": datetime.now().isoformat(),
-            "data_path": str(self.data_path) if self.data_path else None,
+            "data_paths": [str(p) for p in self.data_paths],
             "feature_names": self.feature_names,
             "experiments": self.experiments,
         }
@@ -103,13 +111,13 @@ class ExperimentGroup:
 
 
 
-def run_experiment(seed, label="suicidea", experiment_group=None):
+def run_experiment(seed: int, label: str, dataset: Path, experiment_group: ExperimentGroup):
     """Run a single experiment with the specified random seed."""
     # Create a unique experiment name based on timestamp and seed
     rng = np.random.default_rng(seed)
-    
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    experiment_name = f"experiment_{timestamp}_seed_{seed}"
+    experiment_name = f"experiment_{timestamp}_seed_{seed}_{dataset.name}"
+    dataset_name = dataset.stem
     
     # Add this experiment to the group if provided
     if experiment_group:
@@ -124,14 +132,14 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         "MIN_SAMPLES": MIN_SAMPLES,
         "NUM_BOOTSTRAPS": NUM_BOOTSTRAPS,
         "RANDOM_SEED": seed,
-        "DATA_PATH": "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
+        "DATA_PATH": str(dataset),
     })
     
     # Set random seed for reproducibility
     # np.random.seed(seed)
 
     # Use dataset path from group
-    DATA_PATH = experiment_group.data_path if experiment_group else None
+    DATA_PATH = dataset if dataset else None
     if DATA_PATH is None:
         raise ValueError("DATA_PATH must be provided via --data-path when creating ExperimentGroup")
     logger.log_config({"DATA_PATH": str(DATA_PATH)})
@@ -158,7 +166,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     }
     logger.log_metrics(dataset_metrics)
     
-    print(f"Experiment: {experiment_name} - Seed: {seed}")
+    print(f"Experiment: {experiment_name} - Seed: {seed} - Dataset: {dataset_name}")
     print(f"Number of samples in the full dataset: {len(X_full)}")
     print(f"Number of samples in the training set: {len(X_train)}")
     print(f"Number of samples in the test set: {len(X_test)}")
@@ -212,6 +220,15 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Selected stability-accuracy trade-off final tree index: {selected_tree_index}")
     selected_tree = T[selected_tree_index]
 
+    # --- compute and log depth & node‐count ---
+    stab_depth = selected_tree.tree_.max_depth
+    stab_nodes = selected_tree.tree_.node_count
+    logger.log_metrics({
+        "stability_tree_depth": int(stab_depth),
+        "stability_tree_nodes": int(stab_nodes)
+    })
+    print(f"Stability-accuracy tree depth: {stab_depth}, nodes: {stab_nodes}")
+
     # log & print its feature importances
     stab_feat_imp = selected_tree.feature_importances_
     logger.log_metrics({
@@ -229,6 +246,15 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     print(f"Selected AUC maximizing tree index: {selected_auc_tree_index}")
     selected_auc_tree = T[selected_auc_tree_index]
 
+    # compute and log depth & node‐count ---
+    auc_depth = selected_auc_tree.tree_.max_depth
+    auc_nodes = selected_auc_tree.tree_.node_count
+    logger.log_metrics({
+        "auc_tree_depth": int(auc_depth),
+        "auc_tree_nodes": int(auc_nodes)
+    })
+    print(f"AUC-maximizing tree depth: {auc_depth}, nodes: {auc_nodes}")
+
     # log & print its feature importances
     auc_feat_imp = selected_auc_tree.feature_importances_
     logger.log_metrics({
@@ -245,6 +271,15 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     })
     print(f"Selected distance minimizing tree index: {selected_dist_tree_index}")
     selected_dist_tree = T[selected_dist_tree_index]
+
+    # compute and log depth & node‐count ---
+    dist_depth = selected_dist_tree.tree_.max_depth
+    dist_nodes = selected_dist_tree.tree_.node_count
+    logger.log_metrics({
+        "dist_tree_depth": int(dist_depth),
+        "dist_tree_nodes": int(dist_nodes)
+    })
+    print(f"Distance-minimizing tree depth: {dist_depth}, nodes: {dist_nodes}")
 
     # log & print its feature importances
     dist_feat_imp = selected_dist_tree.feature_importances_
@@ -308,7 +343,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     logger.save_figure("trimmed_decision_tree")
 
     #save common_features for each experiment
-    dataset_name = os.path.splitext(os.path.basename(DATA_PATH))[0]
+    # dataset_name = os.path.splitext(os.path.basename(DATA_PATH))[0]
     plot_common_features(common_feat_list, dataset=dataset_name)
     logger.save_figure("top_common_features")
 
@@ -328,39 +363,91 @@ def main():
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
     parser.add_argument('--seeds', type=int, nargs='+', default=[RANDOM_SEED], 
                         help='List of random seeds to use for experiments')
-    parser.add_argument('--label', type=str, default="suicidea", 
-                        help='Target label to predict (suicidea or suicattempt)')
+    parser.add_argument('--label', type=str,  nargs='+', default="suicidea", 
+                        help='Target label to predict (suicidea or suicattempt or target)')
     parser.add_argument('--group-name', type=str, default= "suicide_test",
                         help='Name for the experiment group')
-    parser.add_argument('--data-path', type=str,
-                        help='Path to the dataset CSV', default = data_path_dict[1])
+    parser.add_argument('--datasets', nargs='+', default = data_path_dict[1],
+                        help='Path to the dataset CSVs')
     args = parser.parse_args()
-    group = ExperimentGroup(args.group_name, args.data_path)
+    group = ExperimentGroup(args.group_name, args.datasets)
     print(f"Created experiment group: {group.group_name}")
-    
-    try:
-        # Run experiments for each seed
-        for seed in args.seeds:
-            print(f"\n{'='*50}")
-            print(f"Running experiment with seed {seed}")
-            print(f"{'='*50}")
-            experiment_name = run_experiment(seed, args.label, group)
-            print(f"Completed experiment: {experiment_name}")
+    dataset_dict= {}
+    for ds in group.data_paths:
+        try:
+            # Run experiments for each seed
+            for seed in args.seeds:
+                print(f"\n{"="}*50")
+                print(f"Running for dataset {ds.stem} with seed {seed}")
+                print(f"{"="}*50")
+                experiment_name = run_experiment(seed, args.label, ds, group)
+                print(f"Completed experiment: {experiment_name}")
+
+                '''======Aggregate Statistics========='''
+                # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
+                print("\nAggregate feature‐importance stability across experiments:")
+                mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
+                for key, mean_std in mean_std_feature_dict.items():
+                    print(f"  {key:20s} mean(std) = {mean_std:.5f}")
+                dataset_dict[ds.name].append(mean_std_feature_dict)
+            
+                # Compute the top 3 distinct features in all experiments for every pareto selection strategy
+                distinct_feats_dict = count_distinct_top_features(group)
+
+                # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+                mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
+
+                # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+                mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
+
+                # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
+                mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
+
+                 # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
+                mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
+                '''================================='''
+
+            dataset_dict[ds_name] = {
+                "feature_std":            mean_std_feature_dict,
+                "distinct_top_features":  distinct_feats_dict,
+                "tree_nodes": {
+                    "mean": mean_nodes_dict,
+                    "std":  std_nodes_dict,
+                },
+                "tree_depth": {
+                    "mean": mean_depth_dict,
+                    "std":  std_depth_dict,
+                },
+                "optimal_auc": {
+                    "mean": mean_auc_dict,
+                    "std":  std_auc_dict,
+                },
+                "optimal_distance": {
+                    "mean": mean_dist_dict,
+                    "std":  std_dist_dict,
+                },
+            }
+
+            '''======Aggregate Plotting========='''
+            plot_aggregate_metrics(dataset_dict, group)
+            '''================================='''
         
-        '''======Aggregate Statistics======='''
+        except Exception as e:
+            print(f"\nError encountered: {e!r}\nCleaning up logs and experiment folder…")
 
-        # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
-        print("\nAggregate feature‐importance stability across experiments:")
-        mean_std_dict= compute_avg_feature_std(group)
-        for key, mean_std in mean_std_dict.items():
-            print(f"  {key:20s} mean(std) = {mean_std:.5f}")
-        plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std")
+            # 1) remove logs/<each_experiment>
+            logs_root = Path("logs").resolve()
+            for exp_name in getattr(group, "experiments", []):
+                log_dir = logs_root / exp_name
+                if log_dir.exists():
+                    rmtree(log_dir)
 
-        #Compute the top 3 distinct features in all experiments for every pareto selection strategy
-        features_dict = count_distinct_top_features(group)
-        plot_distinct_top_features(features_dict, group)
+            # 2) remove the experiments/<group_name> folder
+            if group.group_path.exists():
+                rmtree(group.group_path)
 
-        '''================================='''
+            # re-raise so you still see the traceback
+            raise
 
 
         # Generate and save group summary
@@ -371,22 +458,7 @@ def main():
         print(f"\nExperiment group summary saved to {summary_path}")
         print(f"Total experiments run: {len(args.seeds)}")
 
-    except Exception as e:
-        print(f"\nError encountered: {e!r}\nCleaning up logs and experiment folder…")
-
-        # 1) remove logs/<each_experiment>
-        logs_root = Path("logs").resolve()
-        for exp_name in getattr(group, "experiments", []):
-            log_dir = logs_root / exp_name
-            if log_dir.exists():
-                rmtree(log_dir)
-
-        # 2) remove the experiments/<group_name> folder
-        if group.group_path.exists():
-            rmtree(group.group_path)
-
-        # re-raise so you still see the traceback
-        raise
+        
 
 
 if __name__ == "__main__":

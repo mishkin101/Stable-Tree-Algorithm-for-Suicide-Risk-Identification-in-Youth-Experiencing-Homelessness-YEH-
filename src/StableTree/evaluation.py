@@ -2,6 +2,7 @@ import numpy as np
 from collections import Counter
 import json
 from pathlib import Path
+from typing import Tuple, Dict
 
 def common_features(tree_set, feature_names, n_splits=3, top_k=2):
     """
@@ -47,7 +48,7 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
 
 "============= Aggregation Metrics ==================="
 
-def compute_avg_feature_std(group):
+def compute_avg_feature_std(group, dataset_name):
     keys = ["stability_accuracy_importances","auc_max_importances","dist_min_importances"]
     all_imps = {}
     logs_dir = Path("logs").resolve()
@@ -56,6 +57,8 @@ def compute_avg_feature_std(group):
         # collect every experiment's importance‐vector for this strategy
         all_vals = []
         for exp in group.experiments:
+            if not exp.endswith(dataset_name):
+                continue
             mpath = logs_dir / exp / "metrics.json"
             with open(mpath, "r") as f:
                 metrics = json.load(f)
@@ -75,7 +78,7 @@ def compute_avg_feature_std(group):
     return mean_std_dict
 
 
-def count_distinct_top_features(group,top_k: int = 3) -> dict[str, set[str]]:
+def count_distinct_top_features(group, dataset_name, top_k: int = 3) -> dict[str, set[str]]:
     """
     For each selection strategy key, count and return the set of unique feature names
     that ever appear in the top_k importances across all experiments in the group.
@@ -87,6 +90,8 @@ def count_distinct_top_features(group,top_k: int = 3) -> dict[str, set[str]]:
     for key in keys:
         distinct_idxs = set()
         for exp in group.experiments:
+            if not exp.endswith(dataset_name):
+                continue
             metrics_path = logs_dir/exp/"metrics.json"
             if not metrics_path.exists():
                 continue
@@ -109,3 +114,141 @@ def count_distinct_top_features(group,top_k: int = 3) -> dict[str, set[str]]:
 
     return result
 
+def aggregate_tree_depth(group,  dataset_name)-> dict[str, float]:
+    """
+    For each strategy, average the logged tree-depth over the
+    experiments of this dataset.
+    """
+    keys = {
+        "stability_tree_depth": [],
+        "auc_tree_depth": [],
+        "dist_tree_depth": [],
+    }
+    logs_dir = Path("logs").resolve()
+
+    for exp in group.experiments:
+        if not exp.endswith(dataset_name):
+            continue
+        mpath = logs_dir / exp / "metrics.json"
+        with open(mpath) as f:
+            metrics = json.load(f)
+        for k in keys:
+            d = metrics.get(k)
+            if d is not None:
+                keys[k].append(d)
+
+    # Compute mean & std
+    mean_dict: Dict[str, float] = {}
+    std_dict:  Dict[str, float] = {}
+    for k, vals in keys.items():
+        if vals:
+            arr = np.array(vals, dtype=float)
+            mean_dict[k] = float(arr.mean())
+            std_dict[k]  = float(arr.std())
+        else:
+            mean_dict[k] = 0.0
+            std_dict[k]  = 0.0
+
+    return mean_dict, std_dict
+
+
+def aggregate_tree_nodes(group, dataset_name)->dict[str, float]:
+    """
+    For each strategy, average the logged tree-node-count over the
+    experiments of this dataset.
+    """
+    keys = {
+        "stability_tree_nodes": [],
+        "auc_tree_nodes": [],
+        "dist_tree_nodes": [],
+    }
+    logs_dir = Path("logs").resolve()
+
+    for exp in group.experiments:
+        if not exp.endswith(dataset_name):
+            continue
+        mpath = logs_dir / exp / "metrics.json"
+        with open(mpath) as f:
+            metrics = json.load(f)
+        for k in keys:
+            n = metrics.get(k)
+            if n is not None:
+                keys[k].append(n)
+
+     # Compute mean & std
+    mean_dict: Dict[str, float] = {}
+    std_dict:  Dict[str, float] = {}
+    for k, vals in keys.items():
+        if vals:
+            arr = np.array(vals, dtype=float)
+            mean_dict[k] = float(arr.mean())
+            std_dict[k]  = float(arr.std())
+        else:
+            mean_dict[k] = 0.0
+            std_dict[k]  = 0.0
+
+    return mean_dict, std_dict
+    
+
+def aggregate_optimal_auc(group, dataset_name)->dict[str, float]:
+    keys = {
+        "selected_auc_tree_auc": []
+    }
+    logs_dir = Path("logs").resolve()
+
+    for exp in group.experiments:
+        if not exp.endswith(dataset_name):
+            continue
+        mpath = logs_dir / exp / "metrics.json"
+        with open(mpath) as f:
+            metrics = json.load(f)
+        for k in keys:
+            n = metrics.get(k)
+            if n is not None:
+                keys[k].append(n)
+
+     # Compute mean & std
+    mean_dict: Dict[str, float] = {}
+    std_dict:  Dict[str, float] = {}
+    for k, vals in keys.items():
+        if vals:
+            arr = np.array(vals, dtype=float)
+            mean_dict[k] = float(arr.mean())
+            std_dict[k]  = float(arr.std())
+        else:
+            mean_dict[k] = 0.0
+            std_dict[k]  = 0.0
+
+    return mean_dict, std_dict
+
+
+def aggregate_optimal_distance(group, dataset_name)->dict[str, float]:
+    keys = {
+        "selected_auc_tree_distance": []
+    }
+    logs_dir = Path("logs").resolve()
+
+    for exp in group.experiments:
+        if not exp.endswith(dataset_name):
+            continue
+        mpath = logs_dir / exp / "metrics.json"
+        with open(mpath) as f:
+            metrics = json.load(f)
+        for k in keys:
+            n = metrics.get(k)
+            if n is not None:
+                keys[k].append(n)
+
+     # Compute mean & std
+    mean_dict: Dict[str, float] = {}
+    std_dict:  Dict[str, float] = {}
+    for k, vals in keys.items():
+        if vals:
+            arr = np.array(vals, dtype=float)
+            mean_dict[k] = float(arr.mean())
+            std_dict[k]  = float(arr.std())
+        else:
+            mean_dict[k] = 0.0
+            std_dict[k]  = 0.0
+
+    return mean_dict, std_dict

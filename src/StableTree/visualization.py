@@ -114,6 +114,7 @@ def plot_common_features(results, dataset, title="Common Features for all Trees"
     #return fig  # or plt.show(), or save with your logger
 
 
+"==========Aggregation Plotting=========="
 
 def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std"):
    
@@ -168,3 +169,98 @@ def plot_distinct_top_features(distinct_count_dict: dict, group, output_name: st
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     return out_path
+
+
+
+
+def plot_aggregate_metrics(dataset_dict: Dict[str, dict], group, output_prefix: str = "aggregate_metrics"):
+    """
+    Generate all aggregation bar plots across multiple datasets and selection strategies.
+
+    Parameters
+    ----------
+    dataset_dict : dict
+        Mapping from dataset name -> metrics dict, e.g.
+        {
+          "dataset1.csv": {
+              "feature_std": {"stability_accuracy_importances": 0.01, ...},
+              "distinct_top_features": {"stability_accuracy_importances": {"age","income"}, ...},
+              "tree_nodes": {"mean": {...}, "std": {...}},
+              "tree_depth": {"mean": {...}, "std": {...}},
+              "optimal_auc": {"mean": {...}, "std": {...}},
+              "optimal_distance": {"mean": {...}, "std": {...}},
+          },
+          ...
+        }
+    group : ExperimentGroup
+        Used to determine the save directory at group.group_path.
+    output_prefix : str
+        Filename prefix for the plots.
+
+    Returns
+    -------
+    None
+    """
+    plots_dir = Path(group.group_path)
+    datasets = list(dataset_dict.keys())
+    n_ds = len(datasets)
+    x = np.arange(n_ds)
+    width = 0.2
+
+    # Helper to save a figure
+    def _save(fig, name):
+        path = plots_dir / f"{output_prefix}_{name}.png"
+        fig.savefig(path, dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        print(f"Saved plot: {path}")
+
+    # 1) Feature-importance std dev
+    strat_keys = list(next(iter(dataset_dict.values()))['feature_std'].keys())
+    fig, ax = plt.subplots(figsize=(8,5))
+    for i, strat in enumerate(strat_keys):
+        means = [dataset_dict[ds]['feature_std'][strat] for ds in datasets]
+        ax.bar(x + i*width, means, width, label=strat)
+    ax.set_xticks(x + width*(len(strat_keys)-1)/2)
+    ax.set_xticklabels(datasets, rotation=45, ha='right')
+    ax.set_ylabel('Mean feature-importance STD')
+    ax.set_title('Feature-Importance Stability')
+    ax.legend()
+    _save(fig, 'feature_std')
+
+    # 2) Distinct top-k features count
+    fig, ax = plt.subplots(figsize=(8,5))
+    for i, strat in enumerate(strat_keys):
+        counts = [len(dataset_dict[ds]['distinct_top_features'][strat]) for ds in datasets]
+        ax.bar(x + i*width, counts, width, label=strat)
+    ax.set_xticks(x + width*(len(strat_keys)-1)/2)
+    ax.set_xticklabels(datasets, rotation=45, ha='right')
+    ax.set_ylabel('Count of distinct top-k features')
+    ax.set_title('Distinct Top-3 Features')
+    ax.legend()
+    _save(fig, 'distinct_top_features')
+
+    # Generic mean+std plot
+    def _plot_mean_std_block(key_name, title, ylabel):
+        fig, ax = plt.subplots(figsize=(8,5))
+        mean_map = {ds: dataset_dict[ds][key_name]['mean'] for ds in datasets}
+        std_map  = {ds: dataset_dict[ds][key_name]['std']  for ds in datasets}
+        strat_keys2 = list(next(iter(mean_map.values())).keys())
+        for i, strat in enumerate(strat_keys2):
+            means = [mean_map[ds][strat] for ds in datasets]
+            errs  = [std_map[ds][strat]  for ds in datasets]
+            ax.bar(x + i*width, means, width, yerr=errs, capsize=5, label=strat)
+        ax.set_xticks(x + width*(len(strat_keys2)-1)/2)
+        ax.set_xticklabels(datasets, rotation=45, ha='right')
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+        ax.legend()
+        _save(fig, key_name)
+
+    # 3) Tree nodes
+    _plot_mean_std_block('tree_nodes', 'Mean Tree Node Counts', 'Nodes')
+    # 4) Tree depth
+    _plot_mean_std_block('tree_depth', 'Mean Tree Depths', 'Depth')
+    # 5) Optimal AUC
+    _plot_mean_std_block('optimal_auc', 'Mean Optimal AUC', 'AUC')
+    # 6) Optimal distance
+    _plot_mean_std_block('optimal_distance', 'Mean Optimal Distance', 'Distance')
