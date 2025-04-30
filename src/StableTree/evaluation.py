@@ -45,18 +45,22 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
 
 
 
+"=============Aggregation Metrics==================="
 
-
-def feature_importance_std_across_trees(trees):
+def compute_avg_feature_std(group_path, exp_names, key):
     all_imps = []
-    for tree in trees:
-        imps = tree.feature_importances_
-        all_imps.append(np.asarray(imps))
-    # Stack into shape (n_trees (1 tree = 1 row), n_features)
-    all_imps = np.vstack(all_imps)
-    # Compute std dev across the first axis (over trees)
-    stds = np.std(all_imps, axis=0)
-    return stds
+    for exp in exp_names:
+        mpath = group_path / exp / "metrics.json"
+        with open(mpath, "r") as f:
+            metrics = json.load(f)
+        imp_list = metrics.get(key)
+        if imp_list is None:
+            raise KeyError(f"{key} not found in {mpath}")
+        all_imps.append(imp_list)
+    arr = np.array(all_imps)                # shape = (n_experiments, n_features)
+    per_feat_std = np.std(arr, axis=0)      # shape = (n_features,)
+    mean_std = per_feat_std.mean()          # scalar
+    return mean_std, per_feat_std
 
 
 

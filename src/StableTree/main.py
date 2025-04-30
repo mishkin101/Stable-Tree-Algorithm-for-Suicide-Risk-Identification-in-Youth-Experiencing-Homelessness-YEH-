@@ -12,7 +12,7 @@ from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
 from visualization import plot_pareto_frontier, plot_decision_tree, plot_common_features
 from logging_utils import ExperimentLogger
-from evaluation import common_features
+from evaluation import common_features, compute_avg_feature_std
 from sklearn.preprocessing import label_binarize
 import visualize_like_orig as vis_orig
 import warnings
@@ -335,6 +335,21 @@ def main():
     Sve plot of aggregate metrics to experiment group
     '''
 
+    keys = {
+        "stability–accuracy": "selected_stability_accuracy_trade_off_feature_importances",
+        "AUC‐maximizing"    : "selected_auc_tree_feature_importances",
+        "distance‐minimizing": "selected_dist_tree_feature_importances",
+    }
+
+    print("\nAggregate feature‐importance stability across experiments:")
+    for label, key in keys.items():
+        mean_std, per_feat_std = compute_avg_feature_std(
+            group.group_path,
+            group.experiments,
+            key
+        )
+        print(f"  {label:20s} mean(std) = {mean_std:.5f}")
+        
     # Generate and save group summary
     summary = group.get_summary()
     summary_path = group.group_path / "group_summary.json"
