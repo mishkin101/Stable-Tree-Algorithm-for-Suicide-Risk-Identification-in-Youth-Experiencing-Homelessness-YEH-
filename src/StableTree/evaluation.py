@@ -1,7 +1,7 @@
 import numpy as np 
 from collections import Counter
 
-def common_features(tree_set, n_splits=3, top_k=2):
+def common_features(tree_set, feature_names, dataset, n_splits=3, top_k=2):
     """
     Record the two most commonly selected features in each of the
     first three splits, along with their selection frequencies.
@@ -24,8 +24,11 @@ def common_features(tree_set, n_splits=3, top_k=2):
         # convert counts → percentage
         freq_list = [(feat, (count / n_trees) * 100) for feat, count in most_common]
         # sanitize into plain Python types
-        sanitized = [(int(feat), float(freq)) for feat, freq in freq_list]
-        results.append(sanitized)
+        named = [
+            (feature_names[feat_idx], float(freq_pct))
+            for feat_idx, freq_pct in freq_list
+        ]
+        results.append(named)
     return results
 
 def gini_importance(tree):
