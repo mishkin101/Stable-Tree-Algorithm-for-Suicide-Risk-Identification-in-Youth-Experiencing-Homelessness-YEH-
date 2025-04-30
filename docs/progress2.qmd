@@ -210,8 +210,9 @@ print(f"Shape of training set: {X_train.shape}")
 ## A peek at the data {.smaller}
 
 ```{python}     
-#! echo: true
-show(X_train, searching = False, paging = True,ordering = False, autoWidth = True)
+#| echo: false
+#| output-location: column
+X_train
 ```
 
 ::: footer
