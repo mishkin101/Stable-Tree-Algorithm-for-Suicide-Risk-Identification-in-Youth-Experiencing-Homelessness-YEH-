@@ -2,6 +2,7 @@ import numpy as np
 from collections import Counter
 
 from collections import Counter
+import json
 
 def common_features(tree_set, feature_names, n_splits=3, top_k=2):
     """
@@ -62,5 +63,27 @@ def compute_avg_feature_std(group, key):
     mean_std = per_feat_std.mean()          # scalar
     return mean_std, per_feat_std
 
+def count_distinct_top_features(group, feature_names, top_k: int = 3) -> int:
+    """
+    Count how many unique features ever appear in the top_k importances
+    across all experiments and all selection strategies.
+    """
 
+    distinct_idxs = set()
+    gp = group.group_path
+    for exp in group.experiments:
+        metrics_path = gp / exp / "metrics.json"
+        with open(metrics_path, "r") as f:
+            metrics = json.load(f)
+        for key in keys:
+            imp = metrics.get(key)
+            if not imp:
+                continue
+            # get indices of the top_k largest importances
+            top_idxs = sorted(range(len(imp)), key=lambda i: imp[i], reverse=True)[:top_k]
+            distinct_idxs.update(top_idxs)
+
+    # map indices back to names and count
+    distinct_feats = {feature_names[i] for i in distinct_idxs}
+    return len(distinct_feats), distinct_feats
 

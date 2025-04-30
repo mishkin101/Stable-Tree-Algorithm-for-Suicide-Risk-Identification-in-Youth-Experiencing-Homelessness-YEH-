@@ -10,9 +10,10 @@ from data import prepare_data, random_train_split
 from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
-from visualization import plot_pareto_frontier, plot_decision_tree, plot_common_features, plot_avg_feature_std_from_dict
+from visualization import plot_pareto_frontier, plot_decision_tree, \
+plot_common_features, plot_avg_feature_std_from_dict
 from logging_utils import ExperimentLogger
-from evaluation import common_features, compute_avg_feature_std
+from evaluation import common_features, compute_avg_feature_std, count_distinct_top_features
 from sklearn.preprocessing import label_binarize
 import visualize_like_orig as vis_orig
 import warnings
@@ -50,8 +51,12 @@ class ExperimentGroup:
         self.group_name = group_name
         self.group_path = Path(f"experiments/{group_name}")
         self.group_path.mkdir(parents=True, exist_ok=True)
-        
-        # Create a metadata file for the group
+
+        # Store dataset path and feature names
+        self.data_path = Path(data_path) if data_path is not None else None
+        self.feature_names: list[str] = []
+
+       # Create a metadata file for the group
         self.metadata_path = self.group_path / "group_metadata.json"
         self.experiments = []
         
@@ -63,15 +68,21 @@ class ExperimentGroup:
         self.experiments.append(experiment_name)
         self._save_metadata()
         return experiment_name
-    
+
+    def set_feature_names(self, feature_names: list[str]):
+        """Store feature names used across this experiment group."""
+        self.feature_names = feature_names
+        self._save_metadata()
+
     def _save_metadata(self):
         """Save metadata about this experiment group."""
         metadata = {
             "group_name": self.group_name,
             "created_at": datetime.now().isoformat(),
+            "data_path": str(self.data_path) if self.data_path else None,
+            "feature_names": self.feature_names,
             "experiments": self.experiments,
         }
-        
         with open(self.metadata_path, "w") as f:
             json.dump(metadata, f, indent=2)
     
@@ -86,13 +97,9 @@ class ExperimentGroup:
             if metrics_path.exists():
                 with open(metrics_path, "r") as f:
                     metrics = json.load(f)
-                summary["experiments"].append({
-                    "name": exp_name,
-                    "metrics": metrics
-                })
-    
+                summary["experiments"].append({"name": exp_name, "metrics": metrics})
+        return summary
 
-    
 
 
 def run_experiment(seed, label="suicidea", experiment_group=None):
@@ -122,8 +129,11 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     # Set random seed for reproducibility
     # np.random.seed(seed)
 
-    DATA_PATH = "data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
-
+    # Use dataset path from group
+    DATA_PATH = experiment_group.data_path if experiment_group else None
+    if DATA_PATH is None:
+        raise ValueError("DATA_PATH must be provided via --data-path when creating ExperimentGroup")
+    logger.log_config({"DATA_PATH": str(DATA_PATH)})
     # Load and prepare data
     df = pd.read_csv(DATA_PATH)
     
@@ -134,7 +144,11 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
         df, FEATURE_SETS[label], label, rng
     )
 
-    # Log data metrics
+    # Store feature names in group metadata (once)
+    if experiment_group and not experiment_group.feature_names:
+        experiment_group.set_feature_names(X_full.columns.tolist())
+
+    # Log dataset metrics
     dataset_metrics = {
         "num_samples_full": len(X_full),
         "num_samples_train": len(X_train),
@@ -313,11 +327,12 @@ def main():
     parser.add_argument('--label', type=str, default="suicidea", 
                         help='Target label to predict (suicidea or suicattempt)')
     parser.add_argument('--group-name', type=str, default=None,
-                        help='Name for the experiment group (default: auto-generated)')
+                        help='Name for the experiment group')
+    parser.add_argument('--data-path', type=str, required=True,
+                        help='Path to the dataset CSV')
     args = parser.parse_args()
-    
-    # Create an experiment group
-    group = ExperimentGroup(args.group_name)
+
+    group = ExperimentGroup(args.group_name, data_path=args.data_path)
     print(f"Created experiment group: {group.group_name}")
     
     # Run experiments for each seed
@@ -329,6 +344,8 @@ def main():
         print(f"Completed experiment: {experiment_name}")
     
     '''======Aggregate Statistics======='''
+
+    # Compute the average standard deviation of Gini Importance across multiple experiments
     keys = {
         "stability–accuracy": "selected_stability_accuracy_trade_off_feature_importances",
         "AUC‐maximizing"    : "selected_auc_tree_feature_importances",
@@ -342,11 +359,15 @@ def main():
             group,
             key
         )
-        mean_std_dict[label] = mean_std
+        mean_std_dict[key] = mean_std
         print(f"  {label:20s} mean(std) = {mean_std:.5f}")
     plot_avg_feature_std_from_dict(mean_std_dict,group, output_name="avg_feature_std")
 
+    #Compute the top 3 distinct features in all experiments for every pareto selection strategy
+    num_features, feature_names_list = count_distinct_top_features(group, feature_names)
+
     '''================================='''
+
 
     # Generate and save group summary
     summary = group.get_summary()
