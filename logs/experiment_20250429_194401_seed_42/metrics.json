@@ -13,41 +13,41 @@
     "num_trees_T0": 20,
     "num_trees_T": 20,
     "num_distances": 20,
-    "average_auc": 0.6208041958041959,
-    "num_pareto_trees": 3,
+    "average_auc": 0.63698347107438,
+    "num_pareto_trees": 2,
     "common_feature_freq": [
         [
             [
-                "harddrug_life",
-                45.0
+                "trauma_sum",
+                20.0
             ],
             [
-                "trauma_sum",
+                "ptsd_score",
                 20.0
             ]
         ],
         [
             [
-                "trauma_sum",
-                20.0
+                "harddrug_life",
+                30.0
             ],
             [
                 "prop_alter_homeless",
-                15.0
+                10.0
             ]
         ],
         [
             [
-                "harddrug_life",
-                15.0
+                "prop_alter_homeless",
+                10.0
             ],
             [
-                "cesd_score",
+                "trauma_sum",
                 10.0
             ]
         ]
     ],
-    "selected_tree_index": 9,
-    "selected_tree_distance": 0.084795,
-    "selected_tree_auc": 0.743801652892562
+    "selected_tree_index": 3,
+    "selected_tree_distance": 0.028935,
+    "selected_tree_auc": 0.7519071837253656
 }
