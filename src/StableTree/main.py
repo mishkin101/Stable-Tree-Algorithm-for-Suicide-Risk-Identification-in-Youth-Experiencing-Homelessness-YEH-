@@ -195,8 +195,8 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     selected_tree = T[selected_tree_index]
     
     """======= Original Code Metrics======="""
-    vis_orig.visualize_tree(selected_tree, X_full.columns, label=label)
-    vis_orig.save_feature_importance(selected_tree, X_full.columns.tolist(), label=label)
+    vis_orig.visualize_tree(selected_tree, X_full.columns, label=label, logger = logger, fig_name="original_decision_tree")
+    vis_orig.save_feature_importance(selected_tree, X_full.columns.tolist(), label=label, logger = logger, fig_name="original_feature_importance")
     
     # Predict labels and probabilities
     y_pred_prob = selected_tree.predict_proba(X_test.values)
@@ -207,7 +207,8 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     y_test_bin,
     y_pred_prob,
     label=label,
-    output_dir=logger.plots_dir,
+    logger = logger,
+    fig_name ="original_roc_curve"
     )
 
     vis_orig.write_metrics(
@@ -217,6 +218,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     y_pred=y_pred,
     y_pred_prob=y_pred_prob,
     y_test_bin=y_test_bin,
+    logger = logger
     )
     
     # #find the gini importance

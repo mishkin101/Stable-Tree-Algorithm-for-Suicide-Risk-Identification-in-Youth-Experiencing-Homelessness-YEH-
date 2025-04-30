@@ -1,7 +1,7 @@
 import numpy as np 
 from collections import Counter
 
-def common_features(tree_set, feature_names, dataset, n_splits=3, top_k=2):
+def common_features(tree_set, feature_names, n_splits=3, top_k=2):
     """
     Record the two most commonly selected features in each of the
     first three splits, along with their selection frequencies.

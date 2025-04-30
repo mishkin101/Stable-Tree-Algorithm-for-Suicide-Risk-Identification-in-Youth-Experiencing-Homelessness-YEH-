@@ -53,40 +53,67 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
     plt.title(title)
 
 """"""
-def plot_common_features(results, dataset, title  =" Common Features for all Trees"):
-    # Prepare the rows for each dataset+split
-    # Prepare rows
-    rows = []
-    split_names = ["Root", "Left", "Right"]
-    for splits in results:
-        for idx, split in enumerate(split_names):
-            feats = splits[idx] if idx < len(splits) else []
-            f1, p1 = feats[0] if len(feats) > 0 else ("-", 0.0)
-            f2, p2 = feats[1] if len(feats) > 1 else ("-", 0.0)
-            ds_label = dataset if idx == len(split_names) - 1 else ""
-            rows.append([ds_label, split, f1, f"{p1:.2f}", f2, f"{p2:.2f}"])
+import pandas as pd
+import matplotlib.pyplot as plt
 
-    # Create DataFrame
+def plot_common_features(results, dataset, title="Common Features for all Trees"):
+    """
+    results :[
+                [("age", 40.0), ("income", 20.0)],   # split 0
+                [("education", 25.0), ("age", 15.0)], # split 1
+                [("gender", 30.0), ("age", 10.0)]     # split 2
+             ]
+    dataset : str
+        Name to show in the “Dataset” column for the last row.
+    """
+    split_names = ["Root", "Left", "Right"]
+    rows = []
+
+    for idx, feats in enumerate(results):
+        # get the split name
+        split = split_names[idx] if idx < len(split_names) else f"Split{idx}"
+        if len(feats) >= 1: 
+            f1, p1 = feats[0]
+        else:
+            f1, p1 = "-", 0.0
+        if len(feats) >= 2:
+            f2, p2 = feats[1]
+        else:
+            f2, p2 = "-", 0.0
+        ds_label = dataset if idx == len(results) - 1 else ""
+        rows.append([
+            ds_label,
+            split,
+            f1,
+            f"{p1:.2f}",
+            f2,
+            f"{p2:.2f}",
+        ])
+
+    # Build DataFrame
     df = pd.DataFrame(rows, columns=[
         "Dataset", "Split",
         "Feature 1", "Frequency (%)",
         "Feature 2", "Frequency (%)"
     ])
 
-    # Plot table
-    fig, ax = plt.subplots(figsize=(12, df.shape[0] * 0.4 + 1))
-    ax.axis('off')
+    # Plot
+    fig, ax = plt.subplots(figsize=(12, len(rows)*0.4 + 1))
+    ax.axis("off")
     table = ax.table(
         cellText=df.values,
         colLabels=df.columns,
-        cellLoc='center',
-        loc='center'
+        cellLoc="center",
+        loc="center"
     )
     table.auto_set_font_size(False)
     table.set_fontsize(10)
     table.scale(1, 1.5)
+
     plt.title(title, pad=20)
     plt.tight_layout()
+    #return fig  # or plt.show(), or save with your logger
+
 
 
 

@@ -1,4 +1,4 @@
-# visualization_simpler.py
+# visualization_simpler.py (updated to use ExperimentLogger for saving)
 from __future__ import annotations
 
 import logging
@@ -9,22 +9,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import (
     accuracy_score,
-    auc,
     classification_report,
     roc_auc_score,
+    auc,
     roc_curve,
 )
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 
-# --------------------------------------------------------------------------- #
-#  Global output location (override from your main via e.g. logger.figure_dir)
-# --------------------------------------------------------------------------- #
-'''Don't need to overwrite from logger, better to save for each experiment run'''
-# OUTPUT_DIR = Path("outputs")
-# OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+# Import ExperimentLogger
+from logging_utils import ExperimentLogger
 
 # --------------------------------------------------------------------------- #
-#  1.  Display an image at native resolution (unchanged – still handy)
+# 1. Display an image at native resolution (unchanged)
 # --------------------------------------------------------------------------- #
 def plot_im(im: np.ndarray, dpi: int = 300) -> None:
     """Display a saved PNG in its native resolution."""
@@ -34,12 +30,13 @@ def plot_im(im: np.ndarray, dpi: int = 300) -> None:
     ax = fig.add_axes([0, 0, 1, 1])
     ax.axis("off")
     ax.imshow(im, aspect="auto")
-    plt.show(block=False)          # avoid blocking when called in notebooks
+    plt.show(block=False)
 
 
 # --------------------------------------------------------------------------- #
-#  2.  Decision-tree visualisation (Graphviz-free)
+# 2. Decision-tree visualisation
 # --------------------------------------------------------------------------- #
+
 def visualize_tree(
     tree: DecisionTreeClassifier,
     feature_names: Iterable[str],
@@ -48,13 +45,26 @@ def visualize_tree(
     class_names: Iterable[str] = ("Safe", "Risk!"),
     title: str | None = None,
     dpi: int = 300,
-    output_dir: Path = OUTPUT_DIR,
+    logger: ExperimentLogger,
+    fig_name: str,
 ) -> Path:
     """
-    Save a nicely coloured PNG of a fitted tree **without** Graphviz.
+    Save a coloured PNG of a fitted tree **without** Graphviz, using ExperimentLogger.
 
-    The built-in `plot_tree` already colour-codes nodes by the majority class
-    when `filled=True`, so we simply forward to it and tighten the layout.
+    Parameters
+    ----------
+    tree : DecisionTreeClassifier
+    feature_names : Iterable[str]
+    label : str                  # e.g. "Seed 0"
+    class_names : Iterable[str]
+    title : str | None
+    dpi : int
+    logger : ExperimentLogger    # logger for saving
+    fig_name : str               # name (no extension) for saving
+
+    Returns
+    -------
+    Path to saved PNG
     """
     fig, ax = plt.subplots(figsize=(20, 12), dpi=dpi)
     plot_tree(
@@ -62,23 +72,23 @@ def visualize_tree(
         ax=ax,
         feature_names=list(feature_names),
         class_names=list(class_names),
-        filled=True,          # colour nodes by predicted class
+        filled=True,
         rounded=True,
         proportion=True,
     )
     ax.set_title(title or f"Decision Tree – {label}", fontsize=14)
     fig.tight_layout()
 
-    path = output_dir / f"Decision_Tree_{label}.png"
-    fig.savefig(path, dpi=dpi)
+    # Save with logger
+    saved_path = logger.save_figure(fig_name)
     plt.close(fig)
-    logging.info("Tree visual saved at %s", path)
-    return path
+    return saved_path
 
 
 # --------------------------------------------------------------------------- #
-#  3.  Feature-importance bar-plot
+# 3. Feature-importance bar-plot
 # --------------------------------------------------------------------------- #
+
 def save_feature_importance(
     tree: DecisionTreeClassifier,
     feat_names: List[str],
@@ -86,9 +96,12 @@ def save_feature_importance(
     label: str,
     top_k: int = 20,
     dpi: int = 300,
-    output_dir: Path = OUTPUT_DIR,
+    logger: ExperimentLogger,
+    fig_name: str,
 ) -> Path:
-    """Save a horizontal bar plot of the **top-k** relative importances."""
+    """
+    Save a horizontal bar plot of the **top-k** relative importances using ExperimentLogger.
+    """
     fi = 100 * tree.feature_importances_ / tree.feature_importances_.max()
     idx = np.argsort(fi)[-top_k:]
     pos = np.arange(len(idx)) + 0.5
@@ -100,61 +113,61 @@ def save_feature_importance(
     ax.set_title("Feature importance")
     fig.tight_layout()
 
-    path = output_dir / f"Feature_Importance_{label}.png"
-    fig.savefig(path, dpi=dpi)
+    # Save with logger
+    saved_path = logger.save_figure(fig_name)
     plt.close(fig)
-    logging.info("Feature importance saved at %s", path)
-    return path
+    return saved_path
 
 
 # --------------------------------------------------------------------------- #
-#  4.  Micro-average ROC curve
+# 4. Micro-average ROC curve
 # --------------------------------------------------------------------------- #
+
 def plot_roc_curve(
     y_test_bin: np.ndarray,
     y_score: np.ndarray,
     *,
     label: str,
     dpi: int = 300,
-    output_dir: Path = OUTPUT_DIR,
+    logger: ExperimentLogger,
+    fig_name: str,
 ) -> Path:
-    """Save a micro-average ROC curve."""
-    # y_true_flat = y_test_bin[:, : y_score.shape[1]].ravel()
-    # y_score_flat = y_score.ravel()
-
-    # fpr, tpr, _ = roc_curve(y_true_flat, y_score_flat)
-    # roc_auc = auc(fpr, tpr)
+    """
+    Save a micro-average ROC curve using ExperimentLogger.
+    """
+    # Determine binary vs multiclass
     if y_score.shape[1] == 2 and y_test_bin.shape[1] == 1:
-    # binary: use the prob. of the positive class (column 1)
         y_true = y_test_bin.ravel()
         y_score_pos = y_score[:, 1]
         fpr, tpr, _ = roc_curve(y_true, y_score_pos)
         roc_auc = auc(fpr, tpr)
-        
     else:
-        # multi-class micro-average (flatten everything)
-        y_true_flat = y_test_bin[:, : y_score.shape[1]].ravel()
+        y_true_flat = y_test_bin[:, :y_score.shape[1]].ravel()
         y_score_flat = y_score.ravel()
         fpr, tpr, _ = roc_curve(y_true_flat, y_score_flat)
         roc_auc = auc(fpr, tpr)
 
     fig, ax = plt.subplots(figsize=(5, 5), dpi=dpi)
     ax.plot(fpr, tpr, lw=2, label=f"ROC (AUC = {roc_auc:.2f})")
-    ax.plot([0, 1], [0, 1], "--", lw=2, color="navy")
-    ax.set(xlim=(0, 1), ylim=(0, 1.05), xlabel="False-positive rate",
-           ylabel="True-positive rate", title="ROC – micro average")
+    ax.plot([0, 1], [0, 1], "--", lw=2)
+    ax.set(
+        xlim=(0, 1),
+        ylim=(0, 1.05),
+        xlabel="False-positive rate",
+        ylabel="True-positive rate",
+        title="ROC – micro average",
+    )
     ax.legend(loc="lower right")
     fig.tight_layout()
 
-    path = output_dir / f"ROC_Curve_{label}.png"
-    fig.savefig(path, dpi=dpi)
+    # Save with logger
+    saved_path = logger.save_figure(fig_name)
     plt.close(fig)
-    logging.info("ROC curve saved at %s", path)
-    return path
+    return saved_path
 
 
 # --------------------------------------------------------------------------- #
-#  5.  Persist plain-text metrics (unchanged, but stricter types)
+# 5. Persist plain-text metrics (unchanged)
 # --------------------------------------------------------------------------- #
 def write_metrics(
     features: List[str],
@@ -164,24 +177,22 @@ def write_metrics(
     y_pred: np.ndarray,
     y_pred_prob: np.ndarray,
     y_test_bin: np.ndarray,
-    output_dir: Path = OUTPUT_DIR,
+    logger = ExperimentLogger,
 ) -> Path:
-    """
-    Write the same textual metrics block the original helpers produced,
-    one file per label.
-    """
-    metrics_path = output_dir / f"Metrics_{label}.txt"
+    # This function is unchanged and writes metrics text files.
+    metrics_path = logger.experiment_dir / f"original_metrics_{label}.txt"
     with metrics_path.open("w") as f:
         f.write("-" * 60 + "\n")
         f.write(f"Features: {features}\n")
         f.write(f"Label   : {label}\n\n")
         f.write(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}\n")
-         # Binary vs. multi-class AUC
         if y_pred_prob.shape[1] == 2 and y_test_bin.shape[1] == 1:
             auc_val = roc_auc_score(y_test_bin.ravel(), y_pred_prob[:, 1])
         else:
             auc_val = roc_auc_score(
-                y_test_bin[:, : y_pred_prob.shape[1]], y_pred_prob, average="micro"
+                y_test_bin[:, :y_pred_prob.shape[1]],
+                y_pred_prob,
+                average="micro",
             )
         f.write(f"AUC     : {auc_val:.4f}\n")
         f.write("Classification report:\n")
