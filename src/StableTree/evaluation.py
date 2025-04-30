@@ -63,27 +63,34 @@ def compute_avg_feature_std(group, key):
     mean_std = per_feat_std.mean()          # scalar
     return mean_std, per_feat_std
 
-def count_distinct_top_features(group, feature_names, top_k: int = 3) -> int:
+def count_distinct_top_features(group, keys,top_k: int = 3) -> dict[str, set[str]]:
     """
-    Count how many unique features ever appear in the top_k importances
-    across all experiments and all selection strategies.
+    For each selection strategy key, count and return the set of unique feature names
+    that ever appear in the top_k importances across all experiments in the group.
     """
-
-    distinct_idxs = set()
+    result: dict[str, set[str]] = {}
     gp = group.group_path
-    for exp in group.experiments:
-        metrics_path = gp / exp / "metrics.json"
-        with open(metrics_path, "r") as f:
-            metrics = json.load(f)
-        for key in keys:
+    for key in keys:
+        distinct_idxs = set()
+        for exp in group.experiments:
+            metrics_path = gp / exp / "metrics.json"
+            if not metrics_path.exists():
+                continue
+            with open(metrics_path, "r") as f:
+                metrics = json.load(f)
             imp = metrics.get(key)
             if not imp:
                 continue
-            # get indices of the top_k largest importances
-            top_idxs = sorted(range(len(imp)), key=lambda i: imp[i], reverse=True)[:top_k]
+            # find indices of the top_k largest importances
+            top_idxs = sorted(
+                range(len(imp)),
+                key=lambda i: imp[i],
+                reverse=True
+            )[:top_k]
             distinct_idxs.update(top_idxs)
+        # map indices to feature names
+        features = {group.feature_names[i] for i in distinct_idxs}
+        result[key] = features
 
-    # map indices back to names and count
-    distinct_feats = {feature_names[i] for i in distinct_idxs}
-    return len(distinct_feats), distinct_feats
+    return result
 

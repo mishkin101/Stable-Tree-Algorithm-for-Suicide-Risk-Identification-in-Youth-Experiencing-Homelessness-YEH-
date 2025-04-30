@@ -5,6 +5,7 @@ from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 import pandas as pd
 from IPython.display import Image, display
+from pathlib import Path
 
 def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     """
@@ -52,9 +53,8 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
             max_depth=max_depth)
     plt.title(title)
 
-""""""
-import pandas as pd
-import matplotlib.pyplot as plt
+
+
 
 def plot_common_features(results, dataset, title="Common Features for all Trees"):
     """
@@ -116,12 +116,6 @@ def plot_common_features(results, dataset, title="Common Features for all Trees"
 
 
 
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
-
 def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std"):
    
     labels = list(mean_std_dict.keys())
@@ -146,16 +140,31 @@ def plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_featur
     plt.close(fig)
     return out_path
 
-# Example usage:
-# mean_std_dict = {
-#     "selected_stability_accuracy_trade_off_feature_importances": 0.0152,
-#     "selected_auc_tree_feature_importances": 0.0205,
-#     "selected_dist_tree_feature_importances": 0.0127,
-# }
-# keys = {
-#     "Stability–Accuracy": "selected_stability_accuracy_trade_off_feature_importances",
-#     "AUC‑Maximizing":    "selected_auc_tree_feature_importances",
-#     "Distance‑Minimizing":"selected_dist_tree_feature_importances",
-# }
-# path = plot_avg_feature_std_from_dict(mean_std_dict, keys, group.group_path)
-# print(f"Saved plot to {path}")
+
+def plot_distinct_top_features(distinct_count_dict: dict, group, output_name: str = "distinct_top_features"):
+    """
+    Plot and save a bar chart showing the number of distinct top-k features
+    for each selection strategy in an experiment group.
+    """
+    labels = list(distinct_count_dict.keys())
+    counts = [distinct_count_dict[label] for label in labels]
+
+    x = np.arange(len(labels))
+    fig, ax = plt.subplots(figsize=(8, 5))
+    bars = ax.bar(x, counts)
+
+    # Label each bar with its strategy name
+    for bar, lbl in zip(bars, labels):
+        bar.set_label(lbl)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=45, ha="right")
+    ax.set_ylabel("Count of distinct top-k features")
+    ax.set_title("Distinct Top-k Features per Strategy")
+    ax.legend(loc="upper right")
+
+    # Save into the experiment group's folder
+    out_path = group.group_path / f"{output_name}.png"
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    return out_path

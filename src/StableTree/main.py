@@ -11,7 +11,7 @@ from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree, select_auc_maximizing_tree, select_distance_minimizing_tree
 from visualization import plot_pareto_frontier, plot_decision_tree, \
-plot_common_features, plot_avg_feature_std_from_dict
+plot_common_features, plot_avg_feature_std_from_dict, plot_distinct_top_features
 from logging_utils import ExperimentLogger
 from evaluation import common_features, compute_avg_feature_std, count_distinct_top_features
 from sklearn.preprocessing import label_binarize
@@ -319,17 +319,19 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
 
 
 def main():
-    tree_dict = {}
+    ''''add more datasets here as needed'''
+    data_path_dict = {1: "/Users/mishkin/Desktop/Research/Suicide_Project/data/DataSet_Combined_SI_SNI_Baseline_FE.csv"}
+
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
     parser.add_argument('--seeds', type=int, nargs='+', default=[RANDOM_SEED], 
                         help='List of random seeds to use for experiments')
     parser.add_argument('--label', type=str, default="suicidea", 
                         help='Target label to predict (suicidea or suicattempt)')
-    parser.add_argument('--group-name', type=str, default=None,
+    parser.add_argument('--group-name', type=str, default= "suicide_test",
                         help='Name for the experiment group')
-    parser.add_argument('--data-path', type=str, required=True,
-                        help='Path to the dataset CSV')
+    parser.add_argument('--data-path', type=str,
+                        help='Path to the dataset CSV', default = data_path_dict[1])
     args = parser.parse_args()
 
     group = ExperimentGroup(args.group_name, data_path=args.data_path)
@@ -355,16 +357,14 @@ def main():
     print("\nAggregate feature‐importance stability across experiments:")
     mean_std_dict = {}
     for label, key in keys.items():
-        mean_std, per_feat_std = compute_avg_feature_std(
-            group,
-            key
-        )
+        mean_std, per_feat_std = compute_avg_feature_std(group,key)
         mean_std_dict[key] = mean_std
         print(f"  {label:20s} mean(std) = {mean_std:.5f}")
     plot_avg_feature_std_from_dict(mean_std_dict,group, output_name="avg_feature_std")
 
     #Compute the top 3 distinct features in all experiments for every pareto selection strategy
-    num_features, feature_names_list = count_distinct_top_features(group, feature_names)
+    features_dict = count_distinct_top_features(group, keys.values())
+    plot_distinct_top_features(features_dict, group)
 
     '''================================='''
 
