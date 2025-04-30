@@ -5,6 +5,8 @@ from constants import (
     MIN_SAMPLES,
     NUM_BOOTSTRAPS,
     RANDOM_SEED,
+    DATA_DIR
+
 )
 from data import prepare_data, random_train_split
 from models import bootstrap_trees, evaluate_predictive_power
@@ -154,8 +156,9 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     )
 
     # Store feature names in group metadata (once)
-    if experiment_group and not experiment_group.feature_names:
-        experiment_group.set_feature_names(X_full.columns.tolist())
+    ds_name = dataset.name   # or ds.name if that's the variable you used
+    if experiment_group and ds_name not in experiment_group.feature_names:
+        experiment_group.set_feature_names(dataset, X_full.columns.tolist())
 
     # Log dataset metrics
     dataset_metrics = {
@@ -354,10 +357,23 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     return experiment_name
 
 
+def _make_jsonable(o):
+    if isinstance(o, dict):
+        return {k: _make_jsonable(v) for k, v in o.items()}
+    if isinstance(o, list):
+        return [_make_jsonable(v) for v in o]
+    if isinstance(o, set):
+        return sorted(list(o))
+    return o
+
 
 def main():
+  
     ''''add more datasets here as needed'''
-    data_path_dict = {1: "/Users/mishkin/Desktop/Research/Suicide_Project/data/DataSet_Combined_SI_SNI_Baseline_FE.csv"}
+
+    data_path_dict = {  1: DATA_DIR / "DataSet_Combined_SI_SNI_Baseline_FE.csv",
+                        2: DATA_DIR / "breast_cancer.csv"
+    }
 
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
@@ -373,6 +389,7 @@ def main():
     if len(args.labels) != len(args.datasets):
         parser.error(f"--labels ({len(args.labels)}) must match --datasets ({len(args.datasets)})")
     group = ExperimentGroup(args.group_name, args.datasets)
+    group_logger = ExperimentLogger(group_name= args.group_name)
     print(f"Created experiment group: {group.group_name}")
 
     dataset_dict= {}
@@ -380,35 +397,33 @@ def main():
         try:
             # Run experiments for each seed
             for seed in args.seeds:
-                print(f"\n{"="}*50")
+                print(f"\n{'=' * 50}")
                 print(f"Running for dataset {ds.stem} with seed {seed}")
-                print(f"{"="}*50")
+                print(f"\n{'=' * 50}")
                 experiment_name = run_experiment(seed, label, ds, group)
                 print(f"Completed experiment: {experiment_name}")
 
-                '''======Aggregate Statistics========='''
-                # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
-                print("\nAggregate feature‐importance stability across experiments:")
-                mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
-                for key, mean_std in mean_std_feature_dict.items():
-                    print(f"  {key:20s} mean(std) = {mean_std:.5f}")
-                dataset_dict[ds.name].append(mean_std_feature_dict)
-            
-                # Compute the top 3 distinct features in all experiments for every pareto selection strategy
-                distinct_feats_dict = count_distinct_top_features(group)
+            '''======Aggregate Statistics========='''
+            # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
+            print("\nAggregate feature‐importance stability across experiments:")
+            mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
+            for key, mean_std in mean_std_feature_dict.items():
+                print(f"  {key:20s} mean(std) = {mean_std:.5f}")
+            # Compute the top 3 distinct features in all experiments for every pareto selection strategy
+            distinct_feats_dict = count_distinct_top_features(group, ds.name)
 
-                # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-                mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
+            # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+            mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
 
-                # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-                mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
+            # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+            mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
 
-                # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
-                mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
+            # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
+            mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
 
-                 # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
-                mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
-                '''================================='''
+            # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
+            mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
+            '''================================='''
 
             dataset_dict[ds.name] = {
                 "feature_std":            mean_std_feature_dict,
@@ -431,6 +446,9 @@ def main():
                 },
             }
 
+            serializable = _make_jsonable(dataset_dict)
+            group_logger.log_metrics({"dataset_aggregates": serializable})  
+            print(f"saved group metrics to metrics.json")
             '''======Aggregate Plotting========='''
             plot_aggregate_metrics(dataset_dict, group)
             '''================================='''

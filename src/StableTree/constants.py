@@ -13,6 +13,7 @@ DEPTHS = list(range(3, 13))
 MIN_SAMPLES = [3, 5, 10, 30, 50]
 NUM_BOOTSTRAPS = 20
 
+
 # Feature sets for different tasks
 FEATURE_SETS: Dict[str, List[str]] = {
     "suicidea": [
@@ -22,6 +23,10 @@ FEATURE_SETS: Dict[str, List[str]] = {
     
     "target": list(_cancer.feature_names)
 }
+
+#data directory:
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR     = PROJECT_ROOT / "data"
 
 # Model parameters for different tasks
 MODEL_PARAMS = {

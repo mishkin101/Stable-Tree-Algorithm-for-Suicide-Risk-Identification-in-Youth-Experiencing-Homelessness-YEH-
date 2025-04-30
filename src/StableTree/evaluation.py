@@ -85,6 +85,7 @@ def count_distinct_top_features(group, dataset_name, top_k: int = 3) -> dict[str
     """
     keys = ["stability_accuracy_importances","auc_max_importances","dist_min_importances"]
     result: dict[str, set[str]] = {}
+    feat_list = group.feature_names[dataset_name]
     logs_dir = Path("logs").resolve()
     gp = group.group_path
     for key in keys:
@@ -108,7 +109,7 @@ def count_distinct_top_features(group, dataset_name, top_k: int = 3) -> dict[str
             )[:top_k]
             distinct_idxs.update(top_idxs)
         # map indices to feature names
-        features = {group.feature_names[i] for i in distinct_idxs}
+        features = {feat_list[i] for i in distinct_idxs}
         result[key] = features
         print(f"  {key:20s} top 3 unique features:{features}")
 
@@ -192,8 +193,11 @@ def aggregate_tree_nodes(group, dataset_name)->dict[str, float]:
 
 def aggregate_optimal_auc(group, dataset_name)->dict[str, float]:
     keys = {
-        "selected_auc_tree_auc": []
+        "selected_tree_auc":       [],
+        "selected_auc_tree_auc":   [],
+        "selected_dist_tree_auc":  [],
     }
+
     logs_dir = Path("logs").resolve()
 
     for exp in group.experiments:
@@ -224,7 +228,9 @@ def aggregate_optimal_auc(group, dataset_name)->dict[str, float]:
 
 def aggregate_optimal_distance(group, dataset_name)->dict[str, float]:
     keys = {
-        "selected_auc_tree_distance": []
+        "selected_tree_distance":       [],
+        "selected_auc_tree_distance":   [],
+        "selected_dist_tree_distance":  [],
     }
     logs_dir = Path("logs").resolve()
 

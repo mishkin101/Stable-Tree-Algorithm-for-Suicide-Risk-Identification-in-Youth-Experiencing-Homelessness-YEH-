@@ -1,0 +1,161 @@
+{
+    "num_samples_full": 569,
+    "num_samples_train": 426,
+    "num_samples_test": 143,
+    "train_shape": [
+        426,
+        30
+    ],
+    "random_split_shape": [
+        213,
+        213
+    ],
+    "num_trees_T0": 20,
+    "num_trees_T": 20,
+    "num_distances": 20,
+    "average_auc": 0.9555398322851152,
+    "num_pareto_trees": 4,
+    "common_feature_freq": [
+        [
+            [
+                "worst perimeter",
+                40.0
+            ],
+            [
+                "worst radius",
+                15.0
+            ]
+        ],
+        [
+            [
+                "worst concave points",
+                45.0
+            ],
+            [
+                "mean concave points",
+                10.0
+            ]
+        ],
+        [
+            [
+                "worst texture",
+                20.0
+            ],
+            [
+                "mean texture",
+                15.0
+            ]
+        ]
+    ],
+    "selected_tree_index": 3,
+    "selected_tree_distance": 0.05066,
+    "selected_tree_auc": 0.9810272536687632,
+    "stability_tree_depth": 4,
+    "stability_tree_nodes": 11,
+    "stability_accuracy_importances": [
+        0.0,
+        0.0014314530544586512,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0051164718777066565,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.11310399715624599,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.007252070810824767,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.873096007100764,
+        0.0,
+        0.0
+    ],
+    "selected_auc_tree_index": 3,
+    "selected_auc_tree_distance": 0.05066,
+    "selected_auc_tree_auc": 0.9810272536687632,
+    "auc_tree_depth": 4,
+    "auc_tree_nodes": 11,
+    "auc_max_importances": [
+        0.0,
+        0.0014314530544586512,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0051164718777066565,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.11310399715624599,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.007252070810824767,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.873096007100764,
+        0.0,
+        0.0
+    ],
+    "selected_dist_tree_index": 18,
+    "selected_dist_tree_distance": 0.017225,
+    "selected_dist_tree_auc": 0.9151991614255766,
+    "dist_tree_depth": 6,
+    "dist_tree_nodes": 25,
+    "dist_min_importances": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0034611519687258044,
+        0.0,
+        0.0445942106286358,
+        0.0033280969175571245,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.007894482889089621,
+        0.06595903654218674,
+        0.8195479316720438,
+        0.0017696115328823738,
+        0.0,
+        0.0,
+        0.0,
+        0.053445477848878827,
+        0.0,
+        0.0
+    ]
+}

@@ -1,0 +1,84 @@
+Logger started at: 2025-04-30 07:09:41
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 14142
+DATA_PATH: data/breast_cancer.csv
+
+=== Configuration ===
+DATA_PATH: data/breast_cancer.csv
+
+=== Configuration ===
+label: target
+
+=== Metrics ===
+num_samples_full: 569
+num_samples_train: 426
+num_samples_test: 143
+train_shape: (426, 30)
+
+=== Metrics ===
+random_split_shape: (213, 213)
+
+=== Metrics ===
+num_trees_T0: 20
+
+=== Metrics ===
+num_trees_T: 20
+
+=== Metrics ===
+num_distances: 20
+
+=== Metrics ===
+average_auc: 0.9605974842767298
+
+=== Metrics ===
+num_pareto_trees: 4
+
+=== Metrics ===
+common_feature_freq: [[('worst perimeter', 30.0), ('worst area', 25.0)], [('worst concave points', 40.0), ('mean concave points', 20.0)], [('symmetry error', 15.0), ('radius error', 10.0)]]
+
+=== Metrics ===
+selected_tree_index: 13
+selected_tree_distance: 0.051625
+selected_tree_auc: 0.980398322851153
+
+=== Metrics ===
+stability_tree_depth: 4
+stability_tree_nodes: 13
+
+=== Metrics ===
+stability_accuracy_importances: [0.0, 0.016290616238190017, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0010521595088032398, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.009712418490726295, 0.0, 0.8388539415328421, 0.0, 0.0, 0.024302188307368435, 0.10978867592206981, 0.0, 0.0]
+
+=== Metrics ===
+selected_auc_tree_index: 0
+selected_auc_tree_distance: 0.084945
+selected_auc_tree_auc: 0.9810272536687632
+
+=== Metrics ===
+auc_tree_depth: 3
+auc_tree_nodes: 9
+
+=== Metrics ===
+auc_max_importances: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0006177565835606407, 0.0, 0.0, 0.0, 0.033687216559523496, 0.05336924213285289, 0.0, 0.0, 0.0, 0.912325784724063, 0.0, 0.0]
+
+=== Metrics ===
+selected_dist_tree_index: 5
+selected_dist_tree_distance: 0.01492
+selected_dist_tree_auc: 0.9581761006289309
+
+=== Metrics ===
+dist_tree_depth: 6
+dist_tree_nodes: 17
+
+=== Metrics ===
+dist_min_importances: [0.0, 0.0, 0.033644724178252344, 0.0, 0.0, 0.007009363814879157, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0005779078076745347, 0.0, 0.7285351536879515, 0.024129047740190666, 0.001494643754643355, 0.0, 0.2046091590164085, 0.0, 0.0]
+
+Saved figure: original_decision_tree.png
+Saved figure: original_feature_importance.png
+Saved figure: original_roc_curve.png
+Saved figure: decision_tree.png
+Saved figure: trimmed_decision_tree.png
+Saved figure: top_common_features.png
+Saved figure: pareto_frontier.png
