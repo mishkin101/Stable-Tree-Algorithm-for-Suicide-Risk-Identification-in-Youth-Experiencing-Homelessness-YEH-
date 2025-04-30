@@ -2,6 +2,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+import pandas as pd
+from IPython.display import Image, display
 
 def plot_pareto_frontier(distances, auc_scores, pareto_indices):
     """
@@ -49,9 +52,43 @@ def plot_decision_tree(tree, feature_names, class_names=None, title="Decision Tr
             max_depth=max_depth)
     plt.title(title)
 
+""""""
+def plot_common_features(results, dataset, title  =" Common Features for all Trees"):
+    # Prepare the rows for each dataset+split
+    # Prepare rows
+    rows = []
+    split_names = ["Root", "Left", "Right"]
+    for splits in results:
+        for idx, split in enumerate(split_names):
+            feats = splits[idx] if idx < len(splits) else []
+            f1, p1 = feats[0] if len(feats) > 0 else ("-", 0.0)
+            f2, p2 = feats[1] if len(feats) > 1 else ("-", 0.0)
+            ds_label = dataset if idx == len(split_names) - 1 else ""
+            rows.append([ds_label, split, f1, f"{p1:.2f}", f2, f"{p2:.2f}"])
 
-def plot_common_features(trees, title ="Common Features for all Trees"):
-    return
+    # Create DataFrame
+    df = pd.DataFrame(rows, columns=[
+        "Dataset", "Split",
+        "Feature 1", "Frequency (%)",
+        "Feature 2", "Frequency (%)"
+    ])
+
+    # Plot table
+    fig, ax = plt.subplots(figsize=(12, df.shape[0] * 0.4 + 1))
+    ax.axis('off')
+    table = ax.table(
+        cellText=df.values,
+        colLabels=df.columns,
+        cellLoc='center',
+        loc='center'
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1, 1.5)
+    plt.title(title, pad=20)
+    plt.tight_layout()
+
+
 
 
 # \\TODO #23 Make plot to show stf across gini std @mishkin101

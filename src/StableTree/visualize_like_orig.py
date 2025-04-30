@@ -19,8 +19,9 @@ from sklearn.tree import DecisionTreeClassifier, plot_tree
 # --------------------------------------------------------------------------- #
 #  Global output location (override from your main via e.g. logger.figure_dir)
 # --------------------------------------------------------------------------- #
-OUTPUT_DIR = Path("outputs")
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+'''Don't need to overwrite from logger, better to save for each experiment run'''
+# OUTPUT_DIR = Path("outputs")
+# OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # --------------------------------------------------------------------------- #
 #  1.  Display an image at native resolution (unchanged – still handy)

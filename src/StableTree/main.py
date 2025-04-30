@@ -10,7 +10,7 @@ from data import prepare_data, random_train_split
 from models import bootstrap_trees, evaluate_predictive_power
 from distance import compute_average_distances
 from pareto import pareto_optimal_trees, select_final_tree
-from visualization import plot_pareto_frontier, plot_decision_tree
+from visualization import plot_pareto_frontier, plot_decision_tree, plot_common_features
 from logging_utils import ExperimentLogger
 from evaluation import common_features, gini_importance
 from sklearn.preprocessing import label_binarize
@@ -176,9 +176,10 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     pareto_trees = pareto_optimal_trees(distances, auc_scores)
     logger.log_metrics({"num_pareto_trees": len(pareto_trees)})
     print(f"Number of Pareto optimal trees: {len(pareto_trees)}")
-
+ 
     # Find the most common features
-    common_feat_list = common_features(T)
+    features = X_full.columns.tolist()
+    common_feat_list = common_features(T, feature_names = features)
     logger.log_metrics({"common_feature_freq": common_feat_list})
     print(f"Frequenicies of top 2 common features: {common_feat_list}")
 
@@ -193,6 +194,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     #//TODO #22 new issues test @mishkin101
     selected_tree = T[selected_tree_index]
     
+    """======= Original Code Metrics======="""
     vis_orig.visualize_tree(selected_tree, X_full.columns, label=label)
     vis_orig.save_feature_importance(selected_tree, X_full.columns.tolist(), label=label)
     
@@ -241,6 +243,12 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     )
     logger.save_figure("trimmed_decision_tree")
 
+    #save common_features for each experiment
+    dataset_name = os.path.splitext(os.path.basename(DATA_PATH))[0]
+    plot_common_features(common_feat_list, dataset=dataset_name)
+    logger.save_figure("top_common_features")
+
+
     plot_pareto_frontier(distances, auc_scores, pareto_trees)
     logger.save_figure("pareto_frontier")
     
@@ -275,6 +283,7 @@ def main():
     Compute aggregate statistics on experiment group 
     Sve plot of aggregate metrics to experiment group
     '''
+
     # Generate and save group summary
     summary = group.get_summary()
     summary_path = group.group_path / "group_summary.json"
