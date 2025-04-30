@@ -147,7 +147,7 @@ def plot_distinct_top_features(distinct_count_dict: dict, group, output_name: st
     """
     labels = ["Stability–Accuracy", "AUC‐maximizing", "Distance‐Minimizing"]
 
-    counts = [len(distinct_count_dict[label]) for label in labels]
+    counts = [len(distinct_count_dict[selection_strategy]) for selection_strategy in distinct_count_dict.keys()]
 
     x = np.arange(len(labels))
     fig, ax = plt.subplots(figsize=(8, 5))

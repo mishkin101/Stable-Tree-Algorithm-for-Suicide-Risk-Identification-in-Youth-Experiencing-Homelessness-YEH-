@@ -30,6 +30,7 @@ from datetime import datetime
 from pathlib import Path
 import json
 import os
+from shutil   import rmtree
 
 # Add required paths to system path if needed
 src_path = Path("src/dt-distance").resolve()
@@ -213,7 +214,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     # log & print its feature importances
     stab_feat_imp = selected_tree.feature_importances_
     logger.log_metrics({
-        "selected_stability_accuracy_trade_off_feature_importances": stab_feat_imp.tolist()
+        "stability_accuracy_importances": stab_feat_imp.tolist()
     })
     # print("Stability-accuracy trade-off tree feature importances:", stab_feat_imp)
 
@@ -230,7 +231,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     # log & print its feature importances
     auc_feat_imp = selected_auc_tree.feature_importances_
     logger.log_metrics({
-        "selected_auc_tree_feature_importances": auc_feat_imp.tolist()
+        "auc_max_importances": auc_feat_imp.tolist()
     })
     # print("AUC-maximizing tree feature importances:", auc_feat_imp)
 
@@ -247,7 +248,7 @@ def run_experiment(seed, label="suicidea", experiment_group=None):
     # log & print its feature importances
     dist_feat_imp = selected_dist_tree.feature_importances_
     logger.log_metrics({
-        "selected_dist_tree_feature_importances": dist_feat_imp.tolist()
+        "dist_min_importances": dist_feat_imp.tolist()
     })
     # print("Distance-minimizing tree feature importances:", dist_feat_imp)
 
@@ -347,25 +348,15 @@ def main():
         
         '''======Aggregate Statistics======='''
 
-        # Compute the average standard deviation of Gini Importance across multiple experiments
-        keys = {
-            "stability–accuracy": "selected_stability_accuracy_trade_off_feature_importances",
-            "AUC‐maximizing"    : "selected_auc_tree_feature_importances",
-            "distance‐minimizing": "selected_dist_tree_feature_importances",
-        }
-
+        # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
         print("\nAggregate feature‐importance stability across experiments:")
-        mean_std_dict = {}
-        for key, metrics_str in keys.items():
-            print("this is metric_str:", metrics_str)
-            mean_std = compute_avg_feature_std(group, metrics_str)
-            mean_std_dict[key] = mean_std
+        mean_std_dict= compute_avg_feature_std(group)
+        for key, mean_std in mean_std_dict.items():
             print(f"  {key:20s} mean(std) = {mean_std:.5f}")
-
         plot_avg_feature_std_from_dict(mean_std_dict, group, output_name="avg_feature_std")
 
         #Compute the top 3 distinct features in all experiments for every pareto selection strategy
-        features_dict = count_distinct_top_features(group, keys.values())
+        features_dict = count_distinct_top_features(group)
         plot_distinct_top_features(features_dict, group)
 
         '''================================='''
@@ -378,8 +369,9 @@ def main():
             json.dump(summary, f, indent=2)
         print(f"\nExperiment group summary saved to {summary_path}")
         print(f"Total experiments run: {len(args.seeds)}")
-    except:
-        print(f"\n❗ Error encountered: {e!r}\nCleaning up logs and experiment folder…")
+
+    except Exception as e:
+        print(f"\nError encountered: {e!r}\nCleaning up logs and experiment folder…")
 
         # 1) remove logs/<each_experiment>
         logs_root = Path("logs").resolve()
