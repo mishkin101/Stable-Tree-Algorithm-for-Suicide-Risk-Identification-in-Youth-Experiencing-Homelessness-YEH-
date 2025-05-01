@@ -571,17 +571,12 @@ plt.tight_layout()
 <a style="opacity: 0.2;">M</a>
 :::
 
-## Aggregated metrics  {.smaller}
+## Aggregated metrics
 
+\
+\
 
-|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
-|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
-| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
-| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
-| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
-| **CART Pareto AUC**       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
-| **CART Pareto Stability** 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
-| **CART Pareto Distance**  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
+![](./agg_table.png){fig-align="center"}
 
 ::: footer
 <a style="opacity: 0.2;">M</a>
