@@ -272,9 +272,11 @@ Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingS
 <a style="opacity: 0.2;">M</a>
 :::
 
-## Overview
+## An explanation of the method
 
-!()[Untitled-2025-05-01-0029.excalidraw(1).svg]
+\
+
+![](./method%20diagram.svg){fig-align="center"}
 
 ## Random Train Split
 
