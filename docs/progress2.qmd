@@ -576,7 +576,7 @@ plt.tight_layout()
 \
 \
 
-![](./agg_table.png){fig-align="center"}
+![Unbalanced vs **SMOTE** processed aggregate metrics](./agg_table.png){fig-align="center"}
 
 ::: footer
 <a style="opacity: 0.2;">M</a>
