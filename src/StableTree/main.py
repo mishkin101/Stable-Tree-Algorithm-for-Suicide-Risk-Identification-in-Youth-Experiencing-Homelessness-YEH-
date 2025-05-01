@@ -55,20 +55,23 @@ class ExperimentGroup:
         self.group_name = group_name
         self.group_path = Path(f"experiments/{group_name}")
         self.group_path.mkdir(parents=True, exist_ok=True)
-
-        # # Store dataset path and feature names
-        # self.data_path = Path(data_path) if data_path is not None else None
-        # self.feature_names: list[str] = []
-
-        # store list of dataset path
-        self.data_paths = [Path(p) for p in data_paths]
-        # feature names per dataset
-        self.feature_names: dict[str, list[str]] = {}
-  
-
-       # Create a metadata file for the group
         self.metadata_path = self.group_path / "group_metadata.json"
-        self.experiments = []
+
+        # if it already exists, load it
+        if self.metadata_path.exists():
+            with open(self.metadata_path) as f:
+                meta = json.load(f)
+            self.data_paths     = [Path(p) for p in meta.get("data_paths", [])]
+            self.feature_names  = meta.get("feature_names", {})
+            self.experiments    = meta.get("experiments", [])
+        else:
+            # first time: set from args
+            self.data_paths    = [Path(p) for p in data_paths]
+            self.feature_names = {}
+            self.experiments   = []
+
+        # now write out the (possibly new) metadata
+        self._save_metadata()
         
         # Initialize with empty metadata
         self._save_metadata()
@@ -366,96 +369,113 @@ def _make_jsonable(o):
         return sorted(list(o))
     return o
 
+def generate_table(group):
+    return
+
 
 def main():
-  
-    ''''add more datasets here as needed'''
+    ''''add more options here as needed'''
 
-    data_path_dict = {  1: DATA_DIR / "DataSet_Combined_SI_SNI_Baseline_FE.csv",
-                        2: DATA_DIR / "breast_cancer.csv"
-    }
+    option_dict = ["experiments", "plot"]
+            
 
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(description='Run StableTree experiments with multiple seeds')
     parser.add_argument('--seeds', type=int, nargs='+', default=[RANDOM_SEED], 
                         help='List of random seeds to use for experiments')
-    parser.add_argument('--labels', nargs='+', required=True,
+    parser.add_argument('--labels', nargs='+', default= 'suicidea',
                         help='One label per dataset (must match FEATURE_SETS keys)')
     parser.add_argument('--group-name', type=str, default= "suicide_test",
                         help='Name for the experiment group')
-    parser.add_argument('--datasets', nargs='+', default = data_path_dict[1],
+    parser.add_argument('--datasets', nargs='+', default = 'data/DataSet_Combined_SI_SNI_Baseline_FE.csv',
                         help='Path to the dataset CSVs')
+    parser.add_argument('--option', type=str, default = option_dict[1],
+                        help='whether to plot only or run experiments')
     args = parser.parse_args()
-    if len(args.labels) != len(args.datasets):
-        parser.error(f"--labels ({len(args.labels)}) must match --datasets ({len(args.datasets)})")
+    
+
     group = ExperimentGroup(args.group_name, args.datasets)
     group_logger = ExperimentLogger(group_name= args.group_name)
     print(f"Created experiment group: {group.group_name}")
+    try:
+        if args.option == "experiment":
+            if len(args.labels) != len(args.datasets):
+                parser.error(f"--labels ({len(args.labels)}) must match --datasets ({len(args.datasets)})")
+            dataset_dict= {}
+            for ds, label in zip(group.data_paths, args.labels):
+                
+                    # Run experiments for each seed
+                    for seed in args.seeds:
+                        print(f"\n{'=' * 50}")
+                        print(f"Running for dataset {ds.stem} with seed {seed}")
+                        print(f"\n{'=' * 50}")
+                        experiment_name = run_experiment(seed, label, ds, group)
+                        print(f"Completed experiment: {experiment_name}")
 
-    dataset_dict= {}
-    for ds, label in zip(group.data_paths, args.labels):
-        try:
-            # Run experiments for each seed
-            for seed in args.seeds:
-                print(f"\n{'=' * 50}")
-                print(f"Running for dataset {ds.stem} with seed {seed}")
-                print(f"\n{'=' * 50}")
-                experiment_name = run_experiment(seed, label, ds, group)
-                print(f"Completed experiment: {experiment_name}")
+                    '''======Aggregate Statistics========='''
+                    # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
+                    print("\nAggregate feature‐importance stability across experiments:")
+                    mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
+                    for key, mean_std in mean_std_feature_dict.items():
+                        print(f"  {key:20s} mean(std) = {mean_std:.5f}")
+                    # Compute the top 3 distinct features in all experiments for every pareto selection strategy
+                    distinct_feats_dict = count_distinct_top_features(group, ds.name)
 
-            '''======Aggregate Statistics========='''
-            # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
-            print("\nAggregate feature‐importance stability across experiments:")
-            mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
-            for key, mean_std in mean_std_feature_dict.items():
-                print(f"  {key:20s} mean(std) = {mean_std:.5f}")
-            # Compute the top 3 distinct features in all experiments for every pareto selection strategy
-            distinct_feats_dict = count_distinct_top_features(group, ds.name)
+                    # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+                    mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
 
-            # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-            mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
+                    # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
+                    mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
 
-            # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-            mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
+                    # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
+                    mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
 
-            # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
-            mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
+                    # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
+                    mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
+                    '''================================='''
 
-            # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
-            mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
-            '''================================='''
+                    dataset_dict[ds.name] = {
+                        "feature_std":            mean_std_feature_dict,
+                        "distinct_top_features":  distinct_feats_dict,
+                        "tree_nodes": {
+                            "mean": mean_nodes_dict,
+                            "std":  std_nodes_dict,
+                        },
+                        "tree_depth": {
+                            "mean": mean_depth_dict,
+                            "std":  std_depth_dict,
+                        },
+                        "optimal_auc": {
+                            "mean": mean_auc_dict,
+                            "std":  std_auc_dict,
+                        },
+                        "optimal_distance": {
+                            "mean": mean_dist_dict,
+                            "std":  std_dist_dict,
+                        },
+                    }
 
-            dataset_dict[ds.name] = {
-                "feature_std":            mean_std_feature_dict,
-                "distinct_top_features":  distinct_feats_dict,
-                "tree_nodes": {
-                    "mean": mean_nodes_dict,
-                    "std":  std_nodes_dict,
-                },
-                "tree_depth": {
-                    "mean": mean_depth_dict,
-                    "std":  std_depth_dict,
-                },
-                "optimal_auc": {
-                    "mean": mean_auc_dict,
-                    "std":  std_auc_dict,
-                },
-                "optimal_distance": {
-                    "mean": mean_dist_dict,
-                    "std":  std_dist_dict,
-                },
-            }
+                    serializable = _make_jsonable(dataset_dict)
+                    group_logger.log_metrics({"dataset_aggregates": serializable})  
+                    print(f"saved group metrics to metrics.json")
 
-            serializable = _make_jsonable(dataset_dict)
-            group_logger.log_metrics({"dataset_aggregates": serializable})  
-            print(f"saved group metrics to metrics.json")
-            '''======Aggregate Plotting========='''
-            plot_aggregate_metrics(dataset_dict, group)
-            '''================================='''
-        
-        except Exception as e:
-            print(f"\nError encountered: {e!r}\nCleaning up logs and experiment folder…")
+                    '''======Aggregate Plotting========='''
+                    paired_labels = zip(ds, label)
+                    plot_aggregate_metrics(dataset_dict, group, paired_labels)
+                    '''================================='''
 
+        if args.option == "plot":  
+            """NEED TO ADD PLOTTING FROM EXPERIMENT GROUP METRICS.JSON FILE""" 
+            with open(group.group_path/'metrics.json', 'r') as f:
+                all_metrics  = json.load(f) 
+                dataset_dict = all_metrics["dataset_aggregates"]
+            paired_labels = zip(args.datasets, args.labels)
+            plot_aggregate_metrics(dataset_dict, group, paired_labels)
+
+    except Exception as e:
+        print(f"\nError encountered: {e!r}")
+        if args.option == "experiment":
+            print("Cleaning up logs and experiment folder…")
             # 1) remove logs/<each_experiment>
             logs_root = Path("logs").resolve()
             for exp_name in getattr(group, "experiments", []):
@@ -467,17 +487,17 @@ def main():
             if group.group_path.exists():
                 rmtree(group.group_path)
 
-            # re-raise so you still see the traceback
-            raise
+        # re-raise so you still see the traceback
+        raise
 
 
-        # Generate and save group summary
-        summary = group.get_summary()
-        summary_path = group.group_path / "group_summary.json"
-        with open(summary_path, "w") as f:
-            json.dump(summary, f, indent=2)
-        print(f"\nExperiment group summary saved to {summary_path}")
-        print(f"Total experiments run: {len(args.seeds)}")
+    # Generate and save group summary
+    summary = group.get_summary()
+    summary_path = group.group_path / "group_summary.json"
+    with open(summary_path, "w") as f:
+        json.dump(summary, f, indent=2)
+    print(f"\nExperiment group summary saved to {summary_path}")
+    print(f"Total experiments run: {len(args.seeds)}")
 
         
 
