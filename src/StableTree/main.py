@@ -157,7 +157,7 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     logger.log_config({"label": label})
     
     X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(
-        df, FEATURE_SETS[label], label, rng
+        df, FEATURE_SETS[label], label, rng, imbalance="SMOTE"
     )
 
     # Store feature names in group metadata (once)

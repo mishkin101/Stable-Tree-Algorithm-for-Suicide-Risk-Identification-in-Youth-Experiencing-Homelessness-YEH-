@@ -4,8 +4,9 @@ from typing import Dict, List, Tuple
 from sklearn.model_selection import train_test_split
 import sys
 from pathlib import Path
+from imblearn.over_sampling import SMOTE, SVMSMOTE
 
-def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng) -> Tuple:
+def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng, imbalance=None) -> Tuple:
     """
     Prepare data for training and testing by cleaning and splitting.
     
@@ -21,6 +22,11 @@ def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng) -> Tupl
     df_full_cleaned = df[features + [label]].dropna().copy()
     X = df_full_cleaned[features]
     y = df_full_cleaned[label]
+    
+    if imbalance == "SMOTE":
+        sm = SVMSMOTE(random_state=42)
+        X, y = sm.fit_resample(X, y)
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=rng.integers(0, 2**32 - 1), stratify=y)
     X_full = df_full_cleaned[features]
     y_full = df_full_cleaned[label]
