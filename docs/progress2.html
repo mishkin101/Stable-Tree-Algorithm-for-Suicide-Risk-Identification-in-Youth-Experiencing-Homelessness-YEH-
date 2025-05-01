@@ -11,7 +11,7 @@
 
   <meta name="author" content="Adhithya Bhaskar">
   <meta name="author" content="Michelle Gelman">
-  <meta name="dcterms.date" content="2025-04-30">
+  <meta name="dcterms.date" content="2025-05-01">
   <title>Decision Tree Stability for Suicide Experience Prediction</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -218,182 +218,105 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Decision Tree Stability for Suicide Experience Prediction</h1>
-  <p class="subtitle">ISE 625 Project Progress</p>
+  <p class="subtitle">ISE 625 Project Presentation</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Adhithya Bhaskar 
+<strong>Adhithya Bhaskar</strong> 
 </div>
 </div>
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Michelle Gelman 
+<strong>Michelle Gelman</strong> 
 </div>
 </div>
 </div>
 
-  <p class="date">2025-04-30</p>
+  <p class="date">2025-05-01</p>
 </section>
-<section id="introduction" class="slide level2 smaller">
-<h2>Introduction</h2>
-<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span></p>
-<ol type="1">
-<li><strong>Initial Training (T0):</strong> Train initial set of decision trees on subset</li>
-<li><strong>Full Data Training (T):</strong> Train a second set on full training data</li>
-<li><strong>Distance Computation:</strong> Calulate average distance between trees in <strong>T</strong> and the trees in <strong>T0</strong> <span class="math display">\[
-  d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) \;=\;\min_{\{x\}}\ \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q} \;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
-  \]</span></li>
-<li><strong>Performance Metrics:</strong> Compute AUC ROC on test set</li>
-<li><strong>Pareto Optimization:</strong> Select Pareto optimal trees that balance predictive performance and stability <span class="math display">\[
-  \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
-  \]</span></li>
-</ol>
+<section id="problem-outline" class="slide level2">
+<h2>Problem outline</h2>
+<ul>
+<li>4.2 million youth experience homelessness each year in the U.S</li>
+<li><strong>~27%</strong> and <strong>~35%</strong> of <strong>R</strong>unaway and <strong>H</strong>omeless <strong>Y</strong>outh report past-year suicidal ideation <span class="citation" data-cites="kirstConcurrentMentalHealth2011"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span> <span class="citation" data-cites="rewSexualAbuseAlcohol2001"><a href="#/references" role="doc-biblioref" onclick="">[2]</a></span> compared with <strong>15.8%</strong> in general population <span class="citation" data-cites="YouthRiskBehaviora"><a href="#/references" role="doc-biblioref" onclick="">[3]</a></span></li>
+<li><strong>&gt;50%</strong> of RHY have experienced suicidal ideation during their lifetime <span class="citation" data-cites="merschamMentalHealthSubstance2009"><a href="#/references" role="doc-biblioref" onclick="">[4]</a></span> <span class="citation" data-cites="molnarSuicidalBehaviorSexual1998"><a href="#/references" role="doc-biblioref" onclick="">[5]</a></span> <span class="citation" data-cites="vottaSuicideHighriskBehaviors2004"><a href="#/references" role="doc-biblioref" onclick="">[6]</a></span></li>
+</ul>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
 </section>
-<section id="decision-tree-as-collection-of-paths" class="slide level2">
-<h2>Decision Tree as Collection of Paths</h2>
-<p>We represent a decision tree <span class="math inline">\(𝕋\)</span> as a set of paths: <span class="math display">\[
-𝒫(𝕋) = \{p_1, \dots, p_T\}
-\]</span></p>
-<p>Each path <span class="math inline">\(p\)</span> corresponds to one leaf region in the feature space.</p>
-</section>
-<section id="definition-of-a-split" class="slide level2">
-<h2>Definition of a Split</h2>
+<section id="key-question" class="slide level2">
+<h2>Key question</h2>
 <ul>
-<li><strong>Numerical split</strong> on feature <span class="math inline">\(j \in \mathcal{N}\)</span> threshold <span class="math inline">\(t \in [l_j,u_j]\)</span>:
-<ul>
-<li>Test: <span class="math inline">\(x_j &lt; t\)</span> or <span class="math inline">\(x_j \ge t\)</span><br>
-</li>
-</ul></li>
-<li><strong>Categorical split</strong> on feature <span class="math inline">\(j \in \mathcal{C}\)</span> with categories <span class="math inline">\(\mathcal{C}' \subseteq [c_j]\)</span>:
-<ul>
-<li>Test: <span class="math inline">\(x_j \in \mathcal{C}'\)</span> or <span class="math inline">\(x_j \notin \mathcal{C}'\)</span></li>
-</ul></li>
+<li>Most studies focus on <strong>individual characteristics</strong> in suicidal risk for YEH <span class="citation" data-cites="PreventingSuicideConnectedness"><a href="#/references" role="doc-biblioref" onclick="">[7]</a></span></li>
+<li>Limited insight on relevant factors and combinations of both individual and social factors that influence suicide risk <span class="citation" data-cites="fulginitiRiskyIntegrationSocial2016"><a href="#/references" role="doc-biblioref" onclick="">[8]</a></span> <!-- - **Novel** No previous social network considerations or behavior indicators in homeless population suicide research --></li>
+<li><strong>Risk Profile:</strong> Signal of high vulnerability or resiliency with respect to suicidal ideation and attempts</li>
 </ul>
-<p>Each split partitions the feature space into two disjoint regions.</p>
-</section>
-<section id="tree-path" class="slide level2">
-<h2>Tree Path</h2>
-<div title="Definition">
-<div class="callout callout-important no-icon callout-titled callout-style-simple">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong>Definition</strong></p>
-</div>
-<div class="callout-content">
-<p>Sequence of splits from the root to a leaf &amp; class label <span class="math inline">\(k^p\)</span></p>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li><span class="math inline">\(\mathbf{u}^p \in \mathbb{R}^{|\mathcal{N}|}\)</span>: upper bounds for numerical features<br>
-</li>
-<li><span class="math inline">\(\mathbf{l}^p \in \mathbb{R}^{|\mathcal{N}|}\)</span>: lower bounds for numerical features<br>
-</li>
-<li><span class="math inline">\(C^p \in \{0,1\}^{|\mathcal{C}| \times \max_j c_j}\)</span>: category masks<br>
-</li>
-<li><span class="math inline">\(k^p \in [K]\)</span>: assigned class label</li>
-</ul>
-<p><span class="math display">\[
-(\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
-\]</span></p>
-</section>
-<section id="explanations-of-components" class="slide level2">
-<h2>Explanations of components</h2>
-<ul>
-<li><strong><span class="math inline">\(\mathbf{u}^p_j\)</span></strong>, <strong><span class="math inline">\(\mathbf{l}^p_j\)</span></strong>: define the numeric interval for feature <span class="math inline">\(j\)</span><br>
-</li>
-<li><strong><span class="math inline">\(c^p_j\)</span></strong>: binary vector indicating which categories of feature <span class="math inline">\(j\)</span> satisfy the splits<br>
-</li>
-<li><strong><span class="math inline">\(C^p\)</span></strong>: matrix stacking all <span class="math inline">\(c^p_j\)</span><br>
-</li>
-<li><strong><span class="math inline">\(k^p\)</span></strong>: class label predicted for this region</li>
-</ul>
-</section>
-<section id="tree-representation-non-uniqueness" class="slide level2">
-<h2>Tree Representation &amp; Non-Uniqueness</h2>
-<ul>
-<li>Order of splits is irrelevant; different trees can yield the same set of paths.</li>
-<li>Desirable: identical path sets imply identical decision logic regardless of tree shape.</li>
-</ul>
-</section>
-<section id="path-calculations" class="slide level2 smaller">
-<h2>Path calculations</h2>
-<p><strong>Compare feature ranges and class weight</strong> <span class="math display">\[
-    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
-\]</span></p>
-<p><strong>Portion of feature ranges captured by the path</strong> <span class="math display">\[
-    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
-\]</span></p>
-</section>
-<section id="tree-distance" class="slide level2 smaller">
-<h2>Tree Distance</h2>
-<p><span class="math display">\[
-\begin{align*}
-d({T}_1, {T}_2)
-&amp;= \min_{{x}} \Bigg[
-    \sum_{p \in \mathcal{P}({T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) \, x_{pq}
-    + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) \, x_{p}
-\Bigg] \\
-\text{s.t.} \quad
-&amp; \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1,
-\quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
-&amp; \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1,
-\quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
-&amp; x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
-\quad \forall p \in \mathcal{P}(\mathbb{T}_1),
-\quad \forall q \in \mathcal{P}(\mathbb{T}_2)
-\end{align*}
-\]</span></p>
-</section>
-<section id="configuration-parameters" class="slide level2">
-<h2>Configuration Parameters</h2>
-<div id="664888f1" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a>DEPTHS <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">3</span>, <span class="dv">13</span>))</span>
-<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>MIN_SAMPLES <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>]</span>
-<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a>NUM_BOOTSTRAPS <span class="op">=</span> <span class="dv">25</span></span>
-<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a>DATA_PATH <span class="op">=</span> <span class="st">"../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"</span></span>
-<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a>FEATURE_SETS: Dict[<span class="bu">str</span>, List[<span class="bu">str</span>]] <span class="op">=</span> {</span>
-<span id="cb1-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suicidea"</span>: [</span>
-<span id="cb1-9"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="st">"age"</span>, <span class="st">"gender"</span>, <span class="st">"sexori"</span>, <span class="st">"raceall"</span>, <span class="st">"trauma_sum"</span>, <span class="st">"cesd_score"</span>, <span class="st">"harddrug_life"</span>, <span class="st">"school"</span>, <span class="st">"degree"</span>, <span class="st">"job"</span>, <span class="st">"sex"</span>, <span class="st">"concurrent"</span>, <span class="st">"exchange"</span>, <span class="st">"children"</span>, <span class="st">"weapon"</span>, <span class="st">"fight"</span>, <span class="st">"fighthurt"</span>, <span class="st">"ipv"</span>, <span class="st">"ptsd_score"</span>, <span class="st">"alcfirst"</span>, <span class="st">"potfirst"</span>, <span class="st">"staycurrent"</span>, <span class="st">"homelage"</span>, <span class="st">"time_homeless_month"</span>, <span class="st">"jail"</span>, <span class="st">"jailkid"</span>, <span class="st">"gettherapy"</span>, <span class="st">"sum_alter"</span>, <span class="st">"sum_family"</span>, <span class="st">"sum_home_friends"</span>, <span class="st">"sum_street_friends"</span>, <span class="st">"sum_unknown_alter"</span>, <span class="st">"sum_talk_once_week"</span>, <span class="st">"sum_alter3close"</span>, <span class="st">"prop_family_harddrug"</span>, <span class="st">"prop_friends_harddrug"</span>, <span class="st">"prop_friends_home_harddrug"</span>, <span class="st">"prop_friends_street_harddrug"</span>, <span class="st">"prop_alter_all_harddrug"</span>, <span class="st">"prop_enc_badbehave"</span>, <span class="st">"prop_alter_homeless"</span>, <span class="st">"prop_family_emosup"</span>, <span class="st">"prop_friends_emosup"</span>, <span class="st">"prop_friends_home_emosup"</span>, <span class="st">"prop_friends_street_emosup"</span>, <span class="st">"prop_alter_all_emosup"</span>, <span class="st">"prop_family_othersupport"</span>, <span class="st">"prop_friends_othersupport"</span>, <span class="st">"prop_friends_home_othersupport"</span>, <span class="st">"prop_friends_street_othersupport"</span>, <span class="st">"prop_alter_all_othersupport"</span>, <span class="st">"sum_alter_staff"</span>, <span class="st">"prop_object_badbehave"</span>, <span class="st">"prop_enc_goodbehave"</span>, <span class="st">"prop_alter_school_job"</span>, <span class="st">"sum_alter_borrow"</span>],</span>
-<span id="cb1-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suicattempt"</span>: [</span>
-<span id="cb1-11"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="st">"age"</span>, <span class="st">"gender"</span>, <span class="st">"sexori"</span>, <span class="st">"raceall"</span>, <span class="st">"trauma_sum"</span>, <span class="st">"cesd_score"</span>, <span class="st">"harddrug_life"</span>, <span class="st">"school"</span>, <span class="st">"degree"</span>, <span class="st">"job"</span>, <span class="st">"sex"</span>, <span class="st">"concurrent"</span>, <span class="st">"exchange"</span>, <span class="st">"children"</span>, <span class="st">"weapon"</span>, <span class="st">"fight"</span>, <span class="st">"fighthurt"</span>, <span class="st">"ipv"</span>, <span class="st">"ptsd_score"</span>, <span class="st">"alcfirst"</span>, <span class="st">"potfirst"</span>, <span class="st">"staycurrent"</span>, <span class="st">"homelage"</span>, <span class="st">"time_homeless_month"</span>, <span class="st">"jail"</span>, <span class="st">"jailkid"</span>, <span class="st">"gettherapy"</span>, <span class="st">"sum_alter"</span>, <span class="st">"prop_family"</span>, <span class="st">"prop_home_friends"</span>, <span class="st">"prop_street_friends"</span>, <span class="st">"prop_unknown_alter"</span>, <span class="st">"sum_talk_once_week"</span>, <span class="st">"sum_alter3close"</span>, <span class="st">"prop_family_harddrug"</span>, <span class="st">"prop_friends_harddrug"</span>, <span class="st">"prop_friends_home_harddrug"</span>, <span class="st">"prop_friends_street_harddrug"</span>, <span class="st">"prop_alter_all_harddrug"</span>, <span class="st">"prop_enc_badbehave"</span>, <span class="st">"prop_alter_homeless"</span>, <span class="st">"prop_family_emosup"</span>, <span class="st">"prop_friends_emosup"</span>, <span class="st">"prop_friends_home_emosup"</span>, <span class="st">"prop_friends_street_emosup"</span>, <span class="st">"prop_alter_all_emosup"</span>, <span class="st">"prop_family_othersupport"</span>, <span class="st">"prop_friends_othersupport"</span>, <span class="st">"prop_friends_home_othersupport"</span>, <span class="st">"prop_friends_street_othersupport"</span>, <span class="st">"prop_alter_all_othersupport"</span>, <span class="st">"sum_alter_staff"</span>, <span class="st">"prop_object_badbehave"</span>, <span class="st">"prop_enc_goodbehave"</span>, <span class="st">"prop_alter_school_job"</span>, <span class="st">"sum_alter_borrow"</span>],</span>
-<span id="cb1-12"><a href="" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a>MODEL_PARAMS <span class="op">=</span> {</span>
-<span id="cb1-15"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suicidea"</span>: <span class="bu">dict</span>(min_samples_leaf<span class="op">=</span><span class="dv">10</span>, min_samples_split<span class="op">=</span><span class="dv">20</span>, max_depth<span class="op">=</span><span class="dv">4</span>),</span>
-<span id="cb1-16"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suicattempt"</span>: <span class="bu">dict</span>(min_samples_leaf<span class="op">=</span><span class="dv">10</span>, min_samples_split<span class="op">=</span><span class="dv">30</span>, max_depth<span class="op">=</span><span class="dv">4</span>),</span>
-<span id="cb1-17"><a href="" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-18"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="" aria-hidden="true" tabindex="-1"></a>LABELS <span class="op">=</span> [<span class="st">"suicidea"</span>, <span class="st">"suicattempt"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p><strong>Can a stable tree be used to understand the clinical risk profiles of YEH?</strong></p>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="data-collection-considerations" class="slide level2">
+<h2>Data Collection &amp; considerations</h2>
+<ul>
+<li><strong>Survey:</strong>
+<ul>
+<li>Use individual and social network attributes</li>
+<li>Between October 2011 and February 2013</li>
+<li>2 drop-in centers that serve YEH in Hollywood and Santa Monica, CA</li>
+</ul></li>
+<li><strong>Current Factors:</strong>
+<ul>
+<li>Overrepresentation of males and heterosexual youth</li>
+<li>Generalizability to other geographical regions</li>
+</ul></li>
+</ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="what-does-trust-mean-to-a-clinician" class="slide level2">
+<h2>What does <strong>trust</strong> mean to a clinician?</h2>
+<ul>
+<li><p><strong>Accurate intervention targets <span class="math inline">\(\rightarrow\)</span> </strong> Help stakeholders understand how to build intervention strategies based on clinical risk profiles for YEH</p></li>
+<li><p><strong>Less algorithmic aversion <span class="math inline">\(\rightarrow\)</span> </strong> Clinicians’ decision making is not affected by unreliable models’ decisions from a lack of consistency in identifying suicidal risk</p></li>
+</ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="why-do-we-need-stable-trees" class="slide level2">
+<h2>Why do we need <strong>stable trees</strong>?</h2>
+<ul>
+<li>Population characteristics <em>change over time</em></li>
+<li>Model’s predicted output should not change with subsequent runs in light of new patient data</li>
+<li>Initial dataset is small, but larger amounts of data become available over time as more patients’ information gets recorded <strong><span class="math inline">\(\rightarrow\)</span></strong> retraining needed <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023"><a href="#/references" role="doc-biblioref" onclick="">[9]</a></span></li>
+</ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
 </section>
 <section id="data-import-and-preparation" class="slide level2">
 <h2>Data Import and Preparation</h2>
 <div id="import-data" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df: pd.DataFrame, features: List[<span class="bu">str</span>], label: <span class="bu">str</span>, rng):</span>
-<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.replace(<span class="st">'NaN'</span>, pd.NA)</span>
-<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a>    df_full_cleaned <span class="op">=</span> df[features <span class="op">+</span> [label]].dropna().copy()</span>
-<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> df_full_cleaned[features]</span>
-<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df_full_cleaned[label]</span>
-<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span>rng.integers(<span class="dv">0</span>, <span class="dv">2</span><span class="op">**</span><span class="dv">32</span> <span class="op">-</span> <span class="dv">1</span>), stratify<span class="op">=</span>y)</span>
-<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a>    X_full <span class="op">=</span> df_full_cleaned[features]</span>
-<span id="cb2-8"><a href="" aria-hidden="true" tabindex="-1"></a>    y_full <span class="op">=</span> df_full_cleaned[label]</span>
-<span id="cb2-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_full, y_full, X_train, X_test, y_train, y_test</span>
-<span id="cb2-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(DATA_PATH)</span>
-<span id="cb2-12"><a href="" aria-hidden="true" tabindex="-1"></a>X_full, y_full, X_train, X_test, y_train, y_test <span class="op">=</span> prepare_data(df, FEATURE_SETS[<span class="st">"suicidea"</span>], <span class="st">"suicidea"</span>, np.random.default_rng(<span class="dv">1234</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df: pd.DataFrame, features: List[<span class="bu">str</span>], label: <span class="bu">str</span>, rng, imbalance<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.replace(<span class="st">'NaN'</span>, pd.NA)  <span class="co"># replace the string 'NaN' with actual NaN values</span></span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a>    df_full_cleaned <span class="op">=</span> df[features <span class="op">+</span> [label]].dropna().copy()</span>
+<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> df_full_cleaned[features]</span>
+<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df_full_cleaned[label]</span>
+<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> imbalance <span class="op">==</span> <span class="st">"SMOTE"</span>:</span>
+<span id="cb1-8"><a href="" aria-hidden="true" tabindex="-1"></a>        sm <span class="op">=</span> SVMSMOTE(random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-9"><a href="" aria-hidden="true" tabindex="-1"></a>        X, y <span class="op">=</span> sm.fit_resample(X, y)</span>
+<span id="cb1-10"><a href="" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-11"><a href="" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span>rng.integers(<span class="dv">0</span>, <span class="dv">2</span><span class="op">**</span><span class="dv">32</span> <span class="op">-</span> <span class="dv">1</span>), stratify<span class="op">=</span>y)</span>
+<span id="cb1-12"><a href="" aria-hidden="true" tabindex="-1"></a>    X_full <span class="op">=</span> df_full_cleaned[features]</span>
+<span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a>    y_full <span class="op">=</span> df_full_cleaned[label]</span>
+<span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_full, y_full, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="406a4bc9" class="cell" data-execution_count="4">
+<div id="70993e73" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of samples in the full dataset: 586
 Number of samples in the training set: 439
@@ -401,14 +324,15 @@ Number of samples in the test set: 147
 Shape of training set: (439, 56)</code></pre>
 </div>
 </div>
-<div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
-</div>
 </section>
+<section id="data-imbalance" class="slide level2">
+<h2>Data Imbalance</h2>
+
+<img data-src="progress2_files/figure-revealjs/cell-6-output-1.png" class="r-stretch quarto-figure-center"><p class="caption">Before and after using SMOTE on imbalanced <code>suicidea</code></p></section>
 <section id="a-peek-at-the-data" class="slide level2 smaller">
 <h2>A peek at the data</h2>
-<div id="6549aa09" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div id="210a2aff" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="531">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -723,25 +647,86 @@ Shape of training set: (439, 56)</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="tree-path" class="slide level2">
+<h2>Tree Path</h2>
+<p><em>Sequence of splits from the root to a leaf &amp; class label <span class="math inline">\(k^p\)</span></em></p>
+<p><span class="math display">\[
+𝒫(𝕋) = \{p_1, \dots, p_T\}
+\]</span></p>
+<ul>
+<li><strong><span class="math inline">\(\mathbf{u}^p_j\)</span></strong>, <strong><span class="math inline">\(\mathbf{l}^p_j\)</span></strong>: define the numeric interval for feature <span class="math inline">\(j\)</span><br>
+</li>
+<li><strong><span class="math inline">\(\mathbf{c}^p_j\)</span></strong>: binary vector indicating which categories of feature <span class="math inline">\(j\)</span> satisfy the splits<br>
+</li>
+<li><strong><span class="math inline">\(\mathbf{k}^p\)</span></strong>: class label predicted for this region</li>
+</ul>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
+</section>
+<section id="tree-distance" class="slide level2 smaller">
+<h2>Tree Distance</h2>
+<p><span class="math display">\[
+\begin{align*}
+d({T}_1, {T}_2)
+&amp;= \min_{{x}} \Bigg[
+    \sum_{p \in \mathcal{P}({T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) \, x_{pq}
+    + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) \, x_{p}
+\Bigg] \\
+\text{s.t.} \quad
+&amp; \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1,
+\quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
+&amp; \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1,
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
+\\
+&amp; x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
+\\
+&amp; \quad \forall p \in \mathcal{P}(\mathbb{T}_1),
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2)
+\end{align*}
+\]</span></p>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="stable-decision-trees" class="slide level2 smaller">
+<h2>Stable decision trees</h2>
+<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023"><a href="#/references" role="doc-biblioref" onclick="">[9]</a></span></p>
+<ol type="1">
+<li><strong>Initial Training (T0):</strong> Train initial set of decision trees on subset</li>
+<li><strong>Full Data Training (T):</strong> Train a second set on full training data</li>
+<li><strong>Distance Computation:</strong> Calulate average distance between trees in <strong>T</strong> and the trees in <strong>T0</strong> <span class="math display">\[
+  d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) \;=\;\min_{\{x\}}\ \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q} \;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+  \]</span></li>
+<li><strong>Performance Metrics:</strong> Compute AUC ROC on test set</li>
+<li><strong>Pareto Optimization:</strong> Select Pareto optimal trees that balance predictive performance and stability <span class="math display">\[
+  \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
+  \]</span></li>
+</ol>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<p>!()[Untitled-2025-05-01-0029.excalidraw(1).svg]</p>
 </section>
 <section id="random-train-split" class="slide level2">
 <h2>Random Train Split</h2>
-<div id="cell-train-test-split" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_train_split(X, y):</span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>    X_values <span class="op">=</span> X.values <span class="cf">if</span> <span class="bu">hasattr</span>(X, <span class="st">'values'</span>) <span class="cf">else</span> X</span>
-<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>    y_values <span class="op">=</span> y.values <span class="cf">if</span> <span class="bu">hasattr</span>(y, <span class="st">'values'</span>) <span class="cf">else</span> y</span>
-<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X_values.shape[<span class="dv">0</span>]</span>
-<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> np.random.permutation(N)</span>
-<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a>    X0, y0 <span class="op">=</span> X_values[indices[:N <span class="op">//</span> <span class="dv">2</span>]], y_values[indices[:N <span class="op">//</span> <span class="dv">2</span>]]</span>
-<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X0, y0</span>
-<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a>X0, y0 <span class="op">=</span> random_train_split(X_train.values, y_train.values)</span>
-<span id="cb4-11"><a href="" aria-hidden="true" tabindex="-1"></a>X0.shape, y0.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="6">
+<div id="cell-train-test-split" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_train_split(X, y):</span>
+<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a>    X_values <span class="op">=</span> X.values <span class="cf">if</span> <span class="bu">hasattr</span>(X, <span class="st">'values'</span>) <span class="cf">else</span> X</span>
+<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a>    y_values <span class="op">=</span> y.values <span class="cf">if</span> <span class="bu">hasattr</span>(y, <span class="st">'values'</span>) <span class="cf">else</span> y</span>
+<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X_values.shape[<span class="dv">0</span>]</span>
+<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> np.random.permutation(N)</span>
+<span id="cb3-7"><a href="" aria-hidden="true" tabindex="-1"></a>    X0, y0 <span class="op">=</span> X_values[indices[:N <span class="op">//</span> <span class="dv">2</span>]], y_values[indices[:N <span class="op">//</span> <span class="dv">2</span>]]</span>
+<span id="cb3-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X0, y0</span>
+<span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="" aria-hidden="true" tabindex="-1"></a>X0, y0 <span class="op">=</span> random_train_split(X_train.values, y_train.values)</span>
+<span id="cb3-11"><a href="" aria-hidden="true" tabindex="-1"></a>X0.shape, y0.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="532">
 <pre><code>((219, 56), (219,))</code></pre>
 </div>
 </div>
@@ -749,34 +734,29 @@ Shape of training set: (439, 56)</code></pre>
 <p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
-<section id="decision-tree-training-functions" class="slide level2">
-<h2>Decision Tree Training Functions</h2>
-<div id="a823d08c" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="|6,7|10|11,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="kw">def</span> train_decision_tree(X, y, depth, min_samples_leaf):</span>
-<span id="cb6-2"><a href=""></a>    clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>depth, min_samples_leaf<span class="op">=</span>min_samples_leaf)</span>
-<span id="cb6-3"><a href=""></a>    clf.fit(X, y)</span>
-<span id="cb6-4"><a href=""></a>    <span class="cf">return</span> clf</span>
-<span id="cb6-5"><a href=""></a></span>
-<span id="cb6-6"><a href=""></a><span class="kw">def</span> bootstrap_trees(X, y, depths, min_samples, B):</span>
-<span id="cb6-7"><a href=""></a>    <span class="co"># Create B bootstrap trees by sampling with replacement from X_0</span></span>
-<span id="cb6-8"><a href=""></a>    trees <span class="op">=</span> []</span>
-<span id="cb6-9"><a href=""></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(B):</span>
-<span id="cb6-10"><a href=""></a>        X_sample, y_sample <span class="op">=</span> resample(X, y, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-11"><a href=""></a>        depth <span class="op">=</span> np.random.choice(depths)</span>
-<span id="cb6-12"><a href=""></a>        min_leaf <span class="op">=</span> np.random.choice(min_samples)</span>
-<span id="cb6-13"><a href=""></a>        tree <span class="op">=</span> train_decision_tree(X_sample, y_sample, depth, min_leaf)</span>
-<span id="cb6-14"><a href=""></a>        trees.append(tree)</span>
-<span id="cb6-15"><a href=""></a>    <span class="cf">return</span> trees</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
 <section id="bootstrapping-decision-trees" class="slide level2">
 <h2>Bootstrapping Decision Trees</h2>
-<div id="fc445758" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>T0 <span class="op">=</span> bootstrap_trees(X0, y0, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)</span>
-<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of trees in T0:"</span>, <span class="bu">len</span>(T0))</span>
-<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> bootstrap_trees(X_train.values, y_train.values, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)</span>
-<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of trees in T:"</span>, <span class="bu">len</span>(T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="beb86dd8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|6,7|10|11,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="kw">def</span> train_decision_tree(X, y, depth, min_samples_leaf):</span>
+<span id="cb5-2"><a href=""></a>    clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>depth, min_samples_leaf<span class="op">=</span>min_samples_leaf)</span>
+<span id="cb5-3"><a href=""></a>    clf.fit(X, y)</span>
+<span id="cb5-4"><a href=""></a>    <span class="cf">return</span> clf</span>
+<span id="cb5-5"><a href=""></a></span>
+<span id="cb5-6"><a href=""></a><span class="kw">def</span> bootstrap_trees(X, y, depths, min_samples, B):</span>
+<span id="cb5-7"><a href=""></a>    <span class="co"># Create B bootstrap trees by sampling with replacement from X_0</span></span>
+<span id="cb5-8"><a href=""></a>    trees <span class="op">=</span> []</span>
+<span id="cb5-9"><a href=""></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(B):</span>
+<span id="cb5-10"><a href=""></a>        X_sample, y_sample <span class="op">=</span> resample(X, y, replace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-11"><a href=""></a>        depth <span class="op">=</span> np.random.choice(depths)</span>
+<span id="cb5-12"><a href=""></a>        min_leaf <span class="op">=</span> np.random.choice(min_samples)</span>
+<span id="cb5-13"><a href=""></a>        tree <span class="op">=</span> train_decision_tree(X_sample, y_sample, depth, min_leaf)</span>
+<span id="cb5-14"><a href=""></a>        trees.append(tree)</span>
+<span id="cb5-15"><a href=""></a>    <span class="cf">return</span> trees</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
+<div id="2c8a6253" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of trees in T0: 25
 Number of trees in T: 25</code></pre>
@@ -785,67 +765,56 @@ Number of trees in T: 25</code></pre>
 </section>
 <section id="computing-tree-distances" class="slide level2">
 <h2>Computing Tree Distances</h2>
-<div id="84ac1c13" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|5|8,9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a><span class="kw">def</span> compute_average_distances(T0, T, X_train, y_train):</span>
-<span id="cb9-2"><a href=""></a>    X_train_values <span class="op">=</span> X_train.values <span class="cf">if</span> <span class="bu">hasattr</span>(X_train, <span class="st">"values"</span>) <span class="cf">else</span> X_train</span>
-<span id="cb9-3"><a href=""></a>    distances: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
-<span id="cb9-4"><a href=""></a></span>
-<span id="cb9-5"><a href=""></a>    <span class="cf">with</span> alive_bar(<span class="bu">len</span>(T), title<span class="op">=</span><span class="st">"Computing average tree distances"</span>, dual_line<span class="op">=</span><span class="va">True</span>, spinner<span class="op">=</span><span class="st">"waves"</span>, bar<span class="op">=</span><span class="st">"smooth"</span>) <span class="im">as</span> bar:</span>
-<span id="cb9-6"><a href=""></a>        <span class="cf">for</span> tree_b <span class="kw">in</span> T:</span>
-<span id="cb9-7"><a href=""></a>            d_b <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb9-8"><a href=""></a>            <span class="cf">for</span> tree_beta <span class="kw">in</span> T0:</span>
-<span id="cb9-9"><a href=""></a>                calc <span class="op">=</span> DistanceCalculator(tree_beta, tree_b, X<span class="op">=</span>X_train_values, y<span class="op">=</span>y_train)</span>
-<span id="cb9-10"><a href=""></a>                d_b <span class="op">+=</span> calc.compute_tree_distance()</span>
-<span id="cb9-11"><a href=""></a></span>
-<span id="cb9-12"><a href=""></a>            mean_dist <span class="op">=</span> d_b <span class="op">/</span> <span class="bu">len</span>(T0)</span>
-<span id="cb9-13"><a href=""></a>            distances.append(mean_dist)</span>
-<span id="cb9-14"><a href=""></a>            bar()</span>
-<span id="cb9-15"><a href=""></a></span>
-<span id="cb9-16"><a href=""></a>    <span class="cf">return</span> distances</span>
-<span id="cb9-17"><a href=""></a>distances <span class="op">=</span> compute_average_distances(T0, T, X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="df22b793" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="6,8,9,10,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> compute_average_distances(T0, T, X_train, y_train):</span>
+<span id="cb7-2"><a href=""></a>    X_train_values <span class="op">=</span> X_train.values <span class="cf">if</span> <span class="bu">hasattr</span>(X_train, <span class="st">"values"</span>) <span class="cf">else</span> X_train</span>
+<span id="cb7-3"><a href=""></a>    distances: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
+<span id="cb7-4"><a href=""></a></span>
+<span id="cb7-5"><a href=""></a>    <span class="cf">with</span> alive_bar(<span class="bu">len</span>(T), title<span class="op">=</span><span class="st">"Computing average tree distances"</span>, dual_line<span class="op">=</span><span class="va">True</span>, spinner<span class="op">=</span><span class="st">"waves"</span>, bar<span class="op">=</span><span class="st">"smooth"</span>) <span class="im">as</span> bar:</span>
+<span id="cb7-6"><a href=""></a>        <span class="cf">for</span> tree_b <span class="kw">in</span> T:</span>
+<span id="cb7-7"><a href=""></a>            d_b <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-8"><a href=""></a>            <span class="cf">for</span> tree_beta <span class="kw">in</span> T0:</span>
+<span id="cb7-9"><a href=""></a>                calc <span class="op">=</span> DistanceCalculator(tree_beta, tree_b, X<span class="op">=</span>X_train_values, y<span class="op">=</span>y_train)</span>
+<span id="cb7-10"><a href=""></a>                d_b <span class="op">+=</span> calc.compute_tree_distance()</span>
+<span id="cb7-11"><a href=""></a></span>
+<span id="cb7-12"><a href=""></a>            mean_dist <span class="op">=</span> d_b <span class="op">/</span> <span class="bu">len</span>(T0)</span>
+<span id="cb7-13"><a href=""></a>            distances.append(mean_dist)</span>
+<span id="cb7-14"><a href=""></a>            bar()</span>
+<span id="cb7-15"><a href=""></a></span>
+<span id="cb7-16"><a href=""></a>    <span class="cf">return</span> distances</span>
+<span id="cb7-17"><a href=""></a>distances <span class="op">=</span> compute_average_distances(T0, T, X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="evaluating-predictive-power" class="slide level2">
-<h2>Evaluating Predictive Power</h2>
-<div id="4ad247ba" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_predictive_power(trees, X_holdout, y_holdout):</span>
-<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>    auc_scores <span class="op">=</span> []</span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tree <span class="kw">in</span> trees:</span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>        y_prob <span class="op">=</span> tree.predict_proba(X_holdout)[:, <span class="dv">1</span>]</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>        auc <span class="op">=</span> roc_auc_score(y_holdout, y_prob)</span>
-<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>        auc_scores.append(auc)</span>
-<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> auc_scores</span>
-<span id="cb10-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="" aria-hidden="true" tabindex="-1"></a>auc_scores <span class="op">=</span> evaluate_predictive_power(T, X_test.values, y_test.values)</span>
-<span id="cb10-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Average AUC score:"</span>, np.mean(auc_scores))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Average AUC score: 0.6213350286077559</code></pre>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
-</div>
+<!-- ## Evaluating Predictive Power -->
 </section>
 <section id="finding-pareto-optimal-trees" class="slide level2">
 <h2>Finding Pareto Optimal Trees</h2>
 <ul>
 <li><strong>Pareto Optimal:</strong> <span class="math inline">\((d_{b'} \leq d_b \text{ and } \alpha_{b'} &gt; \alpha_b) \text{ or } (d_{b'} &lt; d_b \text{ and } \alpha_{b'} \geq \alpha_b)\)</span></li>
 </ul>
-<div id="9fd9b8f9" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|5,6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href=""></a><span class="kw">def</span> pareto_optimal_trees(distances, auc_scores):</span>
-<span id="cb12-2"><a href=""></a>    pareto_trees <span class="op">=</span> []</span>
-<span id="cb12-3"><a href=""></a>    <span class="cf">for</span> i, (d_i, a_i) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
-<span id="cb12-4"><a href=""></a>        dominated <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb12-5"><a href=""></a>        <span class="cf">for</span> j, (d_j, a_j) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
-<span id="cb12-6"><a href=""></a>            <span class="cf">if</span> i <span class="op">!=</span> j <span class="kw">and</span> ((d_j <span class="op">&lt;=</span> d_i <span class="kw">and</span> a_j <span class="op">&gt;</span> a_i) <span class="kw">or</span> (d_j <span class="op">&lt;</span> d_i <span class="kw">and</span> a_j <span class="op">&gt;=</span> a_i)):</span>
-<span id="cb12-7"><a href=""></a>                dominated <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb12-8"><a href=""></a>                <span class="cf">break</span></span>
-<span id="cb12-9"><a href=""></a>        <span class="cf">if</span> <span class="kw">not</span> dominated:</span>
-<span id="cb12-10"><a href=""></a>            pareto_trees.append(i)</span>
-<span id="cb12-11"><a href=""></a>    <span class="cf">return</span> pareto_trees</span>
-<span id="cb12-12"><a href=""></a></span>
-<span id="cb12-13"><a href=""></a>pareto_trees <span class="op">=</span> pareto_optimal_trees(distances, auc_scores)</span>
-<span id="cb12-14"><a href=""></a><span class="bu">print</span>(<span class="st">"Number of Pareto optimal trees:"</span>, <span class="bu">len</span>(pareto_trees))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ee38fcab" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="5,6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="kw">def</span> pareto_optimal_trees(distances, auc_scores):</span>
+<span id="cb8-2"><a href=""></a>    pareto_trees <span class="op">=</span> []</span>
+<span id="cb8-3"><a href=""></a>    <span class="cf">for</span> i, (d_i, a_i) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
+<span id="cb8-4"><a href=""></a>        dominated <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb8-5"><a href=""></a>        <span class="cf">for</span> j, (d_j, a_j) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
+<span id="cb8-6"><a href=""></a>            <span class="cf">if</span> i <span class="op">!=</span> j <span class="kw">and</span> ((d_j <span class="op">&lt;=</span> d_i <span class="kw">and</span> a_j <span class="op">&gt;</span> a_i) <span class="kw">or</span> (d_j <span class="op">&lt;</span> d_i <span class="kw">and</span> a_j <span class="op">&gt;=</span> a_i)):</span>
+<span id="cb8-7"><a href=""></a>                dominated <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb8-8"><a href=""></a>                <span class="cf">break</span></span>
+<span id="cb8-9"><a href=""></a>        <span class="cf">if</span> <span class="kw">not</span> dominated:</span>
+<span id="cb8-10"><a href=""></a>            pareto_trees.append(i)</span>
+<span id="cb8-11"><a href=""></a>    <span class="cf">return</span> pareto_trees</span>
+<span id="cb8-12"><a href=""></a></span>
+<span id="cb8-13"><a href=""></a>pareto_trees <span class="op">=</span> pareto_optimal_trees(distances, auc_scores)</span>
+<span id="cb8-14"><a href=""></a><span class="bu">print</span>(<span class="st">"Number of Pareto optimal trees:"</span>, <span class="bu">len</span>(pareto_trees))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of Pareto optimal trees: 4</code></pre>
 </div>
+</div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
 <section id="tree-selection-strategy" class="slide level2">
@@ -855,46 +824,31 @@ Number of trees in T: 25</code></pre>
 <li>Stability or predictive power?</li>
 <li>Indicator function: <span class="math inline">\(\alpha_{b}\)</span> is within ε of the best score</li>
 </ul>
-<div id="1d2d4b7d" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="|3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href=""></a><span class="kw">def</span> select_final_tree(distances, auc_scores, pareto_indices, epsilon<span class="op">=</span><span class="fl">0.01</span>):</span>
-<span id="cb14-2"><a href=""></a>    best_auc <span class="op">=</span> <span class="bu">max</span>(auc_scores)</span>
-<span id="cb14-3"><a href=""></a>    candidates <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> pareto_indices <span class="cf">if</span> auc_scores[i] <span class="op">&gt;=</span> (<span class="dv">1</span> <span class="op">-</span> epsilon) <span class="op">*</span> best_auc]</span>
-<span id="cb14-4"><a href=""></a>    <span class="cf">if</span> <span class="kw">not</span> candidates:</span>
-<span id="cb14-5"><a href=""></a>        candidates <span class="op">=</span> pareto_indices</span>
-<span id="cb14-6"><a href=""></a>    best_idx <span class="op">=</span> <span class="bu">max</span>(candidates, key<span class="op">=</span><span class="kw">lambda</span> i: auc_scores[i] <span class="op">-</span> distances[i])</span>
-<span id="cb14-7"><a href=""></a>    <span class="cf">return</span> best_idx</span>
-<span id="cb14-8"><a href=""></a></span>
-<span id="cb14-9"><a href=""></a>selected_tree_index <span class="op">=</span> select_final_tree(distances, auc_scores, pareto_trees)</span>
-<span id="cb14-10"><a href=""></a><span class="bu">print</span>(<span class="st">"Selected tree index:"</span>, selected_tree_index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cb8ce928" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a><span class="kw">def</span> select_final_tree(distances, auc_scores, pareto_indices, epsilon<span class="op">=</span><span class="fl">0.01</span>):</span>
+<span id="cb10-2"><a href=""></a>    best_auc <span class="op">=</span> <span class="bu">max</span>(auc_scores)</span>
+<span id="cb10-3"><a href=""></a>    candidates <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> pareto_indices <span class="cf">if</span> auc_scores[i] <span class="op">&gt;=</span> (<span class="dv">1</span> <span class="op">-</span> epsilon) <span class="op">*</span> best_auc]</span>
+<span id="cb10-4"><a href=""></a>    <span class="cf">if</span> <span class="kw">not</span> candidates:</span>
+<span id="cb10-5"><a href=""></a>        candidates <span class="op">=</span> pareto_indices</span>
+<span id="cb10-6"><a href=""></a>    best_idx <span class="op">=</span> <span class="bu">max</span>(candidates, key<span class="op">=</span><span class="kw">lambda</span> i: auc_scores[i] <span class="op">-</span> distances[i])</span>
+<span id="cb10-7"><a href=""></a>    <span class="cf">return</span> best_idx</span>
+<span id="cb10-8"><a href=""></a></span>
+<span id="cb10-9"><a href=""></a>selected_tree_index <span class="op">=</span> select_final_tree(distances, auc_scores, pareto_trees)</span>
+<span id="cb10-10"><a href=""></a><span class="bu">print</span>(<span class="st">"Selected tree index:"</span>, selected_tree_index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Selected tree index: 23</code></pre>
 </div>
+</div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
 <section id="visualizing-selected-tree" class="slide level2">
 <h2>Visualizing Selected Tree</h2>
 
-<img data-src="progress2_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="pareto-frontier-visualization" class="slide level2">
-<h2>Pareto Frontier Visualization</h2>
-<div class="columns">
-<div class="column" style="width:55%;">
-<div id="49e39aa0" class="cell" data-execution_count="16">
-<div class="cell-output cell-output-display">
-<div>
-<figure>
-<p><img data-src="progress2_files/figure-revealjs/cell-17-output-1.png"></p>
-</figure>
+<img data-src="progress2_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
-</div>
-</div>
-</div><div class="column" style="width:45%;">
-<p><strong>Average distance</strong></p>
-<p><span class="math inline">\(d_{b}\)</span> , <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
-<p><br>
-<strong>Out-of-sample AUCROC</strong></p>
-<p><span class="math inline">\(a_{b}\)</span>, <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
-</div></div>
 </section>
 <section id="aggregated-metrics" class="slide level2 smaller">
 <h2>Aggregated metrics</h2>
@@ -947,13 +901,80 @@ Number of trees in T: 25</code></pre>
 <td style="text-align: center;">49.0</td>
 <td style="text-align: center;">8.4</td>
 </tr>
+<tr class="even">
+<td style="text-align: center;"><strong>CART Pareto AUC</strong></td>
+<td style="text-align: center;">0.900 (0.022)</td>
+<td style="text-align: center;">0.054 (0.031)</td>
+<td style="text-align: center;">0.022</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">35.800</td>
+<td style="text-align: center;">5.600</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>CART Pareto Stability</strong></td>
+<td style="text-align: center;">0.897 (0.023)</td>
+<td style="text-align: center;">0.020 (0.017)</td>
+<td style="text-align: center;">0.025</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">43.600</td>
+<td style="text-align: center;">7.100</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>CART Pareto Distance</strong></td>
+<td style="text-align: center;">0.852 (0.026)</td>
+<td style="text-align: center;">0.006 (0.001)</td>
+<td style="text-align: center;">0.021</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">58.200</td>
+<td style="text-align: center;">8.800</td>
+</tr>
 </tbody>
 </table>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
+<section id="results---aggregated-std" class="slide level2">
+<h2>Results - Aggregated STD</h2>
+
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="results---tree-depth" class="slide level2">
+<h2>Results - Tree depth</h2>
+
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="results---number-of-nodes" class="slide level2">
+<h2>Results - Number of nodes</h2>
+
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="results---distinct-top-features" class="slide level2">
+<h2>Results - Distinct top features</h2>
+
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="pareto-frontier-visualization" class="slide level2">
+<h2>Pareto Frontier Visualization</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div id="4d5b4cd0" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="progress2_files/figure-revealjs/cell-18-output-1.png"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><strong>Average distance</strong></p>
+<p><span class="math inline">\(d_{b}\)</span> , <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
+<p><br>
+<strong>Out-of-sample AUCROC</strong></p>
+<p><span class="math inline">\(a_{b}\)</span>, <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
+</div></div>
 </section>
 <section id="experiment-runner" class="slide level2 smaller">
 <h2>Experiment runner</h2>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">seed=23</a></li><li><a href="#tabset-1-2">seed=28</a></li></ul>
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1"><code>label=suicidea</code></a></li><li><a href="#tabset-1-2"><code>label=suicattempt</code></a></li><li><a href="#tabset-1-3"><code>label=target</code></a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
 <pre class="{bash}"><code>❯ uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
@@ -999,16 +1020,64 @@ Completed experiment: experiment_20250429_183249_seed_28
 Experiment group summary saved to experiments/seed_checking/group_summary.json
 Total experiments run: 2</code></pre>
 </div>
+<div id="tabset-1-3">
+<pre class="{bash}"><code>==================================================
+Running experiment with seed 28
+==================================================
+Experiment: experiment_20250429_183249_seed_28 - Seed: 28
+Number of samples in the full dataset: 586
+Number of samples in the training set: 439
+Number of samples in the test set: 147
+Shape of training set: (439, 56)
+Shape of random split: (219, 56), (219,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Number of distances computed: 20
+Average AUC score: 0.6365702479338843
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
+Selected tree index: 3
+Completed experiment: experiment_20250429_183249_seed_28
+Experiment group summary saved to experiments/seed_checking/group_summary.json
+Total experiments run: 2</code></pre>
+</div>
 </div>
 </div>
 <div class="footer">
 <p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
+<section id="future-work---short-term" class="slide level2">
+<h2>Future work - Short term</h2>
+<ul>
+<li>Refine what <strong>stability</strong> means with our stakeholders
+<ul>
+<li>What do we measure concerning and how do we quantify success?</li>
+<li>Are there correlations to other aggregate metrics that vary with magnitude of tree distance?</li>
+</ul></li>
+<li>Hyper-parameter finetuning
+<ul>
+<li>Path distance class weight</li>
+<li>Pareto tree selection strategy</li>
+<li>Data pre-processing</li>
+</ul></li>
+</ul>
+</section>
+<section id="future-work---long-term" class="slide level2">
+<h2>Future work - Long term</h2>
+<ul>
+<li>Does implementation meet the criteria for reliability in identifying YEH?</li>
+<li>Feature selection and qualitative pre-processing</li>
+</ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="thoughts-and-points-of-dicussion" class="slide level2 smaller">
 <h2>Thoughts and points of dicussion</h2>
 <ol type="1">
-<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918"><a href="#/references" role="doc-biblioref" onclick="">[2]</a></span></li>
+<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918"><a href="#/references" role="doc-biblioref" onclick="">[10]</a></span></li>
 </ol>
 <blockquote>
 <p>The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. … However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.</p>
@@ -1016,16 +1085,43 @@ Total experiments run: 2</code></pre>
 <ol start="2" type="1">
 <li>Stability-performance trade-off when selecting Pareto Optimal tree?</li>
 </ol>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-kirstConcurrentMentalHealth2011" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. Kirst, T. Frederick, and P. G. Erickson, <span>“Concurrent mental health and substance use problems among street-involved youth,”</span> <em>International Journal of Mental Health and Addiction</em>, vol. 9, no. 5, pp. 543–553, 2011, doi: <a href="https://doi.org/10.1007/s11469-011-9328-3">10.1007/s11469-011-9328-3</a>.</div>
+</div>
+<div id="ref-rewSexualAbuseAlcohol2001" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">L. Rew, M. Taylor-Seehafer, and M. L. Fitzgerald, <span>“Sexual abuse, alcohol and other drug use, and suicidal behaviors in homeless adolescents,”</span> <em>Issues Compr Pediatr Nurs</em>, vol. 24, no. 4, pp. 225–240, 2001, doi: <a href="https://doi.org/10.1080/014608601753260326">10.1080/014608601753260326</a>.</div>
+</div>
+<div id="ref-YouthRiskBehaviora" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">D. Eaton, <span>“Youth risk behavior surveillance - <span>United States</span>, 2011 - <span>PubMed</span>.”</span> <a href="https://pubmed.ncbi.nlm.nih.gov/22673000/">https://pubmed.ncbi.nlm.nih.gov/22673000/</a> (accessed May 01, 2025).</div>
+</div>
+<div id="ref-merschamMentalHealthSubstance2009" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">C. Merscham, J. M. Van Leeuwen, and M. McGuire, <span>“Mental health and substance abuse indicators among homeless youth in <span>Denver</span>, <span>Colorado</span>,”</span> <em>Child Welfare</em>, vol. 88, no. 2, pp. 93–110, 2009, Available: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19777794">https://www.ncbi.nlm.nih.gov/pubmed/19777794</a></div>
+</div>
+<div id="ref-molnarSuicidalBehaviorSexual1998" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">B. E. Molnar, S. B. Shade, A. H. Kral, R. E. Booth, and J. K. Watters, <span>“Suicidal behavior and sexual/physical abuse among street youth,”</span> <em>Child Abuse Negl</em>, vol. 22, no. 3, pp. 213–222, Mar. 1998, doi: <a href="https://doi.org/10.1016/s0145-2134(97)00137-3">10.1016/s0145-2134(97)00137-3</a>.</div>
+</div>
+<div id="ref-vottaSuicideHighriskBehaviors2004" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">E. Votta and I. Manion, <span>“Suicide, high-risk behaviors, and coping style in homeless adolescent males’ adjustment,”</span> <em>Journal of Adolescent Health</em>, vol. 34, no. 3, pp. 237–243, 2004, doi: <a href="https://doi.org/10.1016/j.jadohealth.2003.06.002">10.1016/j.jadohealth.2003.06.002</a>.</div>
+</div>
+<div id="ref-PreventingSuicideConnectedness" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline"><span>“Preventing suicide through connectedness.”</span> <a href="https://stacks.cdc.gov/view/cdc/11795">https://stacks.cdc.gov/view/cdc/11795</a> (accessed May 01, 2025).</div>
+</div>
+<div id="ref-fulginitiRiskyIntegrationSocial2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">A. Fulginiti, E. Rice, H.-T. Hsu, H. Rhoades, and H. Winetrobe, <span>“Risky integration: <span>A</span> social network analysis of network position, exposure, and suicidal ideation among homeless youth,”</span> <em>Crisis: The Journal of Crisis Intervention and Suicide Prevention</em>, vol. 37, no. 3, pp. 184–193, 2016, doi: <a href="https://doi.org/10.1027/0227-5910/a000374">10.1027/0227-5910/a000374</a>.</div>
+</div>
 <div id="ref-bertsimasImprovingStabilityDecision2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. Bertsimas and V. D. Jr, <span>“Improving <span>Stability</span> in <span>Decision Tree Models</span>.”</span> arXiv, May 2023. doi: <a href="https://doi.org/10.48550/arXiv.2305.17299">10.48550/arXiv.2305.17299</a>.</div>
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">D. Bertsimas and V. D. Jr, <span>“Improving <span>Stability</span> in <span>Decision Tree Models</span>.”</span> arXiv, May 2023. doi: <a href="https://doi.org/10.48550/arXiv.2305.17299">10.48550/arXiv.2305.17299</a>.</div>
 </div>
 <div id="ref-10571918" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">J. Lee, M. K. Sim, and J.-S. Hong, <span>“Assessing decision tree stability: A comprehensive method for generating a stable decision tree,”</span> <em>IEEE Access</em>, vol. 12, pp. 90061–90072, 2024, doi: <a href="https://doi.org/10.1109/ACCESS.2024.3419228">10.1109/ACCESS.2024.3419228</a>.</div>
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">J. Lee, M. K. Sim, and J.-S. Hong, <span>“Assessing decision tree stability: A comprehensive method for generating a stable decision tree,”</span> <em>IEEE Access</em>, vol. 12, pp. 90061–90072, 2024, doi: <a href="https://doi.org/10.1109/ACCESS.2024.3419228">10.1109/ACCESS.2024.3419228</a>.</div>
 </div>
 </div>
 </section>
