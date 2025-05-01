@@ -82,9 +82,9 @@ class ExperimentGroup:
         self._save_metadata()
         return experiment_name
 
-    def set_feature_names(self, dataset: Path, feature_list: list[str]):
+    def set_feature_names(self, dataset, feature_list: list[str]):
         """Store feature names used across this experiment group."""
-        key = dataset.name
+        key = dataset
         self.feature_names[key] = feature_list
         self._save_metadata()
 
@@ -97,6 +97,7 @@ class ExperimentGroup:
             "feature_names": self.feature_names,
             "experiments": self.experiments,
         }
+        print(f"saved feature names:{metadata}")
         with open(self.metadata_path, "w") as f:
             json.dump(metadata, f, indent=2)
     
@@ -160,10 +161,12 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     )
 
     # Store feature names in group metadata (once)
-    ds_name = dataset.name  # or ds.name if that's the variable you used
+    ds_name = dataset.name # or ds.name if that's the variable you used
+    ds_name_label = dataset.stem + "_" + label
+    # ds_name_label = data
     print(f"ds_name{ds_name}")
-    if experiment_group and ds_name not in experiment_group.feature_names:
-        experiment_group.set_feature_names(dataset, X_full.columns.tolist())
+    if experiment_group and ds_name_label not in experiment_group.feature_names:
+        experiment_group.set_feature_names(ds_name_label, X_full.columns.tolist())
 
     # Log dataset metrics
     dataset_metrics = {
@@ -426,20 +429,20 @@ def main():
                     for key, mean_std in mean_std_feature_dict.items():
                         print(f"  {key:20s} mean(std) = {mean_std:.5f}")
                     # Compute the top 3 distinct features in all experiments for every pareto selection strategy
-                    distinct_feats_dict = count_distinct_top_features(group, ds.name)
+                    distinct_feats_dict = count_distinct_top_features(group, ds_name_label)
                     print("counted distinct features")
 
                     # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-                    mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
+                    mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds_name_label)
 
                     # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
-                    mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds.name)
+                    mean_depth_dict, std_depth_dict = aggregate_tree_depth(group, ds_name_label)
 
                     # Compute the mean and std of aggregated optimal tree auc across multiple experiments for every pareto selection strategy
-                    mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds.name)
+                    mean_auc_dict, std_auc_dict = aggregate_optimal_auc(group, ds_name_label)
 
                     # Compute the mean and std of aggregated optimal tree distance across multiple experiments for every pareto selection strategy
-                    mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
+                    mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds_name_label)
                     '''================================='''
 
                     
