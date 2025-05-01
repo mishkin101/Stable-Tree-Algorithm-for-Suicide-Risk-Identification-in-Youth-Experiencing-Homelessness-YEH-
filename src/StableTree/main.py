@@ -460,7 +460,7 @@ def main():
                     print(f"saved group metrics to metrics.json")
 
                     '''======Aggregate Plotting========='''
-                    paired_labels = zip(ds, label)
+                    paired_labels = [(ds, label)] 
                     plot_aggregate_metrics(dataset_dict, group, paired_labels)
                     '''================================='''
 
