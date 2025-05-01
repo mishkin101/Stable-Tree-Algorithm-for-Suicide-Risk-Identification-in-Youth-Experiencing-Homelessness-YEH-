@@ -502,11 +502,29 @@ plt.tight_layout()
 ![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png){fig-align="center"}
 
 ## Results - Current Considerations
+
 - Correlation to other aggregate metrics with magnitude of distance?
 - What the "right depth?"" (bias-variance trade off)
     - optimizing for distance -> deeper trees
 - Is T0 large enough currently statistically to represent T when bootstrapping?
     - Checks for distribution shift in sampling
+
+
+## Thinking About Stability
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134921_seed_42_breast_cancer_target/plots/decision_tree.png){fig-align="center"}
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt/plots/decision_tree.png){fig-align="center"}
+
+:::
+
+::::
 
 ## Pareto Frontier Visualization
 
