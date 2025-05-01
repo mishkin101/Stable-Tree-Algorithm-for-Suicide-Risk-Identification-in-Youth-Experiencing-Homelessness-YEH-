@@ -159,7 +159,7 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     )
 
     # Store feature names in group metadata (once)
-    ds_name = dataset.name   # or ds.name if that's the variable you used
+    ds_name = dataset.name + "_" + label   # or ds.name if that's the variable you used
     if experiment_group and ds_name not in experiment_group.feature_names:
         experiment_group.set_feature_names(dataset, X_full.columns.tolist())
 
@@ -434,6 +434,8 @@ def main():
                     mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
                     '''================================='''
 
+                    # name + label
+                    ds_name_label = ds.name + "_" + label
                     dataset_dict[ds.name] = {
                         "feature_std":            mean_std_feature_dict,
                         "distinct_top_features":  distinct_feats_dict,

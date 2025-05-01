@@ -1,5 +1,11 @@
 ## suicide_project
 
+```bash
+uv run src/StableTree/main.py --group-name FINAL_aggregate_output --option experiment --datasets data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/breast_cancer.csv --labels suicidea suicattempt target
+
+uv run src/StableTree/main.py --group-name final_aggregate_output_all_datasets --option plot --datasets data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/breast_cancer.csv     
+```
+
 potential fixes for quarto rendering issues:
 ```bash
 uv venv

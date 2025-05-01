@@ -198,6 +198,7 @@ def plot_aggregate_metrics(dataset_dict: Dict[str, dict], group, paired_labels, 
     ]
     # now build our x‐tick labels as e.g. "YEH_Suicide_suicidea"
     labels = [f"{alias}_{pred}" for alias, pred in zip(aliases, preds)]
+    print(f"labels{labels}")
 
     # datasets are still the keys of dataset_dict, in the same order
     datasets = list(dataset_dict.keys())
@@ -219,6 +220,7 @@ def plot_aggregate_metrics(dataset_dict: Dict[str, dict], group, paired_labels, 
 
     # 1) Feature‐importance std dev
     strat_keys = list(next(iter(dataset_dict.values()))["feature_std"].keys())
+    print(f"strat_keys {strat_keys}")
     fig, ax = plt.subplots(figsize=(8, 4))
     for i, strat in enumerate(strat_keys):
         vals = [dataset_dict[ds]["feature_std"][strat] for ds in datasets]
