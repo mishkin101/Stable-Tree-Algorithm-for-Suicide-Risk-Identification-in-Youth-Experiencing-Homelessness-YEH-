@@ -363,102 +363,102 @@ def plot_aggregate_metrics(dataset_dict: Dict[str, dict], group, paired_labels, 
 
 
 
-def generate_stability_trade_off_table(metrics_json_path: Union[str, Path], dataset_name: str, output_path: Union[str, Path]) -> Path:
-    """
-    Load the group‐level metrics.json, extract the aggregated comparison
-    between the AUC‐maximizing and distance‐minimizing Pareto trees for
-    one dataset, and save it as a PNG table matching the LaTeX layout.
-    """
-    metrics_json_path = Path(metrics_json_path)
-    output_path = Path(output_path)
+# def generate_stability_trade_off_table(metrics_json_path: Union[str, Path], dataset_name: str, output_path: Union[str, Path]) -> Path:
+#     """
+#     Load the group‐level metrics.json, extract the aggregated comparison
+#     between the AUC‐maximizing and distance‐minimizing Pareto trees for
+#     one dataset, and save it as a PNG table matching the LaTeX layout.
+#     """
+#     metrics_json_path = Path(metrics_json_path)
+#     output_path = Path(output_path)
     
-    # 1) Load metrics.json
-    with open(metrics_json_path, "r") as f:
-        all_metrics = json.load(f)
-    ds_metrics = all_metrics["dataset_aggregates"][dataset_name]
+#     # 1) Load metrics.json
+#     with open(metrics_json_path, "r") as f:
+#         all_metrics = json.load(f)
+#     ds_metrics = all_metrics["dataset_aggregates"][dataset_name]
 
-    # 2) Build two rows: CART Pareto AUC and CART Pareto Distance
-    rows = []
-    # AUC‐maximizing row
-    auc_mean = ds_metrics["optimal_auc"]["mean"]["selected_auc_tree_auc"]
-    auc_std  = ds_metrics["optimal_auc"]["std"]["selected_auc_tree_auc"]
-    dist_mean = ds_metrics["optimal_distance"]["mean"]["selected_auc_tree_distance"]
-    dist_std  = ds_metrics["optimal_distance"]["std"]["selected_auc_tree_distance"]
-    feat_std_auc = ds_metrics["feature_std"]["auc_max_importances"]
-    top3_auc = len(ds_metrics["distinct_top_features"]["auc_max_importances"])
-    nodes_auc = ds_metrics["tree_nodes"]["mean"]["auc_tree_nodes"]
-    depth_auc = ds_metrics["tree_depth"]["mean"]["auc_tree_depth"]
-    rows.append({
-        "Method":               "CART Pareto AUC",
-        "AUC":                  f"{auc_mean:.3f} ({auc_std:.3f})",
-        "Distance":             f"{dist_mean:.3f} ({dist_std:.3f})",
-        "Feat. Import. Std.":   f"{feat_std_auc:.3f}",
-        "Feat. in Top-3":       f"{top3_auc}",
-        "Nodes":                f"{nodes_auc:.3f}",
-        "Tree Depth":           f"{depth_auc:.3f}",
-    })
+#     # 2) Build two rows: CART Pareto AUC and CART Pareto Distance
+#     rows = []
+#     # AUC‐maximizing row
+#     auc_mean = ds_metrics["optimal_auc"]["mean"]["selected_auc_tree_auc"]
+#     auc_std  = ds_metrics["optimal_auc"]["std"]["selected_auc_tree_auc"]
+#     dist_mean = ds_metrics["optimal_distance"]["mean"]["selected_auc_tree_distance"]
+#     dist_std  = ds_metrics["optimal_distance"]["std"]["selected_auc_tree_distance"]
+#     feat_std_auc = ds_metrics["feature_std"]["auc_max_importances"]
+#     top3_auc = len(ds_metrics["distinct_top_features"]["auc_max_importances"])
+#     nodes_auc = ds_metrics["tree_nodes"]["mean"]["auc_tree_nodes"]
+#     depth_auc = ds_metrics["tree_depth"]["mean"]["auc_tree_depth"]
+#     rows.append({
+#         "Method":               "CART Pareto AUC",
+#         "AUC":                  f"{auc_mean:.3f} ({auc_std:.3f})",
+#         "Distance":             f"{dist_mean:.3f} ({dist_std:.3f})",
+#         "Feat. Import. Std.":   f"{feat_std_auc:.3f}",
+#         "Feat. in Top-3":       f"{top3_auc}",
+#         "Nodes":                f"{nodes_auc:.3f}",
+#         "Tree Depth":           f"{depth_auc:.3f}",
+#     })
 
-    # Distance‐minimizing row
-    auc_mean_d = ds_metrics["optimal_auc"]["mean"]["selected_dist_tree_auc"]
-    auc_std_d  = ds_metrics["optimal_auc"]["std"]["selected_dist_tree_auc"]
-    dist_mean_d = ds_metrics["optimal_distance"]["mean"]["selected_dist_tree_distance"]
-    dist_std_d  = ds_metrics["optimal_distance"]["std"]["selected_dist_tree_distance"]
-    feat_std_dist = ds_metrics["feature_std"]["dist_min_importances"]
-    top3_dist = len(ds_metrics["distinct_top_features"]["dist_min_importances"])
-    nodes_dist = ds_metrics["tree_nodes"]["mean"]["dist_tree_nodes"]
-    depth_dist = ds_metrics["tree_depth"]["mean"]["dist_tree_depth"]
-    rows.append({
-        "Method":               "CART Pareto Distance",
-        "AUC":                  f"{auc_mean_d:.3f} ({auc_std_d:.3f})",
-        "Distance":             f"{dist_mean_d:.3f} ({dist_std_d:.3f})",
-        "Feat. Import. Std.":   f"{feat_std_dist:.3f}",
-        "Feat. in Top-3":       f"{top3_dist}",
-        "Nodes":                f"{nodes_dist:.3f}",
-        "Tree Depth":           f"{depth_dist:.3f}",
-    })
+#     # Distance‐minimizing row
+#     auc_mean_d = ds_metrics["optimal_auc"]["mean"]["selected_dist_tree_auc"]
+#     auc_std_d  = ds_metrics["optimal_auc"]["std"]["selected_dist_tree_auc"]
+#     dist_mean_d = ds_metrics["optimal_distance"]["mean"]["selected_dist_tree_distance"]
+#     dist_std_d  = ds_metrics["optimal_distance"]["std"]["selected_dist_tree_distance"]
+#     feat_std_dist = ds_metrics["feature_std"]["dist_min_importances"]
+#     top3_dist = len(ds_metrics["distinct_top_features"]["dist_min_importances"])
+#     nodes_dist = ds_metrics["tree_nodes"]["mean"]["dist_tree_nodes"]
+#     depth_dist = ds_metrics["tree_depth"]["mean"]["dist_tree_depth"]
+#     rows.append({
+#         "Method":               "CART Pareto Distance",
+#         "AUC":                  f"{auc_mean_d:.3f} ({auc_std_d:.3f})",
+#         "Distance":             f"{dist_mean_d:.3f} ({dist_std_d:.3f})",
+#         "Feat. Import. Std.":   f"{feat_std_dist:.3f}",
+#         "Feat. in Top-3":       f"{top3_dist}",
+#         "Nodes":                f"{nodes_dist:.3f}",
+#         "Tree Depth":           f"{depth_dist:.3f}",
+#     })
 
-    # stability-Trade-Off Row
-    auc_mean_d = ds_metrics["optimal_auc"]["mean"]["selected_tree_auc"]
-    auc_std_d  = ds_metrics["optimal_auc"]["std"]["selected_tree_auc"]
-    dist_mean_d = ds_metrics["optimal_distance"]["mean"]["selected_tree_distance"]
-    dist_std_d  = ds_metrics["optimal_distance"]["std"]["selected_tree_distance"]
-    feat_std_dist = ds_metrics["feature_std"]["stability_accuracy_importances"]
-    top3_dist = len(ds_metrics["distinct_top_features"]["stability_accuracy_importances"])
-    nodes_dist = ds_metrics["tree_nodes"]["mean"]["stability_tree_nodes"]
-    depth_dist = ds_metrics["tree_depth"]["mean"]["stability_tree_depth"]
-    rows.append({
-        "Method":               "CART Pareto Trade-Off",
-        "AUC":                  f"{auc_mean_d:.3f} ({auc_std_d:.3f})",
-        "Distance":             f"{dist_mean_d:.3f} ({dist_std_d:.3f})",
-        "Feat. Import. Std.":   f"{feat_std_dist:.3f}",
-        "Feat. in Top-3":       f"{top3_dist}",
-        "Nodes":                f"{nodes_dist:.3f}",
-        "Tree Depth":           f"{depth_dist:.3f}",
-    })
+#     # stability-Trade-Off Row
+#     auc_mean_d = ds_metrics["optimal_auc"]["mean"]["selected_tree_auc"]
+#     auc_std_d  = ds_metrics["optimal_auc"]["std"]["selected_tree_auc"]
+#     dist_mean_d = ds_metrics["optimal_distance"]["mean"]["selected_tree_distance"]
+#     dist_std_d  = ds_metrics["optimal_distance"]["std"]["selected_tree_distance"]
+#     feat_std_dist = ds_metrics["feature_std"]["stability_accuracy_importances"]
+#     top3_dist = len(ds_metrics["distinct_top_features"]["stability_accuracy_importances"])
+#     nodes_dist = ds_metrics["tree_nodes"]["mean"]["stability_tree_nodes"]
+#     depth_dist = ds_metrics["tree_depth"]["mean"]["stability_tree_depth"]
+#     rows.append({
+#         "Method":               "CART Pareto Trade-Off",
+#         "AUC":                  f"{auc_mean_d:.3f} ({auc_std_d:.3f})",
+#         "Distance":             f"{dist_mean_d:.3f} ({dist_std_d:.3f})",
+#         "Feat. Import. Std.":   f"{feat_std_dist:.3f}",
+#         "Feat. in Top-3":       f"{top3_dist}",
+#         "Nodes":                f"{nodes_dist:.3f}",
+#         "Tree Depth":           f"{depth_dist:.3f}",
+#     })
 
-    # 3) Create DataFrame
-    df = pd.DataFrame(rows, columns=[
-        "Method", "AUC", "Distance",
-        "Feat. Import. Std.", "Feat. in Top-3",
-        "Nodes", "Tree Depth"
-    ])
+#     # 3) Create DataFrame
+#     df = pd.DataFrame(rows, columns=[
+#         "Method", "AUC", "Distance",
+#         "Feat. Import. Std.", "Feat. in Top-3",
+#         "Nodes", "Tree Depth"
+#     ])
 
-    # 4) Render as a table and save to PNG
-    fig, ax = plt.subplots(figsize=(10, 2.5), dpi=300)
-    ax.axis("off")
-    table = ax.table(
-        cellText=df.values,
-        colLabels=df.columns,
-        cellLoc="center",
-        loc="center"
-    )
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
-    table.scale(1, 1.5)
-    fig.tight_layout()
-    _save(fig, f"tradeoff_{label}")
+#     # 4) Render as a table and save to PNG
+#     fig, ax = plt.subplots(figsize=(10, 2.5), dpi=300)
+#     ax.axis("off")
+#     table = ax.table(
+#         cellText=df.values,
+#         colLabels=df.columns,
+#         cellLoc="center",
+#         loc="center"
+#     )
+#     table.auto_set_font_size(False)
+#     table.set_fontsize(10)
+#     table.scale(1, 1.5)
+#     fig.tight_layout()
+#     _save(fig, f"tradeoff_{label}")
 
-    return output_path
+#     return output_path
 
 
 

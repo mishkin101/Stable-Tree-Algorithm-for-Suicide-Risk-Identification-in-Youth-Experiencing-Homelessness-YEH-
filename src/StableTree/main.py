@@ -97,7 +97,7 @@ class ExperimentGroup:
             "feature_names": self.feature_names,
             "experiments": self.experiments,
         }
-        print(f"saved feature names:{metadata}")
+        # print(f"saved feature names:{metadata}")
         with open(self.metadata_path, "w") as f:
             json.dump(metadata, f, indent=2)
     
@@ -124,9 +124,9 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     dataset_name = dataset.stem
-    experiment_name = f"experiment_{timestamp}_seed_{seed}_{dataset_name}_label_{label}"
+    experiment_name = f"experiment_{timestamp}_seed_{seed}_{dataset_name}_{label}"
     
-    # Add this experiment to the group if provided
+    # Add this experiment to the group if provided with label appended
     if experiment_group:
         experiment_group.add_experiment(experiment_name)
     

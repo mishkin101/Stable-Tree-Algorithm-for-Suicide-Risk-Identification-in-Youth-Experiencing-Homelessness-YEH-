@@ -1,0 +1,220 @@
+{
+    "dataset_aggregates": {
+        "DataSet_Combined_SI_SNI_Baseline_FE_suicidea": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.0,
+                "auc_max_importances": 0.0,
+                "dist_min_importances": 0.0
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "cesd_score",
+                    "prop_alter_all_othersupport",
+                    "trauma_sum"
+                ],
+                "auc_max_importances": [
+                    "cesd_score",
+                    "prop_alter_all_othersupport",
+                    "trauma_sum"
+                ],
+                "dist_min_importances": [
+                    "harddrug_life",
+                    "prop_friends_street_emosup",
+                    "time_homeless_month"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 13.0,
+                    "auc_tree_nodes": 13.0,
+                    "dist_tree_nodes": 47.0
+                },
+                "std": {
+                    "stability_tree_nodes": 0.0,
+                    "auc_tree_nodes": 0.0,
+                    "dist_tree_nodes": 0.0
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 3.0,
+                    "auc_tree_depth": 3.0,
+                    "dist_tree_depth": 9.0
+                },
+                "std": {
+                    "stability_tree_depth": 0.0,
+                    "auc_tree_depth": 0.0,
+                    "dist_tree_depth": 0.0
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.7546090273363001,
+                    "selected_auc_tree_auc": 0.7546090273363001,
+                    "selected_dist_tree_auc": 0.5896376350921805
+                },
+                "std": {
+                    "selected_tree_auc": 0.0,
+                    "selected_auc_tree_auc": 0.0,
+                    "selected_dist_tree_auc": 0.0
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.107115,
+                    "selected_auc_tree_distance": 0.107115,
+                    "selected_dist_tree_distance": 0.00411
+                },
+                "std": {
+                    "selected_tree_distance": 0.0,
+                    "selected_auc_tree_distance": 0.0,
+                    "selected_dist_tree_distance": 0.0
+                }
+            }
+        },
+        "DataSet_Combined_SI_SNI_Baseline_FE_suicattempt": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.0,
+                "auc_max_importances": 0.0,
+                "dist_min_importances": 0.0
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "fight",
+                    "prop_object_badbehave",
+                    "trauma_sum"
+                ],
+                "auc_max_importances": [
+                    "fight",
+                    "prop_object_badbehave",
+                    "trauma_sum"
+                ],
+                "dist_min_importances": [
+                    "degree",
+                    "fighthurt",
+                    "prop_alter_all_harddrug"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 9.0,
+                    "auc_tree_nodes": 9.0,
+                    "dist_tree_nodes": 45.0
+                },
+                "std": {
+                    "stability_tree_nodes": 0.0,
+                    "auc_tree_nodes": 0.0,
+                    "dist_tree_nodes": 0.0
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 4.0,
+                    "auc_tree_depth": 4.0,
+                    "dist_tree_depth": 9.0
+                },
+                "std": {
+                    "stability_tree_depth": 0.0,
+                    "auc_tree_depth": 0.0,
+                    "dist_tree_depth": 0.0
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.7694570135746606,
+                    "selected_auc_tree_auc": 0.7694570135746606,
+                    "selected_dist_tree_auc": 0.639366515837104
+                },
+                "std": {
+                    "selected_tree_auc": 0.0,
+                    "selected_auc_tree_auc": 0.0,
+                    "selected_dist_tree_auc": 0.0
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.04289,
+                    "selected_auc_tree_distance": 0.04289,
+                    "selected_dist_tree_distance": 0.0041600000000000005
+                },
+                "std": {
+                    "selected_tree_distance": 0.0,
+                    "selected_auc_tree_distance": 0.0,
+                    "selected_dist_tree_distance": 0.0
+                }
+            }
+        },
+        "breast_cancer_target": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.0,
+                "auc_max_importances": 0.0,
+                "dist_min_importances": 0.0
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "mean concave points",
+                    "worst concave points",
+                    "worst perimeter"
+                ],
+                "auc_max_importances": [
+                    "mean concave points",
+                    "worst perimeter",
+                    "worst radius"
+                ],
+                "dist_min_importances": [
+                    "fractal dimension error",
+                    "worst concave points",
+                    "worst perimeter"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 11.0,
+                    "auc_tree_nodes": 21.0,
+                    "dist_tree_nodes": 21.0
+                },
+                "std": {
+                    "stability_tree_nodes": 0.0,
+                    "auc_tree_nodes": 0.0,
+                    "dist_tree_nodes": 0.0
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 4.0,
+                    "auc_tree_depth": 4.0,
+                    "dist_tree_depth": 7.0
+                },
+                "std": {
+                    "stability_tree_depth": 0.0,
+                    "auc_tree_depth": 0.0,
+                    "dist_tree_depth": 0.0
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.9720125786163523,
+                    "selected_auc_tree_auc": 0.9775681341719078,
+                    "selected_dist_tree_auc": 0.9373165618448638
+                },
+                "std": {
+                    "selected_tree_auc": 0.0,
+                    "selected_auc_tree_auc": 0.0,
+                    "selected_dist_tree_auc": 0.0
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.034675,
+                    "selected_auc_tree_distance": 0.082355,
+                    "selected_dist_tree_distance": 0.00655
+                },
+                "std": {
+                    "selected_tree_distance": 0.0,
+                    "selected_auc_tree_distance": 0.0,
+                    "selected_dist_tree_distance": 0.0
+                }
+            }
+        }
+    }
+}
