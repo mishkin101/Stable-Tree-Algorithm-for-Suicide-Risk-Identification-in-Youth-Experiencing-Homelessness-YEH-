@@ -276,7 +276,7 @@ Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingS
 
 \
 
-![](./method%20diagram.svg){fig-align="center"}
+![](./amethod%20diagram.svg){fig-align="center"}
 
 ## Random Train Split
 
@@ -514,11 +514,15 @@ plt.tight_layout()
 
 ## Thinking About Stability
 
+\
+
 :::: {.columns}
 
 ::: {.column width="50%"}
 
 ![](../logs/experiment_20250501_134921_seed_42_breast_cancer_target/plots/decision_tree.png){fig-align="center"}
+
+:::
 
 ::: {.column width="50%"}
 
@@ -574,74 +578,86 @@ $a_{b}$, $\forall b \in \mathcal{T}$
 
 ### `label=suicidea`
 ```{bash}
-❯ uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
-Created experiment group: seed_checking
 ==================================================
-Running experiment with seed 23
+Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
 ==================================================
-Experiment: experiment_20250429_183236_seed_23 - Seed: 23
+ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
+Experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
 Number of samples in the full dataset: 586
-Number of samples in the training set: 439
-Number of samples in the test set: 147
-Shape of training set: (439, 56)
-Shape of random split: (219, 56), (219,)
+Number of samples in the training set: 726
+Number of samples in the test set: 242
+Shape of training set: (726, 56)
+Shape of random split: (363, 56), (363,)
 Number of trees in T0: 20
 Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.8s (1.76/s) 
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 20.7s (0.96/s) 
 Number of distances computed: 20
-Average AUC score: 0.5955578512396694
+Average AUC score: 0.821854723038044
 Number of Pareto optimal trees: 7
-Frequenicies of top 2 common features: [[(18, 30.0), (5, 20.0)], [(6, 40.0), (5, 20.0)], [(6, 20.0), (14, 10.0)]]
-Selected tree index: 16
-Completed experiment: experiment_20250429_183236_seed_23
+Frequenicies of top 2 common features: [[('trauma_sum', 70.0), ('fight', 20.0)], [('harddrug_life', 45.0), ('exchange', 15.0)], [('LEAF_NODE', 25.0), ('harddrug_life', 20.0)]]
+Selected stability-accuracy trade-off final tree index: 1
+Stability-accuracy tree depth: 4, nodes: 23
+Selected AUC maximizing tree index: 1
+AUC-maximizing tree depth: 4, nodes: 23
+Selected distance minimizing tree index: 15
+Distance-minimizing tree depth: 11, nodes: 79
+Completed experiment: 
 ```
 
 ### `label=suicattempt`
 ```{bash}
 ==================================================
-Running experiment with seed 28
+Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
 ==================================================
-Experiment: experiment_20250429_183249_seed_28 - Seed: 28
-Number of samples in the full dataset: 586
-Number of samples in the training set: 439
-Number of samples in the test set: 147
-Shape of training set: (439, 56)
-Shape of random split: (219, 56), (219,)
+ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
+Experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
+Number of samples in the full dataset: 587
+Number of samples in the training set: 627
+Number of samples in the test set: 209
+Shape of training set: (627, 56)
+Shape of random split: (313, 56), (313,)
 Number of trees in T0: 20
 Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 9.4s (2.13/s) 
 Number of distances computed: 20
-Average AUC score: 0.6365702479338843
+Average AUC score: 0.8648953261927945
 Number of Pareto optimal trees: 5
-Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
-Selected tree index: 3
-Completed experiment: experiment_20250429_183249_seed_28
-Experiment group summary saved to experiments/seed_checking/group_summary.json
-Total experiments run: 2
+Frequenicies of top 2 common features: [[('fighthurt', 45.0), ('fight', 35.0)], [('trauma_sum', 40.0), ('degree', 15.0)], [('gettherapy', 15.0), ('exchange', 15.0)]]
+Selected stability-accuracy trade-off final tree index: 18
+Stability-accuracy tree depth: 7, nodes: 59
+Selected AUC maximizing tree index: 8
+AUC-maximizing tree depth: 4, nodes: 19
+Selected distance minimizing tree index: 11
+Distance-minimizing tree depth: 10, nodes: 61
+Completed experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt
 ```
 
 ### `label=target`
 ```{bash}
 ==================================================
-Running experiment with seed 28
+Running for dataset breast_cancer with seed 42
 ==================================================
-Experiment: experiment_20250429_183249_seed_28 - Seed: 28
-Number of samples in the full dataset: 586
-Number of samples in the training set: 439
-Number of samples in the test set: 147
-Shape of training set: (439, 56)
-Shape of random split: (219, 56), (219,)
+ds_namebreast_cancer.csv
+Experiment: experiment_20250501_134921_seed_42_breast_cancer_target - Seed: 42 - Dataset: breast_cancer
+Number of samples in the full dataset: 569
+Number of samples in the training set: 535
+Number of samples in the test set: 179
+Shape of training set: (535, 30)
+Shape of random split: (267, 30), (267,)
 Number of trees in T0: 20
 Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 1.9s (10.51/s) 
 Number of distances computed: 20
-Average AUC score: 0.6365702479338843
+Average AUC score: 0.9502996254681648
 Number of Pareto optimal trees: 5
-Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
-Selected tree index: 3
-Completed experiment: experiment_20250429_183249_seed_28
-Experiment group summary saved to experiments/seed_checking/group_summary.json
-Total experiments run: 2
+Frequenicies of top 2 common features: [[('worst perimeter', 65.0), ('mean concave points', 20.0)], [('worst smoothness', 15.0), ('worst radius', 15.0)], [('area error', 30.0), ('worst texture', 10.0)]]
+Selected stability-accuracy trade-off final tree index: 14
+Stability-accuracy tree depth: 5, nodes: 19
+Selected AUC maximizing tree index: 12
+AUC-maximizing tree depth: 3, nodes: 9
+Selected distance minimizing tree index: 13
+Distance-minimizing tree depth: 6, nodes: 23
+Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target
 ```
 :::
 
@@ -657,6 +673,7 @@ Total experiments run: 2
     - Path distance class weight
     - Pareto tree selection strategy
     - Data pre-processing
+- Stability-performance trade-off when selecting Pareto Optimal tree?
 
 ## Future work - Long term
 
@@ -672,11 +689,10 @@ Total experiments run: 2
 
 ## Thoughts and points of dicussion {.smaller}
 
-1. Does the sequence of paths matter? @10571918
+**Does the sequence of paths matter?** @10571918
 
 > The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. ... However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.
 
-2. Stability-performance trade-off when selecting Pareto Optimal tree?
 
 ::: footer
 <a style="opacity: 0.2;">M</a>
