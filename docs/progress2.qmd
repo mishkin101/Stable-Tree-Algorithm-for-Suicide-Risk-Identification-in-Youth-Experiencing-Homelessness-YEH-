@@ -25,40 +25,6 @@ bibliography: refs.bib
 csl: template/ieee.csl
 ---
 
-## Problem outline
-
-- 4.2 million youth experience homelessness each year in the U.S
-- **~27%** and **~35%** of **R**unaway and **H**omeless **Y**outhreport past-year suicidal ideation @kirstConcurrentMentalHealth2011 @rewSexualAbuseAlcohol2001
-- **15.8%** in general population @YouthRiskBehaviora
-- **>50%** of RHY have experienced suicidal ideation during their lifetime @merschamMentalHealthSubstance2009 @molnarSuicidalBehaviorSexual1998 @vottaSuicideHighriskBehaviors2004
-
-## Key question
-
-- Most studies focus on **individual characteristics** in suicidal risk for YEH @PreventingSuicideConnectedness
-- Limited insight on relevant factors and combinations of both individual and social factors that influence suicide risk @fulginitiRiskyIntegrationSocial2016
-
-**Can a stable tree be used to understand the clinical risk profiles of YEH?**
-
-## Stable decision trees {.smaller}
-
-Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingStabilityDecision2023
-
-1. **Initial Training (T0):** Train initial set of decision trees on subset
-2. **Full Data Training (T):** Train a second set on full training data 
-3. **Distance Computation:**  Calulate average distance between trees in **T** and the trees in **T0**
-  $$
-  d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) \;=\;\min_{\{x\}}\ \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q} \;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
-  $$
-1. **Performance Metrics:** Compute AUC ROC on test set
-2. **Pareto Optimization:** Select Pareto optimal trees that balance predictive performance and stability
-  $$
-  \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
-  $$
-
-::: footer
-<a style="opacity: 0.2;">A</a>
-:::
-
 ```{python}
 import sys
 import itertools
@@ -82,55 +48,15 @@ from dt_distance.distance_calculator import DistanceCalculator
 import matplotlib.pyplot as plt
 from alive_progress import alive_bar
 from imblearn.over_sampling import SMOTE, SVMSMOTE
-# set seed for reproducibility
 np.random.seed(42)
+DATA_PATH = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 ```
 
-## Tree Path
-
-*Sequence of splits from the root to a leaf & class label $k^p$*
-
-$$
-𝒫(𝕋) = \{p_1, \dots, p_T\}
-$$
-
-- **$\mathbf{u}^p_j$**, **$\mathbf{l}^p_j$**: define the numeric interval for feature $j$  
-- **$\mathbf{c}^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
-- **$\mathbf{k}^p$**: class label predicted for this region
-
-
-## Tree Distance {.smaller}
- $$
-\begin{align*}
-d({T}_1, {T}_2)
-&= \min_{{x}} \Bigg[ 
-    \sum_{p \in \mathcal{P}({T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) \, x_{pq} 
-    + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) \, x_{p} 
-\Bigg] \\
-\text{s.t.} \quad 
-& \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1, 
-\quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
-& \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1, 
-\quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
-\\
-& x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
-\\
-& \quad \forall p \in \mathcal{P}(\mathbb{T}_1),
-\quad \forall q \in \mathcal{P}(\mathbb{T}_2)
-\end{align*}
-$$
-
-## Configuration Parameters
-
 ```{python}
-#| echo: True
-#| code-overflow: wrap
-
+#| echo: false
 DEPTHS = list(range(3, 13))
 MIN_SAMPLES = [3, 5, 10, 30, 50]
-
 NUM_BOOTSTRAPS = 25
-DATA_PATH = "../data/DataSet_Combined_SI_SNI_Baseline_FE.csv"
 
 FEATURE_SETS: Dict[str, List[str]] = {
     "suicidea": [
@@ -147,9 +73,38 @@ MODEL_PARAMS = {
 LABELS = ["suicidea", "suicattempt"]
 ```
 
-::: footer
-<a style="opacity: 0.2;">A</a>
-:::
+## Problem outline
+
+- 4.2 million youth experience homelessness each year in the U.S
+- **~27%** and **~35%** of **R**unaway and **H**omeless **Y**outhreport past-year suicidal ideation @kirstConcurrentMentalHealth2011 @rewSexualAbuseAlcohol2001
+- **15.8%** in general population @YouthRiskBehaviora
+- **>50%** of RHY have experienced suicidal ideation during their lifetime @merschamMentalHealthSubstance2009 @molnarSuicidalBehaviorSexual1998 @vottaSuicideHighriskBehaviors2004
+
+## Key question
+
+- Most studies focus on **individual characteristics** in suicidal risk for YEH @PreventingSuicideConnectedness
+- Limited insight on relevant factors and combinations of both individual and social factors that influence suicide risk @fulginitiRiskyIntegrationSocial2016
+<!-- - **Novel** No previous social network considerations or behavior indicators in homeless population suicide research -->
+- **Risk Profile:** Signal of high vulnerability or resiliency with respect to suicidal ideation and attempts 
+
+**Can a stable tree be used to understand the clinical risk profiles of YEH?**
+
+## Data Collection and Considerations
+
+- **Survey:** Use individual and social network attributes collected between October 2011 and February 2013 from two drop-in centers that serve young people experiencing homelessness in Hollywood and Santa Monica, CA
+- **Current Factors:** Overrepresentation of males
+
+## What does trust mean to a clinician?
+
+- **Accurate intervention targets $\rightarrow$ ** Help stakeholders understand how to build intervention strategies based on clinical risk profiles for YEH
+
+- **Less algorithmic aversion $\rightarrow$ ** Clinicians' decision making is not affected by unreliable models' decisions from a lack of consistency in identifying suicidal risk
+
+## Why do we need stable trees?
+
+- Population characteristics **change over time**
+- Model’s predicted output should not change with subsequent runs in light of new patient data
+- Initial dataset is small, but larger amounts of data become available over time as more patients’ information gets recorded **$\rightarrow$** retraining needed @bertsimasImprovingStabilityDecision2023
 
 ## Data Import and Preparation
 
@@ -182,10 +137,6 @@ print(f"Number of samples in the training set: {len(X_train)}")
 print(f"Number of samples in the test set: {len(X_test)}")
 print(f"Shape of training set: {X_train.shape}")
 ```
-
-::: footer
-<a style="opacity: 0.2;">A</a>
-:::
 
 ## Data Imbalance
 
@@ -238,9 +189,71 @@ plt.show()
 X_train
 ```
 
+## Tree Path
+
+*Sequence of splits from the root to a leaf & class label $k^p$*
+
+$$
+𝒫(𝕋) = \{p_1, \dots, p_T\}
+$$
+
+- **$\mathbf{u}^p_j$**, **$\mathbf{l}^p_j$**: define the numeric interval for feature $j$  
+- **$\mathbf{c}^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
+- **$\mathbf{k}^p$**: class label predicted for this region
+
+
+## Tree Distance {.smaller}
+ $$
+\begin{align*}
+d({T}_1, {T}_2)
+&= \min_{{x}} \Bigg[ 
+    \sum_{p \in \mathcal{P}({T}_1)} \sum_{q \in \mathcal{P}(\mathbb{T}_2)} d(p,q) \, x_{pq} 
+    + \sum_{p \in \mathcal{P}(\mathbb{T}_1)} w(p) \, x_{p} 
+\Bigg] \\
+\text{s.t.} \quad 
+& \sum_{q \in \mathcal{P}(\mathbb{T}_2)} x_{pq} + x_{p} = 1, 
+\quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
+& \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1, 
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
+\\
+& x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
+\\
+& \quad \forall p \in \mathcal{P}(\mathbb{T}_1),
+\quad \forall q \in \mathcal{P}(\mathbb{T}_2)
+\end{align*}
+$$
+
 ::: footer
 <a style="opacity: 0.2;">A</a>
 :::
+
+## Stable decision trees {.smaller}
+
+Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingStabilityDecision2023
+
+1. **Initial Training (T0):** Train initial set of decision trees on subset
+2. **Full Data Training (T):** Train a second set on full training data 
+3. **Distance Computation:**  Calulate average distance between trees in **T** and the trees in **T0**
+  $$
+  d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) \;=\;\min_{\{x\}}\ \sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q} \;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+  $$
+1. **Performance Metrics:** Compute AUC ROC on test set
+2. **Pareto Optimization:** Select Pareto optimal trees that balance predictive performance and stability
+  $$
+  \mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!
+  $$
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
+## Overview
+
+!()[Untitled-2025-05-01-0029.excalidraw(1).svg]
 
 ## Random Train Split
 
@@ -322,7 +335,7 @@ def compute_average_distances(T0, T, X_train, y_train):
 distances = compute_average_distances(T0, T, X_train, y_train)
 ```
 
-## Evaluating Predictive Power
+<!-- ## Evaluating Predictive Power -->
 
 ```{python}
 #| eval: true
@@ -342,7 +355,7 @@ with open("distances.csv", "w") as f:
 ```
 
 ```{python}
-#| echo: true
+#| echo: false
 def evaluate_predictive_power(trees, X_holdout, y_holdout):
     auc_scores = []
     for tree in trees:
@@ -352,7 +365,7 @@ def evaluate_predictive_power(trees, X_holdout, y_holdout):
     return auc_scores
 
 auc_scores = evaluate_predictive_power(T, X_test.values, y_test.values)
-print("Average AUC score:", np.mean(auc_scores))
+# print("Average AUC score:", np.mean(auc_scores))
 ```
 
 ## Finding Pareto Optimal Trees
@@ -403,7 +416,6 @@ print("Selected tree index:", selected_tree_index)
 
 ```{python}
 #| fig-align: center
-
 selected_tree = T[selected_tree_index]
 plt.figure(figsize=(12, 8), dpi=500)
 plot_tree(selected_tree, 
@@ -412,6 +424,30 @@ plot_tree(selected_tree,
           filled=True)
 plt.tight_layout()
 ```
+
+## Aggregated metrics {.smaller}
+
+|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	|  Nodes 	| Tree Depth 	|
+|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:------:	|:----------:	|
+| CART Pareto AUC       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
+| CART Pareto Stability 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
+| CART Pareto Distance  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
+
+## Results - Aggregated STD
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png){fig-align="center"}
+
+## Results - Tree depth
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png){fig-align="center"}
+
+## Results - Number of nodes
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png){fig-align="center"}
+
+## Results - Distinct top features
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png){fig-align="center"}
 
 ## Pareto Frontier Visualization
 
@@ -452,17 +488,6 @@ $a_{b}$, $\forall b \in \mathcal{T}$
 :::
 
 ::::
-
-## Aggregated metrics {.smaller}
-
-
-|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
-|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
-| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
-| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
-| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
-
-
 
 ## Experiment runner {.smaller}
 
@@ -520,6 +545,21 @@ Total experiments run: 2
 ::: footer
 <a style="opacity: 0.2;">A</a>
 :::
+
+## Future work - Short term
+
+- Refine what **Stability** means with our stakeholders
+    - What do we measure concerning and how do we quantify success?
+    - Are there correlations to other aggregate metrics that vary with magnitude of tree distance?
+- Hyper-parameter finetuning
+    - Path distance class weight
+    - Pareto tree selection strategy
+    - Data pre-processing
+
+## Future work - Long term
+
+- Does implementation meet the criteria for reliability in identifying YEH?
+- Feature selection and qualitative pre-proceesing
 
 ## Thoughts and points of dicussion {.smaller}
 
