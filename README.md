@@ -1,4 +1,6 @@
 ## suicide_project
+## Commands to run
+uv run src/StableTree/main.py --group-name FINAL_aggregate_output --option experiment --datasets data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/breast_cancer.csv --labels suicidea suicattempt target --seeds 42  123  999  2025  31415  27182  16180  14142  2718  8284
 
 ```bash
 uv run src/StableTree/main.py --group-name FINAL_aggregate_output --option experiment --datasets data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/breast_cancer.csv --labels suicidea suicattempt target
