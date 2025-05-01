@@ -46,18 +46,20 @@ def common_features(tree_set, feature_names, n_splits=3, top_k=2):
 
 
 
-"============= Aggregation Metrics ==================="
+"============= Aggregation Metrics (PER DATASET) ==================="
 
 def compute_avg_feature_std(group, dataset_name):
+    print(f"dataset_name: {dataset_name}")
     keys = ["stability_accuracy_importances","auc_max_importances","dist_min_importances"]
     all_imps = {}
     logs_dir = Path("logs").resolve()
     mean_std_dict = {}
-    print(f"dataset_name from compute_avg_feature:{dataset_name}")
+    #print(f"dataset_name from compute_avg_feature:{dataset_name}")
     for key in keys:
         # collect every experiment's importance‐vector for this strategy
         all_vals = []
         for exp in group.experiments:
+            print(f"exp: {exp}")
             if not exp.endswith(dataset_name):
                 continue
             mpath = logs_dir / exp / "metrics.json"

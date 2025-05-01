@@ -1,0 +1,84 @@
+Logger started at: 2025-04-30 22:23:20
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 31415
+DATA_PATH: data/breast_cancer.csv
+
+=== Configuration ===
+DATA_PATH: data/breast_cancer.csv
+
+=== Configuration ===
+label: target
+
+=== Metrics ===
+num_samples_full: 569
+num_samples_train: 426
+num_samples_test: 143
+train_shape: (426, 30)
+
+=== Metrics ===
+random_split_shape: (213, 213)
+
+=== Metrics ===
+num_trees_T0: 20
+
+=== Metrics ===
+num_trees_T: 20
+
+=== Metrics ===
+num_distances: 20
+
+=== Metrics ===
+average_auc: 0.9373427672955973
+
+=== Metrics ===
+num_pareto_trees: 3
+
+=== Metrics ===
+common_feature_freq: [[('worst concave points', 60.0), ('worst perimeter', 25.0)], [('worst area', 30.0), ('worst radius', 15.0)], [('area error', 10.0), ('perimeter error', 10.0)]]
+
+=== Metrics ===
+selected_tree_index: 18
+selected_tree_distance: 0.07767000000000002
+selected_tree_auc: 0.969077568134172
+
+=== Metrics ===
+stability_tree_depth: 3
+stability_tree_nodes: 9
+
+=== Metrics ===
+stability_accuracy_importances: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.020257198477566834, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9374791185354945, 0.0, 0.0, 0.0, 0.042263682986938646, 0.0, 0.0]
+
+=== Metrics ===
+selected_auc_tree_index: 18
+selected_auc_tree_distance: 0.07767000000000002
+selected_auc_tree_auc: 0.969077568134172
+
+=== Metrics ===
+auc_tree_depth: 3
+auc_tree_nodes: 9
+
+=== Metrics ===
+auc_max_importances: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.020257198477566834, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9374791185354945, 0.0, 0.0, 0.0, 0.042263682986938646, 0.0, 0.0]
+
+=== Metrics ===
+selected_dist_tree_index: 6
+selected_dist_tree_distance: 0.009174999999999999
+selected_dist_tree_auc: 0.9430817610062895
+
+=== Metrics ===
+dist_tree_depth: 7
+dist_tree_nodes: 25
+
+=== Metrics ===
+dist_min_importances: [0.0, 0.04615307010222319, 0.0, 0.012629471294616229, 0.0, 0.0093459966957002, 0.0, 0.0, 0.008307552618400176, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0038821832428293057, 0.014953594713120317, 0.0, 0.001345238637816582, 0.0, 0.0, 0.0, 0.0, 0.1314828340048937, 0.0, 0.0, 0.001928226686691848, 0.7600027688616283, 0.009969063142080212, 0.0]
+
+Saved figure: original_decision_tree.png
+Saved figure: original_feature_importance.png
+Saved figure: original_roc_curve.png
+Saved figure: decision_tree.png
+Saved figure: trimmed_decision_tree.png
+Saved figure: top_common_features.png
+Saved figure: pareto_frontier.png

@@ -32,6 +32,12 @@ def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng, imbalan
     y_full = df_full_cleaned[label]
     return X_full, y_full, X_train, X_test, y_train, y_test
 
+
+def down_sample():
+    return
+
+
+
 def random_train_split(X, y):
     """
     Create a random split of the data.

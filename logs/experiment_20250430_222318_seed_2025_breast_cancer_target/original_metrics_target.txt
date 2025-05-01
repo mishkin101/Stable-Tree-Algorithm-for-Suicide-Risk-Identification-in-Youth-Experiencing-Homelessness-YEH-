@@ -1,0 +1,20 @@
+------------------------------------------------------------
+Features: [np.str_('mean radius'), np.str_('mean texture'), np.str_('mean perimeter'), np.str_('mean area'), np.str_('mean smoothness'), np.str_('mean compactness'), np.str_('mean concavity'), np.str_('mean concave points'), np.str_('mean symmetry'), np.str_('mean fractal dimension'), np.str_('radius error'), np.str_('texture error'), np.str_('perimeter error'), np.str_('area error'), np.str_('smoothness error'), np.str_('compactness error'), np.str_('concavity error'), np.str_('concave points error'), np.str_('symmetry error'), np.str_('fractal dimension error'), np.str_('worst radius'), np.str_('worst texture'), np.str_('worst perimeter'), np.str_('worst area'), np.str_('worst smoothness'), np.str_('worst compactness'), np.str_('worst concavity'), np.str_('worst concave points'), np.str_('worst symmetry'), np.str_('worst fractal dimension')]
+Label   : target
+
+Accuracy: 0.8881
+AUC     : 0.9715
+Classification report:
+              precision    recall  f1-score   support
+
+           0      0.951     0.736     0.830        53
+           1      0.863     0.978     0.917        90
+
+    accuracy                          0.888       143
+   macro avg      0.907     0.857     0.873       143
+weighted avg      0.896     0.888     0.884       143
+
+Note:
+  Sensitivity == Recall of the positive class
+  Specificity == Recall of the negative class
+------------------------------------------------------------
