@@ -22,6 +22,7 @@ date: last-modified
 code-line-numbers: false
 highlight-style: a11y
 bibliography: refs.bib
+csl: template/ieee.csl
 ---
 
 ## Introduction {.smaller}
@@ -117,14 +118,14 @@ $$
 - Order of splits is irrelevant; different trees can yield the same set of paths.
 - Desirable: identical path sets imply identical decision logic regardless of tree shape.
 
-## Path Distance {.smaller}
-Compare feature ranges and class weight
+## Path calculations {.smaller}
+
+**Compare feature ranges and class weight**
 $$
     d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
 $$
 
-## Path Weight {.smaller}
-- Portion of feature ranges captured by the path
+**Portion of feature ranges captured by the path**
 $$
     d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
 $$
@@ -430,6 +431,17 @@ $a_{b}$, $\forall b \in \mathcal{T}$
 :::
 
 ::::
+
+## Aggregated metrics {.smaller}
+
+
+|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
+|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
+| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
+| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
+| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
+
+
 
 ## Experiment runner {.smaller}
 

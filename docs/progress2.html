@@ -11,7 +11,7 @@
 
   <meta name="author" content="Adhithya Bhaskar">
   <meta name="author" content="Michelle Gelman">
-  <meta name="dcterms.date" content="2025-04-29">
+  <meta name="dcterms.date" content="2025-04-30">
   <title>Decision Tree Stability for Suicide Experience Prediction</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -233,11 +233,11 @@ Michelle Gelman
 </div>
 </div>
 
-  <p class="date">2025-04-29</p>
+  <p class="date">2025-04-30</p>
 </section>
 <section id="introduction" class="slide level2 smaller">
 <h2>Introduction</h2>
-<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023">Bertsimas and Jr (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></p>
+<p>Implementing stable trees proposed by Bertsimas et al.&nbsp;2023 <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span></p>
 <ol type="1">
 <li><strong>Initial Training (T0):</strong> Train initial set of decision trees on subset</li>
 <li><strong>Full Data Training (T):</strong> Train a second set on full training data</li>
@@ -321,19 +321,14 @@ Michelle Gelman
 <li>Desirable: identical path sets imply identical decision logic regardless of tree shape.</li>
 </ul>
 </section>
-<section id="path-distance" class="slide level2 smaller">
-<h2>Path Distance</h2>
-<p>Compare feature ranges and class weight <span class="math display">\[
+<section id="path-calculations" class="slide level2 smaller">
+<h2>Path calculations</h2>
+<p><strong>Compare feature ranges and class weight</strong> <span class="math display">\[
     d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
 \]</span></p>
-</section>
-<section id="path-weight" class="slide level2 smaller">
-<h2>Path Weight</h2>
-<ul>
-<li>Portion of feature ranges captured by the path <span class="math display">\[
-  d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
-\]</span></li>
-</ul>
+<p><strong>Portion of feature ranges captured by the path</strong> <span class="math display">\[
+    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
+\]</span></p>
 </section>
 <section id="tree-distance" class="slide level2 smaller">
 <h2>Tree Distance</h2>
@@ -901,6 +896,60 @@ Number of trees in T: 25</code></pre>
 <p><span class="math inline">\(a_{b}\)</span>, <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
 </div></div>
 </section>
+<section id="aggregated-metrics" class="slide level2 smaller">
+<h2>Aggregated metrics</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 14%">
+<col style="width: 6%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Method</th>
+<th style="text-align: center;">AUC</th>
+<th style="text-align: center;">Distance</th>
+<th style="text-align: center;">Feat. Import. Std.</th>
+<th style="text-align: center;">Feat. in Top-3</th>
+<th style="text-align: center;">Nodes</th>
+<th style="text-align: center;">Tree Depth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">CART Pareto AUC</td>
+<td style="text-align: center;">0.752 (0.029)</td>
+<td style="text-align: center;">0.043 (0.009)</td>
+<td style="text-align: center;">0.028</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">14.8</td>
+<td style="text-align: center;">4.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CART Pareto Stability</td>
+<td style="text-align: center;">0.751 (0.029)</td>
+<td style="text-align: center;">0.037 (0.014)</td>
+<td style="text-align: center;">0.03</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">19.2</td>
+<td style="text-align: center;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CART Pareto Distance</td>
+<td style="text-align: center;">0.596 (0.066)</td>
+<td style="text-align: center;">0.009 (0.005)</td>
+<td style="text-align: center;">0.026</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">49.0</td>
+<td style="text-align: center;">8.4</td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="experiment-runner" class="slide level2 smaller">
 <h2>Experiment runner</h2>
 <div class="panel-tabset">
@@ -959,7 +1008,7 @@ Total experiments run: 2</code></pre>
 <section id="thoughts-and-points-of-dicussion" class="slide level2 smaller">
 <h2>Thoughts and points of dicussion</h2>
 <ol type="1">
-<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918">Lee, Sim, and Hong (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
+<li>Does the sequence of paths matter? <span class="citation" data-cites="10571918"><a href="#/references" role="doc-biblioref" onclick="">[2]</a></span></li>
 </ol>
 <blockquote>
 <p>The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. … However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.</p>
@@ -971,12 +1020,12 @@ Total experiments run: 2</code></pre>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-bertsimasImprovingStabilityDecision2023" class="csl-entry" role="listitem">
-Bertsimas, Dimitris, and Vassilis Digalakis Jr. 2023. <span>“Improving <span>Stability</span> in <span>Decision Tree Models</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.2305.17299">https://doi.org/10.48550/arXiv.2305.17299</a>.
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. Bertsimas and V. D. Jr, <span>“Improving <span>Stability</span> in <span>Decision Tree Models</span>.”</span> arXiv, May 2023. doi: <a href="https://doi.org/10.48550/arXiv.2305.17299">10.48550/arXiv.2305.17299</a>.</div>
 </div>
 <div id="ref-10571918" class="csl-entry" role="listitem">
-Lee, Jeongeon, Min Kyu Sim, and Jung-Sik Hong. 2024. <span>“Assessing Decision Tree Stability: A Comprehensive Method for Generating a Stable Decision Tree.”</span> <em>IEEE Access</em> 12: 90061–72. <a href="https://doi.org/10.1109/ACCESS.2024.3419228">https://doi.org/10.1109/ACCESS.2024.3419228</a>.
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">J. Lee, M. K. Sim, and J.-S. Hong, <span>“Assessing decision tree stability: A comprehensive method for generating a stable decision tree,”</span> <em>IEEE Access</em>, vol. 12, pp. 90061–90072, 2024, doi: <a href="https://doi.org/10.1109/ACCESS.2024.3419228">10.1109/ACCESS.2024.3419228</a>.</div>
 </div>
 </div>
 </section>
