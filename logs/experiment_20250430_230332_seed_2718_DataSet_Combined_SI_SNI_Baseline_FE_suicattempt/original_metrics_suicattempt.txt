@@ -1,0 +1,20 @@
+------------------------------------------------------------
+Features: ['age', 'gender', 'sexori', 'raceall', 'trauma_sum', 'cesd_score', 'harddrug_life', 'school', 'degree', 'job', 'sex', 'concurrent', 'exchange', 'children', 'weapon', 'fight', 'fighthurt', 'ipv', 'ptsd_score', 'alcfirst', 'potfirst', 'staycurrent', 'homelage', 'time_homeless_month', 'jail', 'jailkid', 'gettherapy', 'sum_alter', 'prop_family', 'prop_home_friends', 'prop_street_friends', 'prop_unknown_alter', 'sum_talk_once_week', 'sum_alter3close', 'prop_family_harddrug', 'prop_friends_harddrug', 'prop_friends_home_harddrug', 'prop_friends_street_harddrug', 'prop_alter_all_harddrug', 'prop_enc_badbehave', 'prop_alter_homeless', 'prop_family_emosup', 'prop_friends_emosup', 'prop_friends_home_emosup', 'prop_friends_street_emosup', 'prop_alter_all_emosup', 'prop_family_othersupport', 'prop_friends_othersupport', 'prop_friends_home_othersupport', 'prop_friends_street_othersupport', 'prop_alter_all_othersupport', 'sum_alter_staff', 'prop_object_badbehave', 'prop_enc_goodbehave', 'prop_alter_school_job', 'sum_alter_borrow']
+Label   : suicattempt
+
+Accuracy: 0.8325
+AUC     : 0.8895
+Classification report:
+              precision    recall  f1-score   support
+
+         0.0      0.868     0.862     0.865       130
+         1.0      0.775     0.785     0.780        79
+
+    accuracy                          0.833       209
+   macro avg      0.822     0.823     0.822       209
+weighted avg      0.833     0.833     0.833       209
+
+Note:
+  Sensitivity == Recall of the positive class
+  Specificity == Recall of the negative class
+------------------------------------------------------------

@@ -1,0 +1,84 @@
+Logger started at: 2025-04-30 23:02:55
+=== Configuration ===
+DEPTHS: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+MIN_SAMPLES: [3, 5, 10, 30, 50]
+NUM_BOOTSTRAPS: 20
+RANDOM_SEED: 16180
+DATA_PATH: data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+
+=== Configuration ===
+DATA_PATH: data/DataSet_Combined_SI_SNI_Baseline_FE.csv
+
+=== Configuration ===
+label: suicattempt
+
+=== Metrics ===
+num_samples_full: 587
+num_samples_train: 627
+num_samples_test: 209
+train_shape: (627, 56)
+
+=== Metrics ===
+random_split_shape: (313, 313)
+
+=== Metrics ===
+num_trees_T0: 20
+
+=== Metrics ===
+num_trees_T: 20
+
+=== Metrics ===
+num_distances: 20
+
+=== Metrics ===
+average_auc: 0.8752507302823759
+
+=== Metrics ===
+num_pareto_trees: 5
+
+=== Metrics ===
+common_feature_freq: [[('fighthurt', 80.0), ('fight', 15.0)], [('trauma_sum', 25.0), ('degree', 15.0)], [('cesd_score', 15.0), ('time_homeless_month', 15.0)]]
+
+=== Metrics ===
+selected_tree_index: 16
+selected_tree_distance: 0.056255
+selected_tree_auc: 0.9356864654333008
+
+=== Metrics ===
+stability_tree_depth: 5
+stability_tree_nodes: 35
+
+=== Metrics ===
+stability_accuracy_importances: [0.0, 0.0, 0.0, 0.0, 0.010689167341252075, 0.0, 0.10512855903103774, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.40039176854744657, 0.04372628822658098, 0.0, 0.22779413544920213, 0.0, 0.0, 0.0, 0.0025269776909095645, 0.0, 0.05366795377521144, 0.0, 0.048997096680719186, 0.0, 0.0, 0.0, 0.0, 0.007617023985583957, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01998831599948349, 0.0, 0.06990285071519528, 0.00045941840472490866, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002831628500844312, 0.006278815651808477, 0.0, 0.0, 0.0]
+
+=== Metrics ===
+selected_auc_tree_index: 16
+selected_auc_tree_distance: 0.056255
+selected_auc_tree_auc: 0.9356864654333008
+
+=== Metrics ===
+auc_tree_depth: 5
+auc_tree_nodes: 35
+
+=== Metrics ===
+auc_max_importances: [0.0, 0.0, 0.0, 0.0, 0.010689167341252075, 0.0, 0.10512855903103774, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.40039176854744657, 0.04372628822658098, 0.0, 0.22779413544920213, 0.0, 0.0, 0.0, 0.0025269776909095645, 0.0, 0.05366795377521144, 0.0, 0.048997096680719186, 0.0, 0.0, 0.0, 0.0, 0.007617023985583957, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01998831599948349, 0.0, 0.06990285071519528, 0.00045941840472490866, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002831628500844312, 0.006278815651808477, 0.0, 0.0, 0.0]
+
+=== Metrics ===
+selected_dist_tree_index: 7
+selected_dist_tree_distance: 0.006284999999999999
+selected_dist_tree_auc: 0.8677702044790652
+
+=== Metrics ===
+dist_tree_depth: 9
+dist_tree_nodes: 67
+
+=== Metrics ===
+dist_min_importances: [0.0022105124214580694, 0.0, 0.0, 0.0018137537817091757, 0.025777637015910362, 0.00798775087923255, 0.11464318742672781, 0.0, 0.004086991854784681, 0.0, 0.0, 0.025645411559378536, 0.02496578734823222, 0.0, 0.0, 0.12006524970861077, 0.28776346157772714, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05555534576362883, 0.036349063567404374, 0.09967393094535976, 0.03635450308590167, 0.0, 0.011714341936133894, 0.017241996887372876, 0.0, 0.002243788952533775, 0.0, 0.0012968339539220638, 0.019988948790071664, 0.0, 0.008083649904602709, 0.0, 0.006602063765421407, 0.0, 0.0, 0.0, 0.0031207234185290297, 0.027462366083055443, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.02994350623541389, 0.0, 0.0, 0.0, 0.0, 0.0, 0.029409193136877183]
+
+Saved figure: original_decision_tree.png
+Saved figure: original_feature_importance.png
+Saved figure: original_roc_curve.png
+Saved figure: decision_tree.png
+Saved figure: trimmed_decision_tree.png
+Saved figure: top_common_features.png
+Saved figure: pareto_frontier.png

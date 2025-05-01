@@ -1,0 +1,289 @@
+{
+    "dataset_aggregates": {
+        "DataSet_Combined_SI_SNI_Baseline_FE_suicidea": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.0225859754508208,
+                "auc_max_importances": 0.02099265287444781,
+                "dist_min_importances": 0.01840643492217531
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "cesd_score",
+                    "exchange",
+                    "fight",
+                    "fighthurt",
+                    "harddrug_life",
+                    "prop_friends_emosup",
+                    "ptsd_score",
+                    "trauma_sum",
+                    "weapon"
+                ],
+                "auc_max_importances": [
+                    "cesd_score",
+                    "exchange",
+                    "fight",
+                    "fighthurt",
+                    "harddrug_life",
+                    "ptsd_score",
+                    "trauma_sum",
+                    "weapon"
+                ],
+                "dist_min_importances": [
+                    "exchange",
+                    "fight",
+                    "harddrug_life",
+                    "prop_enc_goodbehave",
+                    "prop_friends_street_emosup",
+                    "ptsd_score",
+                    "time_homeless_month",
+                    "trauma_sum",
+                    "weapon"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 36.0,
+                    "auc_tree_nodes": 35.4,
+                    "dist_tree_nodes": 76.0
+                },
+                "std": {
+                    "stability_tree_nodes": 14.621901381147392,
+                    "auc_tree_nodes": 16.98940846527624,
+                    "dist_tree_nodes": 12.433824833895642
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 6.5,
+                    "auc_tree_depth": 5.8,
+                    "dist_tree_depth": 9.8
+                },
+                "std": {
+                    "stability_tree_depth": 1.4317821063276353,
+                    "auc_tree_depth": 1.8330302779823358,
+                    "dist_tree_depth": 0.6
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.8834266785055667,
+                    "selected_auc_tree_auc": 0.8855098695444301,
+                    "selected_dist_tree_auc": 0.8464893108394236
+                },
+                "std": {
+                    "selected_tree_auc": 0.01959016217202324,
+                    "selected_auc_tree_auc": 0.018311820339985223,
+                    "selected_dist_tree_auc": 0.02749471258423001
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.022919000000000002,
+                    "selected_auc_tree_distance": 0.034924,
+                    "selected_dist_tree_distance": 0.0033035
+                },
+                "std": {
+                    "selected_tree_distance": 0.01771933884206744,
+                    "selected_auc_tree_distance": 0.02374423738510041,
+                    "selected_dist_tree_distance": 0.0010689645691041403
+                }
+            }
+        },
+        "DataSet_Combined_SI_SNI_Baseline_FE_suicattempt": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.024670508022814615,
+                "auc_max_importances": 0.021555472545021496,
+                "dist_min_importances": 0.021099735734690896
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "cesd_score",
+                    "exchange",
+                    "fight",
+                    "fighthurt",
+                    "gettherapy",
+                    "harddrug_life",
+                    "homelage",
+                    "jailkid",
+                    "ptsd_score",
+                    "sexori",
+                    "trauma_sum",
+                    "weapon"
+                ],
+                "auc_max_importances": [
+                    "fight",
+                    "fighthurt",
+                    "gettherapy",
+                    "harddrug_life",
+                    "homelage",
+                    "jail",
+                    "prop_alter_homeless",
+                    "ptsd_score",
+                    "trauma_sum"
+                ],
+                "dist_min_importances": [
+                    "cesd_score",
+                    "degree",
+                    "fight",
+                    "fighthurt",
+                    "gettherapy",
+                    "harddrug_life",
+                    "homelage",
+                    "jail",
+                    "jailkid",
+                    "prop_alter_school_job",
+                    "prop_enc_badbehave",
+                    "ptsd_score",
+                    "trauma_sum",
+                    "weapon"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 43.6,
+                    "auc_tree_nodes": 35.8,
+                    "dist_tree_nodes": 58.2
+                },
+                "std": {
+                    "stability_tree_nodes": 16.66253282067285,
+                    "auc_tree_nodes": 10.007996802557443,
+                    "dist_tree_nodes": 11.106754701531857
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 7.1,
+                    "auc_tree_depth": 5.6,
+                    "dist_tree_depth": 8.8
+                },
+                "std": {
+                    "stability_tree_depth": 1.57797338380595,
+                    "auc_tree_depth": 1.624807680927192,
+                    "dist_tree_depth": 0.6
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.8966163583252191,
+                    "selected_auc_tree_auc": 0.90047711781889,
+                    "selected_dist_tree_auc": 0.8515530671859786
+                },
+                "std": {
+                    "selected_tree_auc": 0.022978956410512386,
+                    "selected_auc_tree_auc": 0.021838878975536095,
+                    "selected_dist_tree_auc": 0.026194436499937385
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.020415,
+                    "selected_auc_tree_distance": 0.053568000000000005,
+                    "selected_dist_tree_distance": 0.0056105
+                },
+                "std": {
+                    "selected_tree_distance": 0.016905966550304064,
+                    "selected_auc_tree_distance": 0.03137650260943689,
+                    "selected_dist_tree_distance": 0.001472204894028002
+                }
+            }
+        },
+        "breast_cancer_target": {
+            "feature_std": {
+                "stability_accuracy_importances": 0.04646975149188227,
+                "auc_max_importances": 0.04311064781544535,
+                "dist_min_importances": 0.0344660894645185
+            },
+            "distinct_top_features": {
+                "stability_accuracy_importances": [
+                    "area error",
+                    "compactness error",
+                    "mean concave points",
+                    "mean concavity",
+                    "mean texture",
+                    "worst area",
+                    "worst compactness",
+                    "worst concave points",
+                    "worst concavity",
+                    "worst perimeter",
+                    "worst radius",
+                    "worst texture"
+                ],
+                "auc_max_importances": [
+                    "area error",
+                    "compactness error",
+                    "concave points error",
+                    "mean concave points",
+                    "mean concavity",
+                    "mean texture",
+                    "radius error",
+                    "worst area",
+                    "worst concave points",
+                    "worst perimeter",
+                    "worst radius",
+                    "worst texture"
+                ],
+                "dist_min_importances": [
+                    "area error",
+                    "mean area",
+                    "mean concave points",
+                    "perimeter error",
+                    "worst area",
+                    "worst concave points",
+                    "worst concavity",
+                    "worst perimeter",
+                    "worst radius",
+                    "worst smoothness",
+                    "worst texture"
+                ]
+            },
+            "tree_nodes": {
+                "mean": {
+                    "stability_tree_nodes": 22.4,
+                    "auc_tree_nodes": 19.4,
+                    "dist_tree_nodes": 28.4
+                },
+                "std": {
+                    "stability_tree_nodes": 4.903060268852505,
+                    "auc_tree_nodes": 4.2708313008125245,
+                    "dist_tree_nodes": 2.835489375751565
+                }
+            },
+            "tree_depth": {
+                "mean": {
+                    "stability_tree_depth": 5.3,
+                    "auc_tree_depth": 4.6,
+                    "dist_tree_depth": 6.6
+                },
+                "std": {
+                    "stability_tree_depth": 0.7810249675906654,
+                    "auc_tree_depth": 0.66332495807108,
+                    "dist_tree_depth": 0.4898979485566356
+                }
+            },
+            "optimal_auc": {
+                "mean": {
+                    "selected_tree_auc": 0.9735830212234706,
+                    "selected_auc_tree_auc": 0.976079900124844,
+                    "selected_dist_tree_auc": 0.9463358302122348
+                },
+                "std": {
+                    "selected_tree_auc": 0.009650275446705844,
+                    "selected_auc_tree_auc": 0.009694789491477658,
+                    "selected_dist_tree_auc": 0.013908928017193583
+                }
+            },
+            "optimal_distance": {
+                "mean": {
+                    "selected_tree_distance": 0.032208499999999994,
+                    "selected_auc_tree_distance": 0.0472005,
+                    "selected_dist_tree_distance": 0.013313499999999997
+                },
+                "std": {
+                    "selected_tree_distance": 0.011156318624438798,
+                    "selected_auc_tree_distance": 0.014970912538987058,
+                    "selected_dist_tree_distance": 0.0043470231480865155
+                }
+            }
+        }
+    }
+}

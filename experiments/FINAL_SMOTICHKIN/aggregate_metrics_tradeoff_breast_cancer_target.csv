@@ -1,0 +1,4 @@
+Method,AUC,Distance,Feat. Import. Std.,Feat. in Top-3,Nodes,Tree Depth
+CART Pareto AUC,0.976 (0.010),0.047 (0.015),0.043,12,19.400,4.600
+CART Pareto Stability,0.974 (0.010),0.032 (0.011),0.046,12,22.400,5.300
+CART Pareto Distance,0.946 (0.014),0.013 (0.004),0.034,11,28.400,6.600
