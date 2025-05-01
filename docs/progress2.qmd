@@ -269,14 +269,19 @@ Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingS
   $$
 
 ::: footer
-<a style="opacity: 0.2;">M</a>
+<a style="opacity: 0.2;">A</a>
 :::
 
-## An explanation of the method
+## 
 
+\
 \
 
 ![](./amethod%20diagram.svg){fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
 
 ## Random Train Split
 
@@ -305,7 +310,7 @@ X0.shape, y0.shape
 
 ```{python}
 #| echo: true
-#| code-line-numbers: "|6,7|10|11,12"
+#| code-line-numbers: "6,7,10,11,12"
 def train_decision_tree(X, y, depth, min_samples_leaf):
     clf = DecisionTreeClassifier(max_depth=depth, min_samples_leaf=min_samples_leaf)
     clf.fit(X, y)
@@ -403,7 +408,9 @@ auc_scores = evaluate_predictive_power(T, X_test.values, y_test.values)
 
 ## Finding Pareto Optimal Trees
 
-- **Pareto Optimal:** $(d_{b'} \leq d_b \text{ and } \alpha_{b'} > \alpha_b) \text{ or } (d_{b'} < d_b \text{ and } \alpha_{b'} \geq \alpha_b)$
+$(d_{b'} \leq d_b \text{ and } \alpha_{b'} > \alpha_b)$
+*or* 
+$(d_{b'} < d_b \text{ and } \alpha_{b'} \geq \alpha_b)$
 
 ```{python}
 #| echo: true
@@ -432,8 +439,8 @@ print("Number of Pareto optimal trees:", len(pareto_trees))
 ## Tree Selection Strategy
 
 -  $\mathbb{T}^\star = \underset{\mathbb{T}_b \in \mathcal{T}^\star}{\text{argmax}} \ f(d_b, \alpha_b)$
-- Stability or predictive power?
-- Indicator function: $\alpha_{b}$ is within ε of the best score
+- **Tradeoff:** Stability *and* predictive power
+<!-- - Indicator function: $\alpha_{b}$ is within ε of the best score -->
 
 ```{python}
 #| echo: true
@@ -453,124 +460,6 @@ print("Selected tree index:", selected_tree_index)
 ::: footer
 <a style="opacity: 0.2;">A</a>
 :::
-
-## Visualizing Selected Tree
-
-```{python}
-#| fig-align: center
-selected_tree = T[selected_tree_index]
-plt.figure(figsize=(12, 8), dpi=500)
-plot_tree(selected_tree, 
-          feature_names=X_full.columns,
-          class_names=["No Suicide Ideation", "Suicide Ideation"],
-          filled=True)
-plt.tight_layout()
-```
-
-::: footer
-<a style="opacity: 0.2;">M</a>
-:::
-
-## Aggregated metrics  {.smaller}
-
-
-|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
-|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
-| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
-| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
-| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
-| **CART Pareto AUC**       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
-| **CART Pareto Stability** 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
-| **CART Pareto Distance**  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
-
-::: footer
-<a style="opacity: 0.2;">M</a>
-:::
-
-## Results - Aggregated STD
-
-![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png){fig-align="center"}
-
-## Results - Tree depth
-
-![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png){fig-align="center"}
-
-## Results - Number of nodes
-
-![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png){fig-align="center"}
-
-## Results - Distinct top features
-
-![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png){fig-align="center"}
-
-## Results - Current Considerations
-
-- Correlation to other aggregate metrics with magnitude of distance?
-- What the "right depth?"" (bias-variance trade off)
-    - optimizing for distance -> deeper trees
-- Is T0 large enough currently statistically to represent T when bootstrapping?
-    - Checks for distribution shift in sampling
-
-
-## Thinking About Stability
-
-\
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-![](../logs/experiment_20250501_134921_seed_42_breast_cancer_target/plots/decision_tree.png){fig-align="center"}
-
-:::
-
-::: {.column width="50%"}
-
-![](../logs/experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt/plots/decision_tree.png){fig-align="center"}
-
-:::
-
-::::
-
-## Pareto Frontier Visualization
-
-:::: {.columns}
-
-::: {.column width="55%"}
-```{python}
-def plot_pareto_frontier(distances, auc_scores, pareto_indices):
-    distances = np.array(distances)
-    auc_scores = np.array(auc_scores)
-    pareto_indices = set(pareto_indices)
-    is_pareto = np.array([i in pareto_indices for i in range(len(distances))])
-    # Plotting
-    plt.figure(figsize=(8, 7), dpi=500)
-    plt.scatter(distances[~is_pareto], auc_scores[~is_pareto], c='blue', label='Dominated Trees', alpha=0.6)
-    plt.scatter(distances[is_pareto], auc_scores[is_pareto], c='red', edgecolors='black', s=80, label='Pareto Optimal Trees')
-    plt.xlabel("Stability (Lower is Better)")
-    plt.ylabel("AUC (Higher is Better)")
-    plt.title("Pareto Frontier of Decision Trees")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-
-plot_pareto_frontier(distances, auc_scores, pareto_trees)
-```
-:::
-
-::: {.column width="45%"}
-
-**Average distance**
-
-$d_{b}$ , $\forall b \in \mathcal{T}$
-
-\
-**Out-of-sample AUCROC**
-
-$a_{b}$, $\forall b \in \mathcal{T}$
-:::
-
-::::
 
 ## Experiment runner {.smaller}
 
@@ -665,6 +554,151 @@ Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target
 <a style="opacity: 0.2;">A</a>
 :::
 
+## Visualizing Selected Tree
+
+```{python}
+#| fig-align: center
+selected_tree = T[selected_tree_index]
+plt.figure(figsize=(12, 8), dpi=500)
+plot_tree(selected_tree, 
+          feature_names=X_full.columns,
+          class_names=["No Suicide Ideation", "Suicide Ideation"],
+          filled=True)
+plt.tight_layout()
+```
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Aggregated metrics  {.smaller}
+
+
+|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
+|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
+| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
+| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
+| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
+| **CART Pareto AUC**       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
+| **CART Pareto Stability** 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
+| **CART Pareto Distance**  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Results - Aggregated STD
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png){fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Results - Tree depth
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png){fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Results - Number of nodes
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png){fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Results - Distinct top features
+
+![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png){fig-align="center"}
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Results - Current Considerations
+
+- Correlation to other aggregate metrics with magnitude of distance?
+- What the "right depth?"" (bias-variance trade off)
+    - optimizing for distance -> deeper trees
+- Is T0 large enough currently statistically to represent T when bootstrapping?
+    - Checks for distribution shift in sampling
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Thinking About Stability
+
+\
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134921_seed_42_breast_cancer_target/plots/decision_tree.png){fig-align="center"}
+
+:::
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt/plots/decision_tree.png){fig-align="center"}
+
+:::
+
+::::
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## Pareto Frontier Visualization
+
+:::: {.columns}
+
+::: {.column width="55%"}
+```{python}
+def plot_pareto_frontier(distances, auc_scores, pareto_indices):
+    distances = np.array(distances)
+    auc_scores = np.array(auc_scores)
+    pareto_indices = set(pareto_indices)
+    is_pareto = np.array([i in pareto_indices for i in range(len(distances))])
+    # Plotting
+    plt.figure(figsize=(8, 7), dpi=500)
+    plt.scatter(distances[~is_pareto], auc_scores[~is_pareto], c='blue', label='Dominated Trees', alpha=0.6)
+    plt.scatter(distances[is_pareto], auc_scores[is_pareto], c='red', edgecolors='black', s=80, label='Pareto Optimal Trees')
+    plt.xlabel("Stability (Lower is Better)")
+    plt.ylabel("AUC (Higher is Better)")
+    plt.title("Pareto Frontier of Decision Trees")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+
+plot_pareto_frontier(distances, auc_scores, pareto_trees)
+```
+:::
+
+::: {.column width="45%"}
+
+**Average distance**
+
+$d_{b}$ , $\forall b \in \mathcal{T}$
+
+\
+**Out-of-sample AUCROC**
+
+$a_{b}$, $\forall b \in \mathcal{T}$
+:::
+
+::::
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
 ## Future work - Short term
 
 - Refine what **stability** means with our stakeholders
@@ -674,6 +708,10 @@ Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target
     - Pareto tree selection strategy
     - Data pre-processing
 - Stability-performance trade-off when selecting Pareto Optimal tree?
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Future work - Long term
 
@@ -689,10 +727,11 @@ Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target
 
 ## Thoughts and points of dicussion {.smaller}
 
+\
+
 **Does the sequence of paths matter?** @10571918
 
 > The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. ... However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.
-
 
 ::: footer
 <a style="opacity: 0.2;">M</a>

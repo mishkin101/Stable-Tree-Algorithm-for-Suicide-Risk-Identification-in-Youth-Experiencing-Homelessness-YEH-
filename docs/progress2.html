@@ -316,7 +316,7 @@
 <span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a>    y_full <span class="op">=</span> df_full_cleaned[label]</span>
 <span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_full, y_full, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e802b088" class="cell" data-execution_count="4">
+<div id="58426a74" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of samples in the full dataset: 586
 Number of samples in the training set: 439
@@ -331,8 +331,8 @@ Shape of training set: (439, 56)</code></pre>
 <img data-src="progress2_files/figure-revealjs/cell-6-output-1.png" class="r-stretch quarto-figure-center"><p class="caption">Before and after using SMOTE on imbalanced <code>suicidea</code></p></section>
 <section id="a-peek-at-the-data" class="slide level2 smaller">
 <h2>A peek at the data</h2>
-<div id="9f5dab2c" class="cell" data-execution_count="6">
-<div class="cell-output cell-output-display" data-execution_count="186">
+<div id="d22fdcbd" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="201">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -705,15 +705,19 @@ d({T}_1, {T}_2)
   \]</span></li>
 </ol>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">M</a></p>
+<p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
 </section>
-<section id="an-explanation-of-the-method" class="slide level2">
-<h2>An explanation of the method</h2>
+<section id="section" class="slide level2">
+<h2></h2>
 <p><br>
+<br>
 </p>
 
-<img data-src="./amethod%20diagram.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="./amethod%20diagram.svg" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
+</section>
 <section id="random-train-split" class="slide level2">
 <h2>Random Train Split</h2>
 <div id="cell-train-test-split" class="cell" data-execution_count="7">
@@ -728,7 +732,7 @@ d({T}_1, {T}_2)
 <span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="" aria-hidden="true" tabindex="-1"></a>X0, y0 <span class="op">=</span> random_train_split(X_train.values, y_train.values)</span>
 <span id="cb3-11"><a href="" aria-hidden="true" tabindex="-1"></a>X0.shape, y0.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="187">
+<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="202">
 <pre><code>((219, 56), (219,))</code></pre>
 </div>
 </div>
@@ -738,8 +742,8 @@ d({T}_1, {T}_2)
 </section>
 <section id="bootstrapping-decision-trees" class="slide level2">
 <h2>Bootstrapping Decision Trees</h2>
-<div id="d9bcab55" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|6,7|10|11,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="kw">def</span> train_decision_tree(X, y, depth, min_samples_leaf):</span>
+<div id="ab378bbe" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="6,7,10,11,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="kw">def</span> train_decision_tree(X, y, depth, min_samples_leaf):</span>
 <span id="cb5-2"><a href=""></a>    clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>depth, min_samples_leaf<span class="op">=</span>min_samples_leaf)</span>
 <span id="cb5-3"><a href=""></a>    clf.fit(X, y)</span>
 <span id="cb5-4"><a href=""></a>    <span class="cf">return</span> clf</span>
@@ -758,7 +762,7 @@ d({T}_1, {T}_2)
 <div class="footer">
 <p><a style="opacity: 0.2;" href="">A</a></p>
 </div>
-<div id="a2f4a8c6" class="cell" data-execution_count="9">
+<div id="318f5dc2" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of trees in T0: 25
 Number of trees in T: 25</code></pre>
@@ -767,7 +771,7 @@ Number of trees in T: 25</code></pre>
 </section>
 <section id="computing-tree-distances" class="slide level2">
 <h2>Computing Tree Distances</h2>
-<div id="3a9a7080" class="cell" data-execution_count="10">
+<div id="1e3b6afd" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb7" data-code-line-numbers="6,8,9,10,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> compute_average_distances(T0, T, X_train, y_train):</span>
 <span id="cb7-2"><a href=""></a>    X_train_values <span class="op">=</span> X_train.values <span class="cf">if</span> <span class="bu">hasattr</span>(X_train, <span class="st">"values"</span>) <span class="cf">else</span> X_train</span>
 <span id="cb7-3"><a href=""></a>    distances: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
@@ -793,10 +797,8 @@ Number of trees in T: 25</code></pre>
 </section>
 <section id="finding-pareto-optimal-trees" class="slide level2">
 <h2>Finding Pareto Optimal Trees</h2>
-<ul>
-<li><strong>Pareto Optimal:</strong> <span class="math inline">\((d_{b'} \leq d_b \text{ and } \alpha_{b'} &gt; \alpha_b) \text{ or } (d_{b'} &lt; d_b \text{ and } \alpha_{b'} \geq \alpha_b)\)</span></li>
-</ul>
-<div id="c4245f24" class="cell" data-execution_count="14">
+<p><span class="math inline">\((d_{b'} \leq d_b \text{ and } \alpha_{b'} &gt; \alpha_b)\)</span> <em>or</em> <span class="math inline">\((d_{b'} &lt; d_b \text{ and } \alpha_{b'} \geq \alpha_b)\)</span></p>
+<div id="0005cb16" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb8" data-code-line-numbers="5,6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="kw">def</span> pareto_optimal_trees(distances, auc_scores):</span>
 <span id="cb8-2"><a href=""></a>    pareto_trees <span class="op">=</span> []</span>
 <span id="cb8-3"><a href=""></a>    <span class="cf">for</span> i, (d_i, a_i) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
@@ -823,10 +825,9 @@ Number of trees in T: 25</code></pre>
 <h2>Tree Selection Strategy</h2>
 <ul>
 <li><span class="math inline">\(\mathbb{T}^\star = \underset{\mathbb{T}_b \in \mathcal{T}^\star}{\text{argmax}} \ f(d_b, \alpha_b)\)</span></li>
-<li>Stability or predictive power?</li>
-<li>Indicator function: <span class="math inline">\(\alpha_{b}\)</span> is within ε of the best score</li>
+<li><strong>Tradeoff:</strong> Stability <em>and</em> predictive power <!-- - Indicator function: $\alpha_{b}$ is within ε of the best score --></li>
 </ul>
-<div id="3e10f538" class="cell" data-execution_count="15">
+<div id="c6dd36cf" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb10" data-code-line-numbers="3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a><span class="kw">def</span> select_final_tree(distances, auc_scores, pareto_indices, epsilon<span class="op">=</span><span class="fl">0.01</span>):</span>
 <span id="cb10-2"><a href=""></a>    best_auc <span class="op">=</span> <span class="bu">max</span>(auc_scores)</span>
 <span id="cb10-3"><a href=""></a>    candidates <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> pareto_indices <span class="cf">if</span> auc_scores[i] <span class="op">&gt;=</span> (<span class="dv">1</span> <span class="op">-</span> epsilon) <span class="op">*</span> best_auc]</span>
@@ -839,6 +840,95 @@ Number of trees in T: 25</code></pre>
 <span id="cb10-10"><a href=""></a><span class="bu">print</span>(<span class="st">"Selected tree index:"</span>, selected_tree_index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Selected tree index: 23</code></pre>
+</div>
+</div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
+</section>
+<section id="experiment-runner" class="slide level2 smaller">
+<h2>Experiment runner</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1"><code>label=suicidea</code></a></li><li><a href="#tabset-1-2"><code>label=suicattempt</code></a></li><li><a href="#tabset-1-3"><code>label=target</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<pre class="{bash}"><code>==================================================
+Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
+==================================================
+ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
+Experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
+Number of samples in the full dataset: 586
+Number of samples in the training set: 726
+Number of samples in the test set: 242
+Shape of training set: (726, 56)
+Shape of random split: (363, 56), (363,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 20.7s (0.96/s) 
+Number of distances computed: 20
+Average AUC score: 0.821854723038044
+Number of Pareto optimal trees: 7
+Frequenicies of top 2 common features: [[('trauma_sum', 70.0), ('fight', 20.0)], [('harddrug_life', 45.0), ('exchange', 15.0)], [('LEAF_NODE', 25.0), ('harddrug_life', 20.0)]]
+Selected stability-accuracy trade-off final tree index: 1
+Stability-accuracy tree depth: 4, nodes: 23
+Selected AUC maximizing tree index: 1
+AUC-maximizing tree depth: 4, nodes: 23
+Selected distance minimizing tree index: 15
+Distance-minimizing tree depth: 11, nodes: 79
+Completed experiment: </code></pre>
+</div>
+<div id="tabset-1-2">
+<pre class="{bash}"><code>==================================================
+Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
+==================================================
+ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
+Experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
+Number of samples in the full dataset: 587
+Number of samples in the training set: 627
+Number of samples in the test set: 209
+Shape of training set: (627, 56)
+Shape of random split: (313, 56), (313,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 9.4s (2.13/s) 
+Number of distances computed: 20
+Average AUC score: 0.8648953261927945
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[('fighthurt', 45.0), ('fight', 35.0)], [('trauma_sum', 40.0), ('degree', 15.0)], [('gettherapy', 15.0), ('exchange', 15.0)]]
+Selected stability-accuracy trade-off final tree index: 18
+Stability-accuracy tree depth: 7, nodes: 59
+Selected AUC maximizing tree index: 8
+AUC-maximizing tree depth: 4, nodes: 19
+Selected distance minimizing tree index: 11
+Distance-minimizing tree depth: 10, nodes: 61
+Completed experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt</code></pre>
+</div>
+<div id="tabset-1-3">
+<pre class="{bash}"><code>==================================================
+Running for dataset breast_cancer with seed 42
+==================================================
+ds_namebreast_cancer.csv
+Experiment: experiment_20250501_134921_seed_42_breast_cancer_target - Seed: 42 - Dataset: breast_cancer
+Number of samples in the full dataset: 569
+Number of samples in the training set: 535
+Number of samples in the test set: 179
+Shape of training set: (535, 30)
+Shape of random split: (267, 30), (267,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 1.9s (10.51/s) 
+Number of distances computed: 20
+Average AUC score: 0.9502996254681648
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[('worst perimeter', 65.0), ('mean concave points', 20.0)], [('worst smoothness', 15.0), ('worst radius', 15.0)], [('area error', 30.0), ('worst texture', 10.0)]]
+Selected stability-accuracy trade-off final tree index: 14
+Stability-accuracy tree depth: 5, nodes: 19
+Selected AUC maximizing tree index: 12
+AUC-maximizing tree depth: 3, nodes: 9
+Selected distance minimizing tree index: 13
+Distance-minimizing tree depth: 6, nodes: 23
+Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target</code></pre>
+</div>
 </div>
 </div>
 <div class="footer">
@@ -939,19 +1029,31 @@ Number of trees in T: 25</code></pre>
 <section id="results---aggregated-std" class="slide level2">
 <h2>Results - Aggregated STD</h2>
 
-<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_feature_std.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="results---tree-depth" class="slide level2">
 <h2>Results - Tree depth</h2>
 
-<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_depth.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="results---number-of-nodes" class="slide level2">
 <h2>Results - Number of nodes</h2>
 
-<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_tree_nodes.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="results---distinct-top-features" class="slide level2">
 <h2>Results - Distinct top features</h2>
 
-<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="results---current-considerations" class="slide level2">
 <h2>Results - Current Considerations</h2>
 <ul>
@@ -965,6 +1067,9 @@ Number of trees in T: 25</code></pre>
 <li>Checks for distribution shift in sampling</li>
 </ul></li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="thinking-about-stability" class="slide level2">
 <h2>Thinking About Stability</h2>
@@ -984,12 +1089,15 @@ Number of trees in T: 25</code></pre>
 </figure>
 </div>
 </div></div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="pareto-frontier-visualization" class="slide level2">
 <h2>Pareto Frontier Visualization</h2>
 <div class="columns">
 <div class="column" style="width:55%;">
-<div id="4660c251" class="cell" data-execution_count="17">
+<div id="25545101" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -1005,94 +1113,8 @@ Number of trees in T: 25</code></pre>
 <strong>Out-of-sample AUCROC</strong></p>
 <p><span class="math inline">\(a_{b}\)</span>, <span class="math inline">\(\forall b \in \mathcal{T}\)</span></p>
 </div></div>
-</section>
-<section id="experiment-runner" class="slide level2 smaller">
-<h2>Experiment runner</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1"><code>label=suicidea</code></a></li><li><a href="#tabset-1-2"><code>label=suicattempt</code></a></li><li><a href="#tabset-1-3"><code>label=target</code></a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
-<pre class="{bash}"><code>==================================================
-Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
-==================================================
-ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
-Experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
-Number of samples in the full dataset: 586
-Number of samples in the training set: 726
-Number of samples in the test set: 242
-Shape of training set: (726, 56)
-Shape of random split: (363, 56), (363,)
-Number of trees in T0: 20
-Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 20.7s (0.96/s) 
-Number of distances computed: 20
-Average AUC score: 0.821854723038044
-Number of Pareto optimal trees: 7
-Frequenicies of top 2 common features: [[('trauma_sum', 70.0), ('fight', 20.0)], [('harddrug_life', 45.0), ('exchange', 15.0)], [('LEAF_NODE', 25.0), ('harddrug_life', 20.0)]]
-Selected stability-accuracy trade-off final tree index: 1
-Stability-accuracy tree depth: 4, nodes: 23
-Selected AUC maximizing tree index: 1
-AUC-maximizing tree depth: 4, nodes: 23
-Selected distance minimizing tree index: 15
-Distance-minimizing tree depth: 11, nodes: 79
-Completed experiment: </code></pre>
-</div>
-<div id="tabset-1-2">
-<pre class="{bash}"><code>==================================================
-Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
-==================================================
-ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
-Experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
-Number of samples in the full dataset: 587
-Number of samples in the training set: 627
-Number of samples in the test set: 209
-Shape of training set: (627, 56)
-Shape of random split: (313, 56), (313,)
-Number of trees in T0: 20
-Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 9.4s (2.13/s) 
-Number of distances computed: 20
-Average AUC score: 0.8648953261927945
-Number of Pareto optimal trees: 5
-Frequenicies of top 2 common features: [[('fighthurt', 45.0), ('fight', 35.0)], [('trauma_sum', 40.0), ('degree', 15.0)], [('gettherapy', 15.0), ('exchange', 15.0)]]
-Selected stability-accuracy trade-off final tree index: 18
-Stability-accuracy tree depth: 7, nodes: 59
-Selected AUC maximizing tree index: 8
-AUC-maximizing tree depth: 4, nodes: 19
-Selected distance minimizing tree index: 11
-Distance-minimizing tree depth: 10, nodes: 61
-Completed experiment: experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt</code></pre>
-</div>
-<div id="tabset-1-3">
-<pre class="{bash}"><code>==================================================
-Running for dataset breast_cancer with seed 42
-==================================================
-ds_namebreast_cancer.csv
-Experiment: experiment_20250501_134921_seed_42_breast_cancer_target - Seed: 42 - Dataset: breast_cancer
-Number of samples in the full dataset: 569
-Number of samples in the training set: 535
-Number of samples in the test set: 179
-Shape of training set: (535, 30)
-Shape of random split: (267, 30), (267,)
-Number of trees in T0: 20
-Number of trees in T: 20
-Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 1.9s (10.51/s) 
-Number of distances computed: 20
-Average AUC score: 0.9502996254681648
-Number of Pareto optimal trees: 5
-Frequenicies of top 2 common features: [[('worst perimeter', 65.0), ('mean concave points', 20.0)], [('worst smoothness', 15.0), ('worst radius', 15.0)], [('area error', 30.0), ('worst texture', 10.0)]]
-Selected stability-accuracy trade-off final tree index: 14
-Stability-accuracy tree depth: 5, nodes: 19
-Selected AUC maximizing tree index: 12
-AUC-maximizing tree depth: 3, nodes: 9
-Selected distance minimizing tree index: 13
-Distance-minimizing tree depth: 6, nodes: 23
-Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target</code></pre>
-</div>
-</div>
-</div>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
 </section>
 <section id="future-work---short-term" class="slide level2">
@@ -1110,6 +1132,9 @@ Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target</c
 </ul></li>
 <li>Stability-performance trade-off when selecting Pareto Optimal tree?</li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="future-work---long-term" class="slide level2">
 <h2>Future work - Long term</h2>
@@ -1128,6 +1153,8 @@ Completed experiment: experiment_20250501_134921_seed_42_breast_cancer_target</c
 </section>
 <section id="thoughts-and-points-of-dicussion" class="slide level2 smaller">
 <h2>Thoughts and points of dicussion</h2>
+<p><br>
+</p>
 <p><strong>Does the sequence of paths matter?</strong> <span class="citation" data-cites="10571918"><a href="#/references" role="doc-biblioref" onclick="">[10]</a></span></p>
 <blockquote>
 <p>The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. … However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.</p>
