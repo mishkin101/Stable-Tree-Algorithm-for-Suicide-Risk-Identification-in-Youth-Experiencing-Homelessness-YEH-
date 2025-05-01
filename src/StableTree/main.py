@@ -121,8 +121,9 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     # Create a unique experiment name based on timestamp and seed
     rng = np.random.default_rng(seed)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    experiment_name = f"experiment_{timestamp}_seed_{seed}_{dataset.name}"
+    
     dataset_name = dataset.stem
+    experiment_name = f"experiment_{timestamp}_seed_{seed}_{dataset_name}_label_{label}"
     
     # Add this experiment to the group if provided
     if experiment_group:
@@ -417,11 +418,16 @@ def main():
                     '''======Aggregate Statistics========='''
                     # Compute the average standard deviation of Gini Importance across multiple experiments for every pareto selection strategy
                     print("\nAggregate feature‐importance stability across experiments:")
-                    mean_std_feature_dict = compute_avg_feature_std(group, ds.name)
+                    
+                    # name + label
+                    ds_name_label = ds.stem + "_" + label
+                    
+                    mean_std_feature_dict = compute_avg_feature_std(group, ds_name_label)
                     for key, mean_std in mean_std_feature_dict.items():
                         print(f"  {key:20s} mean(std) = {mean_std:.5f}")
                     # Compute the top 3 distinct features in all experiments for every pareto selection strategy
                     distinct_feats_dict = count_distinct_top_features(group, ds.name)
+                    print("counted distinct features")
 
                     # Compute the mean and std of aggregated tree nodes across multiple experiments for every pareto selection strategy
                     mean_nodes_dict, std_nodes_dict = aggregate_tree_nodes(group, ds.name)
@@ -436,8 +442,7 @@ def main():
                     mean_dist_dict, std_dist_dict = aggregate_optimal_distance(group, ds.name)
                     '''================================='''
 
-                    # name + label
-                    ds_name_label = ds.stem + "_" + label
+                    
                     # print("ds_name_label{ds_name_label}")
                     dataset_dict[ds_name_label] = {
                         "feature_std":            mean_std_feature_dict,

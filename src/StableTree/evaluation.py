@@ -53,6 +53,7 @@ def compute_avg_feature_std(group, dataset_name):
     all_imps = {}
     logs_dir = Path("logs").resolve()
     mean_std_dict = {}
+    print(f"dataset_name from compute_avg_feature:{dataset_name}")
     for key in keys:
         # collect every experiment's importance‐vector for this strategy
         all_vals = []
@@ -60,6 +61,7 @@ def compute_avg_feature_std(group, dataset_name):
             if not exp.endswith(dataset_name):
                 continue
             mpath = logs_dir / exp / "metrics.json"
+            print(f"mpath{mpath}")
             with open(mpath, "r") as f:
                 metrics = json.load(f)
             imp_list = metrics.get(key)
