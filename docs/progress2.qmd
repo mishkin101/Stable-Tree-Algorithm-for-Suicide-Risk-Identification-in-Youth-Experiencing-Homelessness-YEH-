@@ -1,6 +1,6 @@
 ---
 title: "Decision Tree Stability for Suicide Experience Prediction"
-subtitle: "ISE 625 Project Progress"
+subtitle: "ISE 625 Project Presentation"
 format:
     revealjs:
         theme: [default, template/custom.scss]
@@ -12,10 +12,10 @@ html-math-method:
   method: mathjax
   url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
 author:
-  - name: Adhithya Bhaskar
-  - name: Michelle Gelman
+  - name: "**Adhithya Bhaskar**"
+  - name: "**Michelle Gelman**"
 execute: 
-  cache: true
+  cache: false
 jupyter: python3
 df-print: paged
 date: last-modified
@@ -25,7 +25,21 @@ bibliography: refs.bib
 csl: template/ieee.csl
 ---
 
-## Introduction {.smaller}
+## Problem outline
+
+- 4.2 million youth experience homelessness each year in the U.S
+- **~27%** and **~35%** of **R**unaway and **H**omeless **Y**outhreport past-year suicidal ideation @kirstConcurrentMentalHealth2011 @rewSexualAbuseAlcohol2001
+- **15.8%** in general population @YouthRiskBehaviora
+- **>50%** of RHY have experienced suicidal ideation during their lifetime @merschamMentalHealthSubstance2009 @molnarSuicidalBehaviorSexual1998 @vottaSuicideHighriskBehaviors2004
+
+## Key question
+
+- Most studies focus on **individual characteristics** in suicidal risk for YEH @PreventingSuicideConnectedness
+- Limited insight on relevant factors and combinations of both individual and social factors that influence suicide risk @fulginitiRiskyIntegrationSocial2016
+
+**Can a stable tree be used to understand the clinical risk profiles of YEH?**
+
+## Stable decision trees {.smaller}
 
 Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingStabilityDecision2023
 
@@ -67,68 +81,23 @@ from sklearn.model_selection import train_test_split
 from dt_distance.distance_calculator import DistanceCalculator
 import matplotlib.pyplot as plt
 from alive_progress import alive_bar
+from imblearn.over_sampling import SMOTE, SVMSMOTE
 # set seed for reproducibility
 np.random.seed(42)
 ```
 
-## Decision Tree as Collection of Paths
+## Tree Path
 
-We represent a decision tree $𝕋$ as a set of paths:
+*Sequence of splits from the root to a leaf & class label $k^p$*
+
 $$
 𝒫(𝕋) = \{p_1, \dots, p_T\}
 $$
 
-Each path $p$ corresponds to one leaf region in the feature space.
-
-## Definition of a Split
-
-- **Numerical split** on feature $j \in \mathcal{N}$ threshold $t \in [l_j,u_j]$:
-  - Test: $x_j < t$ or $x_j \ge t$  
-- **Categorical split** on feature $j \in \mathcal{C}$ with categories $\mathcal{C}' \subseteq [c_j]$:
-  - Test: $x_j \in \mathcal{C}'$ or $x_j \notin \mathcal{C}'$
-
-Each split partitions the feature space into two disjoint regions.
-
-## Tree Path
-
-::: {.callout-important title="Definition" appearance="simple" icon=false}
-Sequence of splits from the root to a leaf & class label $k^p$
-:::
-
-- $\mathbf{u}^p \in \mathbb{R}^{|\mathcal{N}|}$: upper bounds for numerical features  
-- $\mathbf{l}^p \in \mathbb{R}^{|\mathcal{N}|}$: lower bounds for numerical features  
-- $C^p \in \{0,1\}^{|\mathcal{C}| \times \max_j c_j}$: category masks  
-- $k^p \in [K]$: assigned class label
-
-$$
-(\mathbf{u}^p,\mathbf{l}^p,C^p,k^p) \in \mathbb{R}^{|\mathcal{N}|} \times \mathbb{R}^{|\mathcal{N}|} \times \{0,1\}^{|\mathcal{C}| \times \max_j c_j} \times [K]
-$$
-
-## Explanations of components
-
 - **$\mathbf{u}^p_j$**, **$\mathbf{l}^p_j$**: define the numeric interval for feature $j$  
-- **$c^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
-- **$C^p$**: matrix stacking all $c^p_j$  
-- **$k^p$**: class label predicted for this region
+- **$\mathbf{c}^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
+- **$\mathbf{k}^p$**: class label predicted for this region
 
----
-
-## Tree Representation & Non-Uniqueness
-
-- Order of splits is irrelevant; different trees can yield the same set of paths.
-- Desirable: identical path sets imply identical decision logic regardless of tree shape.
-
-## Path calculations {.smaller}
-
-**Compare feature ranges and class weight**
-$$
-    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
-$$
-
-**Portion of feature ranges captured by the path**
-$$
-    d(p,q) = \sum_{j \in \mathcal{N}} \frac{\left|u^p_j - u^q_j\right| + \left|l^p_j - l^q_j\right|}{2(u_j - l_j)} + \sum_{j \in \mathcal{C}} \frac{\left\| c^p_j-c^q_j\right\|_1}{c_j} + \lambda \cdot 1_{(k^p \neq k^q)}
-$$
 
 ## Tree Distance {.smaller}
  $$
@@ -143,8 +112,10 @@ d({T}_1, {T}_2)
 \quad \forall p \in \mathcal{P}(\mathbb{T}_1) \\
 & \sum_{p \in \mathcal{P}(\mathbb{T}_1)} x_{pq} = 1, 
 \quad \forall q \in \mathcal{P}(\mathbb{T}_2) \\
-& x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\}, 
-\quad \forall p \in \mathcal{P}(\mathbb{T}_1), 
+\\
+& x_{pq} \in \{0,1\}, \quad x_{p} \in \{0,1\},
+\\
+& \quad \forall p \in \mathcal{P}(\mathbb{T}_1),
 \quad \forall q \in \mathcal{P}(\mathbb{T}_2)
 \end{align*}
 $$
@@ -153,6 +124,8 @@ $$
 
 ```{python}
 #| echo: True
+#| code-overflow: wrap
+
 DEPTHS = list(range(3, 13))
 MIN_SAMPLES = [3, 5, 10, 30, 50]
 
@@ -183,21 +156,27 @@ LABELS = ["suicidea", "suicattempt"]
 ```{python}
 #| label: import-data
 #| echo: true
-def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng):
-    df = df.replace('NaN', pd.NA)
+def prepare_data(df: pd.DataFrame, features: List[str], label: str, rng, imbalance=None):
+    df = df.replace('NaN', pd.NA)  # replace the string 'NaN' with actual NaN values
     df_full_cleaned = df[features + [label]].dropna().copy()
     X = df_full_cleaned[features]
     y = df_full_cleaned[label]
+
+    if imbalance == "SMOTE":
+        sm = SVMSMOTE(random_state=42)
+        X, y = sm.fit_resample(X, y)
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=rng.integers(0, 2**32 - 1), stratify=y)
     X_full = df_full_cleaned[features]
     y_full = df_full_cleaned[label]
     return X_full, y_full, X_train, X_test, y_train, y_test
-
-df = pd.read_csv(DATA_PATH)
-X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(df, FEATURE_SETS["suicidea"], "suicidea", np.random.default_rng(1234))
 ```
+
 ```{python}
 #| echo: false
+df = pd.read_csv(DATA_PATH)
+X_full, y_full, X_train, X_test, y_train, y_test = prepare_data(df, FEATURE_SETS["suicidea"], "suicidea", np.random.default_rng(1234))
+
 print(f"Number of samples in the full dataset: {len(X_full)}")
 print(f"Number of samples in the training set: {len(X_train)}")
 print(f"Number of samples in the test set: {len(X_test)}")
@@ -207,6 +186,50 @@ print(f"Shape of training set: {X_train.shape}")
 ::: footer
 <a style="opacity: 0.2;">A</a>
 :::
+
+## Data Imbalance
+
+```{python}
+#| fig-cap: Before and after using SMOTE on imbalanced `suicidea`
+#| fig-align: center
+#| echo: false
+#| output-location: column
+
+orig_counts = y_full.value_counts().sort_index()
+sm = SVMSMOTE(random_state=42)
+X_smote, y_smote = sm.fit_resample(X_full, y_full)
+smote_counts = y_smote.value_counts().sort_index()
+
+fig, (ax1, ax2) = plt.subplots(
+    ncols=2,
+    figsize=(12, 5),
+    dpi=150,
+)
+
+ax1.hist(
+    y_full,
+    bins=len(orig_counts),
+    rwidth=0.8,
+    color='skyblue',
+    edgecolor='black'
+)
+ax1.set_title("Original label distribution")
+ax1.set_xlabel("Class label")
+ax1.set_ylabel("Count")
+
+ax2.hist(
+    y_smote,
+    bins=len(smote_counts),
+    rwidth=0.8,
+    color='salmon',
+    edgecolor='black'
+)
+ax2.set_title("After SMOTE")
+ax2.set_xlabel("Class label")
+ax2.set_ylabel("Count")
+plt.tight_layout()
+plt.show()
+```
 
 ## A peek at the data {.smaller}
 
@@ -241,7 +264,7 @@ X0.shape, y0.shape
 <a style="opacity: 0.2;">A</a>
 :::
 
-## Decision Tree Training Functions
+## Bootstrapping Decision Trees
 
 
 ```{python}
@@ -264,10 +287,8 @@ def bootstrap_trees(X, y, depths, min_samples, B):
     return trees
 ```
 
-## Bootstrapping Decision Trees
-
 ```{python}
-#| echo: true
+#| echo: false
 T0 = bootstrap_trees(X0, y0, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)
 print("Number of trees in T0:", len(T0))
 
@@ -280,7 +301,7 @@ print("Number of trees in T:", len(T))
 ```{python}
 #| eval: false
 #| echo: true
-#| code-line-numbers: "|5|8,9"
+#| code-line-numbers: "6,8,9,10,12"
 
 def compute_average_distances(T0, T, X_train, y_train):
     X_train_values = X_train.values if hasattr(X_train, "values") else X_train
@@ -340,7 +361,7 @@ print("Average AUC score:", np.mean(auc_scores))
 
 ```{python}
 #| echo: true
-#| code-line-numbers: "|5,6"
+#| code-line-numbers: "5,6"
 def pareto_optimal_trees(distances, auc_scores):
     pareto_trees = []
     for i, (d_i, a_i) in enumerate(zip(distances, auc_scores)):
@@ -365,7 +386,7 @@ print("Number of Pareto optimal trees:", len(pareto_trees))
 
 ```{python}
 #| echo: true
-#| code-line-numbers: "|3"
+#| code-line-numbers: "3"
 def select_final_tree(distances, auc_scores, pareto_indices, epsilon=0.01):
     best_auc = max(auc_scores)
     candidates = [i for i in pareto_indices if auc_scores[i] >= (1 - epsilon) * best_auc]
