@@ -1,6 +1,6 @@
 {
   "group_name": "FINAL_aggregate_output",
-  "created_at": "2025-04-30T22:23:30.584087",
+  "created_at": "2025-05-01T13:49:21.849875",
   "data_paths": [
     "data/DataSet_Combined_SI_SNI_Baseline_FE.csv",
     "data/DataSet_Combined_SI_SNI_Baseline_FE.csv",
@@ -186,6 +186,9 @@
     "experiment_20250430_222324_seed_16180_breast_cancer_target",
     "experiment_20250430_222326_seed_14142_breast_cancer_target",
     "experiment_20250430_222328_seed_2718_breast_cancer_target",
-    "experiment_20250430_222330_seed_8284_breast_cancer_target"
+    "experiment_20250430_222330_seed_8284_breast_cancer_target",
+    "experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea",
+    "experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt",
+    "experiment_20250501_134921_seed_42_breast_cancer_target"
   ]
 }

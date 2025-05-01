@@ -503,6 +503,31 @@ plt.tight_layout()
 
 ![](../experiments/FINAL_SMOTICHKIN/aggregate_metrics_distinct_top_features.png){fig-align="center"}
 
+## Results - Current Considerations
+
+- Correlation to other aggregate metrics with magnitude of distance?
+- What the "right depth?"" (bias-variance trade off)
+    - optimizing for distance -> deeper trees
+- Is T0 large enough currently statistically to represent T when bootstrapping?
+    - Checks for distribution shift in sampling
+
+
+## Thinking About Stability
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134921_seed_42_breast_cancer_target/plots/decision_tree.png){fig-align="center"}
+
+::: {.column width="50%"}
+
+![](../logs/experiment_20250501_134911_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicattempt/plots/decision_tree.png){fig-align="center"}
+
+:::
+
+::::
+
 ## Pareto Frontier Visualization
 
 :::: {.columns}
@@ -628,7 +653,6 @@ Total experiments run: 2
 
 - Refine what **stability** means with our stakeholders
     - What do we measure concerning and how do we quantify success?
-    - Are there correlations to other aggregate metrics that vary with magnitude of tree distance?
 - Hyper-parameter finetuning
     - Path distance class weight
     - Pareto tree selection strategy
@@ -638,6 +662,9 @@ Total experiments run: 2
 
 - Does implementation meet the criteria for reliability in identifying YEH?
 - Feature selection and qualitative pre-processing
+- Robustness: direct versus indirect perturbation sensitivity analysis
+    - **Direct:** Changes in tree structure (threshold pertubations)
+    - **Indirect:** Modifications in  training data
 
 ::: footer
 <a style="opacity: 0.2;">M</a>

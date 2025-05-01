@@ -2,14 +2,15 @@
     "dataset_aggregates": {
         "DataSet_Combined_SI_SNI_Baseline_FE_suicidea": {
             "feature_std": {
-                "stability_accuracy_importances": 0.024788048263953828,
-                "auc_max_importances": 0.023810791219034295,
-                "dist_min_importances": 0.02336901802869578
+                "stability_accuracy_importances": 0.02643094561646656,
+                "auc_max_importances": 0.025640470566538502,
+                "dist_min_importances": 0.023584040209625963
             },
             "distinct_top_features": {
                 "stability_accuracy_importances": [
                     "alcfirst",
                     "cesd_score",
+                    "exchange",
                     "fight",
                     "harddrug_life",
                     "homelage",
@@ -27,6 +28,7 @@
                     "age",
                     "alcfirst",
                     "cesd_score",
+                    "exchange",
                     "fight",
                     "harddrug_life",
                     "homelage",
@@ -61,58 +63,58 @@
             },
             "tree_nodes": {
                 "mean": {
-                    "stability_tree_nodes": 18.4,
-                    "auc_tree_nodes": 17.4,
-                    "dist_tree_nodes": 57.0
+                    "stability_tree_nodes": 18.818181818181817,
+                    "auc_tree_nodes": 17.90909090909091,
+                    "dist_tree_nodes": 59.0
                 },
                 "std": {
-                    "stability_tree_nodes": 10.43264108459598,
-                    "auc_tree_nodes": 8.42852300228219,
-                    "dist_tree_nodes": 8.809086218218097
+                    "stability_tree_nodes": 10.03465071021573,
+                    "auc_tree_nodes": 8.19594739606156,
+                    "dist_tree_nodes": 10.514059850764335
                 }
             },
             "tree_depth": {
                 "mean": {
-                    "stability_tree_depth": 4.3,
-                    "auc_tree_depth": 3.9,
-                    "dist_tree_depth": 9.6
+                    "stability_tree_depth": 4.2727272727272725,
+                    "auc_tree_depth": 3.909090909090909,
+                    "dist_tree_depth": 9.727272727272727
                 },
                 "std": {
-                    "stability_tree_depth": 1.2688577540449522,
-                    "auc_tree_depth": 1.1357816691600549,
-                    "dist_tree_depth": 0.9165151389911681
+                    "stability_tree_depth": 1.212878551284212,
+                    "auc_tree_depth": 1.083306844346635,
+                    "dist_tree_depth": 0.9620913858416692
                 }
             },
             "optimal_auc": {
                 "mean": {
-                    "selected_tree_auc": 0.7356325492689129,
-                    "selected_auc_tree_auc": 0.7367927527018436,
-                    "selected_dist_tree_auc": 0.5972186904005087
+                    "selected_tree_auc": 0.7486321819700688,
+                    "selected_auc_tree_auc": 0.7496869123636422,
+                    "selected_dist_tree_auc": 0.6167877781667824
                 },
                 "std": {
-                    "selected_tree_auc": 0.0306407662215834,
-                    "selected_auc_tree_auc": 0.029956080700766465,
-                    "selected_dist_tree_auc": 0.030267596745113805
+                    "selected_tree_auc": 0.0504322363416341,
+                    "selected_auc_tree_auc": 0.04978334568338269,
+                    "selected_dist_tree_auc": 0.06828129365000608
                 }
             },
             "optimal_distance": {
                 "mean": {
-                    "selected_tree_distance": 0.05266850000000001,
-                    "selected_auc_tree_distance": 0.068934,
-                    "selected_dist_tree_distance": 0.0037775000000000005
+                    "selected_tree_distance": 0.05358636363636364,
+                    "selected_auc_tree_distance": 0.0683731818181818,
+                    "selected_dist_tree_distance": 0.003547272727272727
                 },
                 "std": {
-                    "selected_tree_distance": 0.02424750936178807,
-                    "selected_auc_tree_distance": 0.031883381862656913,
-                    "selected_dist_tree_distance": 0.0019257105831354826
+                    "selected_tree_distance": 0.02330058369254348,
+                    "selected_auc_tree_distance": 0.030451298320785726,
+                    "selected_dist_tree_distance": 0.00197516669450312
                 }
             }
         },
         "DataSet_Combined_SI_SNI_Baseline_FE_suicattempt": {
             "feature_std": {
-                "stability_accuracy_importances": 0.031191239514537988,
-                "auc_max_importances": 0.03200879558156567,
-                "dist_min_importances": 0.027035668363467113
+                "stability_accuracy_importances": 0.03187120165285121,
+                "auc_max_importances": 0.034945509508670536,
+                "dist_min_importances": 0.026705309568763665
             },
             "distinct_top_features": {
                 "stability_accuracy_importances": [
@@ -128,6 +130,7 @@
                     "prop_friends_street_emosup",
                     "prop_home_friends",
                     "prop_object_badbehave",
+                    "ptsd_score",
                     "trauma_sum",
                     "weapon"
                 ],
@@ -137,6 +140,7 @@
                     "cesd_score",
                     "fight",
                     "fighthurt",
+                    "gettherapy",
                     "homelage",
                     "potfirst",
                     "prop_alter_all_harddrug",
@@ -145,6 +149,7 @@
                     "prop_friends_street_emosup",
                     "prop_home_friends",
                     "prop_object_badbehave",
+                    "ptsd_score",
                     "sum_talk_once_week",
                     "trauma_sum",
                     "weapon"
@@ -173,58 +178,58 @@
             },
             "tree_nodes": {
                 "mean": {
-                    "stability_tree_nodes": 17.8,
-                    "auc_tree_nodes": 16.2,
-                    "dist_tree_nodes": 42.4
+                    "stability_tree_nodes": 21.545454545454547,
+                    "auc_tree_nodes": 16.454545454545453,
+                    "dist_tree_nodes": 44.09090909090909
                 },
                 "std": {
-                    "stability_tree_nodes": 10.087616170334792,
-                    "auc_tree_nodes": 8.726969691708572,
-                    "dist_tree_nodes": 8.296987405076615
+                    "stability_tree_nodes": 15.257568234477999,
+                    "auc_tree_nodes": 8.359682860052835,
+                    "dist_tree_nodes": 9.548484367637005
                 }
             },
             "tree_depth": {
                 "mean": {
-                    "stability_tree_depth": 4.7,
-                    "auc_tree_depth": 4.4,
-                    "dist_tree_depth": 9.1
+                    "stability_tree_depth": 4.909090909090909,
+                    "auc_tree_depth": 4.363636363636363,
+                    "dist_tree_depth": 9.181818181818182
                 },
                 "std": {
-                    "stability_tree_depth": 1.4866068747318506,
-                    "auc_tree_depth": 1.2806248474865698,
-                    "dist_tree_depth": 1.0440306508910548
+                    "stability_tree_depth": 1.5640591394622958,
+                    "auc_tree_depth": 1.2264306875665492,
+                    "dist_tree_depth": 1.02851895445316
                 }
             },
             "optimal_auc": {
                 "mean": {
-                    "selected_tree_auc": 0.7490497737556562,
-                    "selected_auc_tree_auc": 0.749502262443439,
-                    "selected_dist_tree_auc": 0.6030542986425339
+                    "selected_tree_auc": 0.762971689516738,
+                    "selected_auc_tree_auc": 0.764148732875464,
+                    "selected_dist_tree_auc": 0.6262961535858036
                 },
                 "std": {
-                    "selected_tree_auc": 0.04698641313820615,
-                    "selected_auc_tree_auc": 0.04624899251413715,
-                    "selected_dist_tree_auc": 0.04949802793605376
+                    "selected_tree_auc": 0.062810972858971,
+                    "selected_auc_tree_auc": 0.06395082887977131,
+                    "selected_dist_tree_auc": 0.08734506700335301
                 }
             },
             "optimal_distance": {
                 "mean": {
-                    "selected_tree_distance": 0.0446695,
-                    "selected_auc_tree_distance": 0.050749999999999997,
-                    "selected_dist_tree_distance": 0.0042805
+                    "selected_tree_distance": 0.042919090909090914,
+                    "selected_auc_tree_distance": 0.053485,
+                    "selected_dist_tree_distance": 0.004097272727272727
                 },
                 "std": {
-                    "selected_tree_distance": 0.028130348775832835,
-                    "selected_auc_tree_distance": 0.027141965109402078,
-                    "selected_dist_tree_distance": 0.002899155437364475
+                    "selected_tree_distance": 0.027386456076796076,
+                    "selected_auc_tree_distance": 0.027285839567605222,
+                    "selected_dist_tree_distance": 0.0028243095404302428
                 }
             }
         },
         "breast_cancer_target": {
             "feature_std": {
-                "stability_accuracy_importances": 0.05067827278127733,
-                "auc_max_importances": 0.04925728919188391,
-                "dist_min_importances": 0.05216378144913887
+                "stability_accuracy_importances": 0.051314773211256465,
+                "auc_max_importances": 0.04833302716325178,
+                "dist_min_importances": 0.053028031898578326
             },
             "distinct_top_features": {
                 "stability_accuracy_importances": [
@@ -238,6 +243,7 @@
                     "worst concavity",
                     "worst perimeter",
                     "worst radius",
+                    "worst smoothness",
                     "worst texture"
                 ],
                 "auc_max_importances": [
@@ -257,10 +263,12 @@
                     "concavity error",
                     "fractal dimension error",
                     "mean concave points",
+                    "mean radius",
                     "mean texture",
                     "worst area",
                     "worst concave points",
                     "worst concavity",
+                    "worst fractal dimension",
                     "worst perimeter",
                     "worst radius",
                     "worst texture"
@@ -268,50 +276,50 @@
             },
             "tree_nodes": {
                 "mean": {
-                    "stability_tree_nodes": 12.4,
-                    "auc_tree_nodes": 12.0,
-                    "dist_tree_nodes": 21.4
+                    "stability_tree_nodes": 13.0,
+                    "auc_tree_nodes": 11.727272727272727,
+                    "dist_tree_nodes": 21.545454545454547
                 },
                 "std": {
-                    "stability_tree_nodes": 3.352610922848042,
-                    "auc_tree_nodes": 4.024922359499621,
-                    "dist_tree_nodes": 5.276362383309168
+                    "stability_tree_nodes": 3.7172815091383407,
+                    "auc_tree_nodes": 3.9333286641425342,
+                    "dist_tree_nodes": 5.051797814345383
                 }
             },
             "tree_depth": {
                 "mean": {
-                    "stability_tree_depth": 4.0,
-                    "auc_tree_depth": 3.7,
-                    "dist_tree_depth": 6.2
+                    "stability_tree_depth": 4.090909090909091,
+                    "auc_tree_depth": 3.6363636363636362,
+                    "dist_tree_depth": 6.181818181818182
                 },
                 "std": {
-                    "stability_tree_depth": 0.7745966692414834,
-                    "auc_tree_depth": 1.004987562112089,
-                    "dist_tree_depth": 0.8717797887081347
+                    "stability_tree_depth": 0.7925270806437588,
+                    "auc_tree_depth": 0.9791208740244551,
+                    "dist_tree_depth": 0.8331955809010617
                 }
             },
             "optimal_auc": {
                 "mean": {
-                    "selected_tree_auc": 0.9776519916142558,
-                    "selected_auc_tree_auc": 0.9788784067085954,
-                    "selected_dist_tree_auc": 0.9451362683438156
+                    "selected_tree_auc": 0.9763128422233787,
+                    "selected_auc_tree_auc": 0.9777568990734139,
+                    "selected_dist_tree_auc": 0.945283340078761
                 },
                 "std": {
-                    "selected_tree_auc": 0.011245264258798028,
-                    "selected_auc_tree_auc": 0.010181025025610255,
-                    "selected_dist_tree_auc": 0.017583038063560586
+                    "selected_tree_auc": 0.011527930518849141,
+                    "selected_auc_tree_auc": 0.01033479751772352,
+                    "selected_dist_tree_auc": 0.016771218814928657
                 }
             },
             "optimal_distance": {
                 "mean": {
-                    "selected_tree_distance": 0.047945,
-                    "selected_auc_tree_distance": 0.05537650000000001,
-                    "selected_dist_tree_distance": 0.0144815
+                    "selected_tree_distance": 0.046168636363636356,
+                    "selected_auc_tree_distance": 0.05699727272727273,
+                    "selected_dist_tree_distance": 0.014709545454545454
                 },
                 "std": {
-                    "selected_tree_distance": 0.018393143151729126,
-                    "selected_auc_tree_distance": 0.02298380517342592,
-                    "selected_dist_tree_distance": 0.005790165390556647
+                    "selected_tree_distance": 0.018414862092010587,
+                    "selected_auc_tree_distance": 0.022505580051868788,
+                    "selected_dist_tree_distance": 0.005567606575109866
                 }
             }
         }
