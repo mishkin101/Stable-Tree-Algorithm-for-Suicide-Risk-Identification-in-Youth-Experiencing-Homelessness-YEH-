@@ -159,7 +159,8 @@ def run_experiment(seed: int, label: str, dataset: Path, experiment_group: Exper
     )
 
     # Store feature names in group metadata (once)
-    ds_name = dataset.name + "_" + label   # or ds.name if that's the variable you used
+    ds_name = dataset.name  # or ds.name if that's the variable you used
+    print(f"ds_name{ds_name}")
     if experiment_group and ds_name not in experiment_group.feature_names:
         experiment_group.set_feature_names(dataset, X_full.columns.tolist())
 
@@ -397,6 +398,7 @@ def main():
     group = ExperimentGroup(args.group_name, args.datasets)
     group_logger = ExperimentLogger(group_name= args.group_name)
     print(f"Created experiment group: {group.group_name}")
+    # print(f"arguments from parser:{sys.argv}")
     try:
         if args.option == "experiment":
             if len(args.labels) != len(args.datasets):
@@ -435,8 +437,9 @@ def main():
                     '''================================='''
 
                     # name + label
-                    ds_name_label = ds.name + "_" + label
-                    dataset_dict[ds.name] = {
+                    ds_name_label = ds.stem + "_" + label
+                    # print("ds_name_label{ds_name_label}")
+                    dataset_dict[ds_name_label] = {
                         "feature_std":            mean_std_feature_dict,
                         "distinct_top_features":  distinct_feats_dict,
                         "tree_nodes": {
@@ -457,14 +460,14 @@ def main():
                         },
                     }
 
-                    serializable = _make_jsonable(dataset_dict)
-                    group_logger.log_metrics({"dataset_aggregates": serializable})  
-                    print(f"saved group metrics to metrics.json")
+            serializable = _make_jsonable(dataset_dict)
+            group_logger.log_metrics({"dataset_aggregates": serializable})  
+            print(f"saved group metrics to metrics.json")
 
-                    '''======Aggregate Plotting========='''
-                    paired_labels = [(ds, label)] 
-                    plot_aggregate_metrics(dataset_dict, group, paired_labels)
-                    '''================================='''
+            '''======Aggregate Plotting========='''
+            paired_labels = zip(group.data_paths, args.labels)
+            plot_aggregate_metrics(dataset_dict, group, paired_labels)
+            '''================================='''
 
         if args.option == "plot":  
             """NEED TO ADD PLOTTING FROM EXPERIMENT GROUP METRICS.JSON FILE""" 
@@ -479,15 +482,15 @@ def main():
         if args.option == "experiment":
             print("Cleaning up logs and experiment folder…")
             # 1) remove logs/<each_experiment>
-            logs_root = Path("logs").resolve()
-            for exp_name in getattr(group, "experiments", []):
-                log_dir = logs_root / exp_name
-                if log_dir.exists():
-                    rmtree(log_dir)
+            # logs_root = Path("logs").resolve()
+            # for exp_name in getattr(group, "experiments", []):
+            #     log_dir = logs_root / exp_name
+            #     if log_dir.exists():
+            #         rmtree(log_dir)
 
             # 2) remove the experiments/<group_name> folder
-            if group.group_path.exists():
-                rmtree(group.group_path)
+            # if group.group_path.exists():
+            #     rmtree(group.group_path)
 
         # re-raise so you still see the traceback
         raise
