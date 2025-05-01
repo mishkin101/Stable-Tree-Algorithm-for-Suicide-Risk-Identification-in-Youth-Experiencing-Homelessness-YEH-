@@ -239,10 +239,12 @@
 <h2>Problem outline</h2>
 <ul>
 <li>4.2 million youth experience homelessness each year in the U.S</li>
-<li><strong>~27%</strong> and <strong>~35%</strong> of <strong>R</strong>unaway and <strong>H</strong>omeless <strong>Y</strong>outhreport past-year suicidal ideation <span class="citation" data-cites="kirstConcurrentMentalHealth2011"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span> <span class="citation" data-cites="rewSexualAbuseAlcohol2001"><a href="#/references" role="doc-biblioref" onclick="">[2]</a></span></li>
-<li><strong>15.8%</strong> in general population <span class="citation" data-cites="YouthRiskBehaviora"><a href="#/references" role="doc-biblioref" onclick="">[3]</a></span></li>
+<li><strong>~27%</strong> and <strong>~35%</strong> of <strong>R</strong>unaway and <strong>H</strong>omeless <strong>Y</strong>outh report past-year suicidal ideation <span class="citation" data-cites="kirstConcurrentMentalHealth2011"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span> <span class="citation" data-cites="rewSexualAbuseAlcohol2001"><a href="#/references" role="doc-biblioref" onclick="">[2]</a></span> compared with <strong>15.8%</strong> in general population <span class="citation" data-cites="YouthRiskBehaviora"><a href="#/references" role="doc-biblioref" onclick="">[3]</a></span></li>
 <li><strong>&gt;50%</strong> of RHY have experienced suicidal ideation during their lifetime <span class="citation" data-cites="merschamMentalHealthSubstance2009"><a href="#/references" role="doc-biblioref" onclick="">[4]</a></span> <span class="citation" data-cites="molnarSuicidalBehaviorSexual1998"><a href="#/references" role="doc-biblioref" onclick="">[5]</a></span> <span class="citation" data-cites="vottaSuicideHighriskBehaviors2004"><a href="#/references" role="doc-biblioref" onclick="">[6]</a></span></li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="key-question" class="slide level2">
 <h2>Key question</h2>
@@ -252,28 +254,49 @@
 <li><strong>Risk Profile:</strong> Signal of high vulnerability or resiliency with respect to suicidal ideation and attempts</li>
 </ul>
 <p><strong>Can a stable tree be used to understand the clinical risk profiles of YEH?</strong></p>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
-<section id="data-collection-and-considerations" class="slide level2">
-<h2>Data Collection and Considerations</h2>
+<section id="data-collection-considerations" class="slide level2">
+<h2>Data Collection &amp; considerations</h2>
 <ul>
-<li><strong>Survey:</strong> Use individual and social network attributes collected between October 2011 and February 2013 from two drop-in centers that serve young people experiencing homelessness in Hollywood and Santa Monica, CA</li>
-<li><strong>Current Factors:</strong> Overrepresentation of males</li>
+<li><strong>Survey:</strong>
+<ul>
+<li>Use individual and social network attributes</li>
+<li>Between October 2011 and February 2013</li>
+<li>2 drop-in centers that serve YEH in Hollywood and Santa Monica, CA</li>
+</ul></li>
+<li><strong>Current Factors:</strong>
+<ul>
+<li>Overrepresentation of males and heterosexual youth</li>
+<li>Generalizability to other geographical regions</li>
+</ul></li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="what-does-trust-mean-to-a-clinician" class="slide level2">
-<h2>What does trust mean to a clinician?</h2>
+<h2>What does <strong>trust</strong> mean to a clinician?</h2>
 <ul>
 <li><p><strong>Accurate intervention targets <span class="math inline">\(\rightarrow\)</span> </strong> Help stakeholders understand how to build intervention strategies based on clinical risk profiles for YEH</p></li>
 <li><p><strong>Less algorithmic aversion <span class="math inline">\(\rightarrow\)</span> </strong> Clinicians’ decision making is not affected by unreliable models’ decisions from a lack of consistency in identifying suicidal risk</p></li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="why-do-we-need-stable-trees" class="slide level2">
-<h2>Why do we need stable trees?</h2>
+<h2>Why do we need <strong>stable trees</strong>?</h2>
 <ul>
-<li>Population characteristics <strong>change over time</strong></li>
+<li>Population characteristics <em>change over time</em></li>
 <li>Model’s predicted output should not change with subsequent runs in light of new patient data</li>
 <li>Initial dataset is small, but larger amounts of data become available over time as more patients’ information gets recorded <strong><span class="math inline">\(\rightarrow\)</span></strong> retraining needed <span class="citation" data-cites="bertsimasImprovingStabilityDecision2023"><a href="#/references" role="doc-biblioref" onclick="">[9]</a></span></li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="data-import-and-preparation" class="slide level2">
 <h2>Data Import and Preparation</h2>
@@ -293,7 +316,7 @@
 <span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a>    y_full <span class="op">=</span> df_full_cleaned[label]</span>
 <span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_full, y_full, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e26433e5" class="cell" data-execution_count="4">
+<div id="70993e73" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of samples in the full dataset: 586
 Number of samples in the training set: 439
@@ -308,8 +331,8 @@ Shape of training set: (439, 56)</code></pre>
 <img data-src="progress2_files/figure-revealjs/cell-6-output-1.png" class="r-stretch quarto-figure-center"><p class="caption">Before and after using SMOTE on imbalanced <code>suicidea</code></p></section>
 <section id="a-peek-at-the-data" class="slide level2 smaller">
 <h2>A peek at the data</h2>
-<div id="f9e9a14b" class="cell" data-execution_count="6">
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div id="210a2aff" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="531">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -638,6 +661,9 @@ Shape of training set: (439, 56)</code></pre>
 </li>
 <li><strong><span class="math inline">\(\mathbf{k}^p\)</span></strong>: class label predicted for this region</li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="tree-distance" class="slide level2 smaller">
 <h2>Tree Distance</h2>
@@ -661,7 +687,7 @@ d({T}_1, {T}_2)
 \end{align*}
 \]</span></p>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
 </section>
 <section id="stable-decision-trees" class="slide level2 smaller">
@@ -679,10 +705,7 @@ d({T}_1, {T}_2)
   \]</span></li>
 </ol>
 <div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
-</div>
-<div class="footer">
-<p><a style="opacity: 0.2;" href="">A</a></p>
+<p><a style="opacity: 0.2;" href="">M</a></p>
 </div>
 </section>
 <section id="overview" class="slide level2">
@@ -703,7 +726,7 @@ d({T}_1, {T}_2)
 <span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="" aria-hidden="true" tabindex="-1"></a>X0, y0 <span class="op">=</span> random_train_split(X_train.values, y_train.values)</span>
 <span id="cb3-11"><a href="" aria-hidden="true" tabindex="-1"></a>X0.shape, y0.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="23">
+<div id="train-test-split" class="cell-output cell-output-display" data-execution_count="532">
 <pre><code>((219, 56), (219,))</code></pre>
 </div>
 </div>
@@ -713,7 +736,7 @@ d({T}_1, {T}_2)
 </section>
 <section id="bootstrapping-decision-trees" class="slide level2">
 <h2>Bootstrapping Decision Trees</h2>
-<div id="a4721806" class="cell" data-execution_count="8">
+<div id="beb86dd8" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|6,7|10|11,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="kw">def</span> train_decision_tree(X, y, depth, min_samples_leaf):</span>
 <span id="cb5-2"><a href=""></a>    clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>depth, min_samples_leaf<span class="op">=</span>min_samples_leaf)</span>
 <span id="cb5-3"><a href=""></a>    clf.fit(X, y)</span>
@@ -730,7 +753,10 @@ d({T}_1, {T}_2)
 <span id="cb5-14"><a href=""></a>        trees.append(tree)</span>
 <span id="cb5-15"><a href=""></a>    <span class="cf">return</span> trees</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ebe0646f" class="cell" data-execution_count="9">
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
+<div id="2c8a6253" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of trees in T0: 25
 Number of trees in T: 25</code></pre>
@@ -739,7 +765,7 @@ Number of trees in T: 25</code></pre>
 </section>
 <section id="computing-tree-distances" class="slide level2">
 <h2>Computing Tree Distances</h2>
-<div id="2635efdd" class="cell" data-execution_count="10">
+<div id="df22b793" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb7" data-code-line-numbers="6,8,9,10,12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> compute_average_distances(T0, T, X_train, y_train):</span>
 <span id="cb7-2"><a href=""></a>    X_train_values <span class="op">=</span> X_train.values <span class="cf">if</span> <span class="bu">hasattr</span>(X_train, <span class="st">"values"</span>) <span class="cf">else</span> X_train</span>
 <span id="cb7-3"><a href=""></a>    distances: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
@@ -758,6 +784,9 @@ Number of trees in T: 25</code></pre>
 <span id="cb7-16"><a href=""></a>    <span class="cf">return</span> distances</span>
 <span id="cb7-17"><a href=""></a>distances <span class="op">=</span> compute_average_distances(T0, T, X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
 <!-- ## Evaluating Predictive Power -->
 </section>
 <section id="finding-pareto-optimal-trees" class="slide level2">
@@ -765,7 +794,7 @@ Number of trees in T: 25</code></pre>
 <ul>
 <li><strong>Pareto Optimal:</strong> <span class="math inline">\((d_{b'} \leq d_b \text{ and } \alpha_{b'} &gt; \alpha_b) \text{ or } (d_{b'} &lt; d_b \text{ and } \alpha_{b'} \geq \alpha_b)\)</span></li>
 </ul>
-<div id="96b721d0" class="cell" data-execution_count="14">
+<div id="ee38fcab" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb8" data-code-line-numbers="5,6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="kw">def</span> pareto_optimal_trees(distances, auc_scores):</span>
 <span id="cb8-2"><a href=""></a>    pareto_trees <span class="op">=</span> []</span>
 <span id="cb8-3"><a href=""></a>    <span class="cf">for</span> i, (d_i, a_i) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(distances, auc_scores)):</span>
@@ -784,6 +813,9 @@ Number of trees in T: 25</code></pre>
 <pre><code>Number of Pareto optimal trees: 4</code></pre>
 </div>
 </div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
 </section>
 <section id="tree-selection-strategy" class="slide level2">
 <h2>Tree Selection Strategy</h2>
@@ -792,7 +824,7 @@ Number of trees in T: 25</code></pre>
 <li>Stability or predictive power?</li>
 <li>Indicator function: <span class="math inline">\(\alpha_{b}\)</span> is within ε of the best score</li>
 </ul>
-<div id="c17a96f8" class="cell" data-execution_count="15">
+<div id="cb8ce928" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb10" data-code-line-numbers="3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a><span class="kw">def</span> select_final_tree(distances, auc_scores, pareto_indices, epsilon<span class="op">=</span><span class="fl">0.01</span>):</span>
 <span id="cb10-2"><a href=""></a>    best_auc <span class="op">=</span> <span class="bu">max</span>(auc_scores)</span>
 <span id="cb10-3"><a href=""></a>    candidates <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> pareto_indices <span class="cf">if</span> auc_scores[i] <span class="op">&gt;=</span> (<span class="dv">1</span> <span class="op">-</span> epsilon) <span class="op">*</span> best_auc]</span>
@@ -807,11 +839,17 @@ Number of trees in T: 25</code></pre>
 <pre><code>Selected tree index: 23</code></pre>
 </div>
 </div>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">A</a></p>
+</div>
 </section>
 <section id="visualizing-selected-tree" class="slide level2">
 <h2>Visualizing Selected Tree</h2>
 
-<img data-src="progress2_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="progress2_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center r-stretch"><div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
+</section>
 <section id="aggregated-metrics" class="slide level2 smaller">
 <h2>Aggregated metrics</h2>
 <table class="caption-top">
@@ -821,7 +859,7 @@ Number of trees in T: 25</code></pre>
 <col style="width: 13%">
 <col style="width: 18%">
 <col style="width: 14%">
-<col style="width: 7%">
+<col style="width: 6%">
 <col style="width: 11%">
 </colgroup>
 <thead>
@@ -838,6 +876,33 @@ Number of trees in T: 25</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">CART Pareto AUC</td>
+<td style="text-align: center;">0.752 (0.029)</td>
+<td style="text-align: center;">0.043 (0.009)</td>
+<td style="text-align: center;">0.028</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">14.8</td>
+<td style="text-align: center;">4.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CART Pareto Stability</td>
+<td style="text-align: center;">0.751 (0.029)</td>
+<td style="text-align: center;">0.037 (0.014)</td>
+<td style="text-align: center;">0.03</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">19.2</td>
+<td style="text-align: center;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CART Pareto Distance</td>
+<td style="text-align: center;">0.596 (0.066)</td>
+<td style="text-align: center;">0.009 (0.005)</td>
+<td style="text-align: center;">0.026</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">49.0</td>
+<td style="text-align: center;">8.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>CART Pareto AUC</strong></td>
 <td style="text-align: center;">0.900 (0.022)</td>
 <td style="text-align: center;">0.054 (0.031)</td>
 <td style="text-align: center;">0.022</td>
@@ -845,8 +910,8 @@ Number of trees in T: 25</code></pre>
 <td style="text-align: center;">35.800</td>
 <td style="text-align: center;">5.600</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">CART Pareto Stability</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>CART Pareto Stability</strong></td>
 <td style="text-align: center;">0.897 (0.023)</td>
 <td style="text-align: center;">0.020 (0.017)</td>
 <td style="text-align: center;">0.025</td>
@@ -854,8 +919,8 @@ Number of trees in T: 25</code></pre>
 <td style="text-align: center;">43.600</td>
 <td style="text-align: center;">7.100</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">CART Pareto Distance</td>
+<tr class="even">
+<td style="text-align: center;"><strong>CART Pareto Distance</strong></td>
 <td style="text-align: center;">0.852 (0.026)</td>
 <td style="text-align: center;">0.006 (0.001)</td>
 <td style="text-align: center;">0.021</td>
@@ -865,6 +930,9 @@ Number of trees in T: 25</code></pre>
 </tr>
 </tbody>
 </table>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="results---aggregated-std" class="slide level2">
 <h2>Results - Aggregated STD</h2>
@@ -886,7 +954,7 @@ Number of trees in T: 25</code></pre>
 <h2>Pareto Frontier Visualization</h2>
 <div class="columns">
 <div class="column" style="width:55%;">
-<div id="87dfbfe5" class="cell" data-execution_count="17">
+<div id="4d5b4cd0" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -906,7 +974,7 @@ Number of trees in T: 25</code></pre>
 <section id="experiment-runner" class="slide level2 smaller">
 <h2>Experiment runner</h2>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">seed=23</a></li><li><a href="#tabset-1-2">seed=28</a></li></ul>
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1"><code>label=suicidea</code></a></li><li><a href="#tabset-1-2"><code>label=suicattempt</code></a></li><li><a href="#tabset-1-3"><code>label=target</code></a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
 <pre class="{bash}"><code>❯ uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
@@ -952,6 +1020,28 @@ Completed experiment: experiment_20250429_183249_seed_28
 Experiment group summary saved to experiments/seed_checking/group_summary.json
 Total experiments run: 2</code></pre>
 </div>
+<div id="tabset-1-3">
+<pre class="{bash}"><code>==================================================
+Running experiment with seed 28
+==================================================
+Experiment: experiment_20250429_183249_seed_28 - Seed: 28
+Number of samples in the full dataset: 586
+Number of samples in the training set: 439
+Number of samples in the test set: 147
+Shape of training set: (439, 56)
+Shape of random split: (219, 56), (219,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Number of distances computed: 20
+Average AUC score: 0.6365702479338843
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
+Selected tree index: 3
+Completed experiment: experiment_20250429_183249_seed_28
+Experiment group summary saved to experiments/seed_checking/group_summary.json
+Total experiments run: 2</code></pre>
+</div>
 </div>
 </div>
 <div class="footer">
@@ -961,7 +1051,7 @@ Total experiments run: 2</code></pre>
 <section id="future-work---short-term" class="slide level2">
 <h2>Future work - Short term</h2>
 <ul>
-<li>Refine what <strong>Stability</strong> means with our stakeholders
+<li>Refine what <strong>stability</strong> means with our stakeholders
 <ul>
 <li>What do we measure concerning and how do we quantify success?</li>
 <li>Are there correlations to other aggregate metrics that vary with magnitude of tree distance?</li>
@@ -978,8 +1068,11 @@ Total experiments run: 2</code></pre>
 <h2>Future work - Long term</h2>
 <ul>
 <li>Does implementation meet the criteria for reliability in identifying YEH?</li>
-<li>Feature selection and qualitative pre-proceesing</li>
+<li>Feature selection and qualitative pre-processing</li>
 </ul>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="thoughts-and-points-of-dicussion" class="slide level2 smaller">
 <h2>Thoughts and points of dicussion</h2>
@@ -992,6 +1085,9 @@ Total experiments run: 2</code></pre>
 <ol start="2" type="1">
 <li>Stability-performance trade-off when selecting Pareto Optimal tree?</li>
 </ol>
+<div class="footer">
+<p><a style="opacity: 0.2;" href="">M</a></p>
+</div>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>

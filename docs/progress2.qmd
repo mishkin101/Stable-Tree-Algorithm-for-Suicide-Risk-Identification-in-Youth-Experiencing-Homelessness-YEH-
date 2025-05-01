@@ -76,9 +76,12 @@ LABELS = ["suicidea", "suicattempt"]
 ## Problem outline
 
 - 4.2 million youth experience homelessness each year in the U.S
-- **~27%** and **~35%** of **R**unaway and **H**omeless **Y**outhreport past-year suicidal ideation @kirstConcurrentMentalHealth2011 @rewSexualAbuseAlcohol2001
-- **15.8%** in general population @YouthRiskBehaviora
+- **~27%** and **~35%** of **R**unaway and **H**omeless **Y**outh report past-year suicidal ideation @kirstConcurrentMentalHealth2011 @rewSexualAbuseAlcohol2001 compared with **15.8%** in general population @YouthRiskBehaviora
 - **>50%** of RHY have experienced suicidal ideation during their lifetime @merschamMentalHealthSubstance2009 @molnarSuicidalBehaviorSexual1998 @vottaSuicideHighriskBehaviors2004
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Key question
 
@@ -89,22 +92,43 @@ LABELS = ["suicidea", "suicattempt"]
 
 **Can a stable tree be used to understand the clinical risk profiles of YEH?**
 
-## Data Collection and Considerations
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
-- **Survey:** Use individual and social network attributes collected between October 2011 and February 2013 from two drop-in centers that serve young people experiencing homelessness in Hollywood and Santa Monica, CA
-- **Current Factors:** Overrepresentation of males
+## Data Collection & considerations
 
-## What does trust mean to a clinician?
+- **Survey:** 
+    - Use individual and social network attributes
+    - Between October 2011 and February 2013
+    - 2 drop-in centers that serve YEH in Hollywood and Santa Monica, CA
+- **Current Factors:** 
+    - Overrepresentation of males and heterosexual youth
+    - Generalizability to other geographical regions
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
+
+## What does **trust** mean to a clinician?
 
 - **Accurate intervention targets $\rightarrow$ ** Help stakeholders understand how to build intervention strategies based on clinical risk profiles for YEH
 
 - **Less algorithmic aversion $\rightarrow$ ** Clinicians' decision making is not affected by unreliable models' decisions from a lack of consistency in identifying suicidal risk
 
-## Why do we need stable trees?
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
-- Population characteristics **change over time**
+## Why do we need **stable trees**?
+
+- Population characteristics *change over time*
 - Model’s predicted output should not change with subsequent runs in light of new patient data
 - Initial dataset is small, but larger amounts of data become available over time as more patients’ information gets recorded **$\rightarrow$** retraining needed @bertsimasImprovingStabilityDecision2023
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Data Import and Preparation
 
@@ -144,8 +168,6 @@ print(f"Shape of training set: {X_train.shape}")
 #| fig-cap: Before and after using SMOTE on imbalanced `suicidea`
 #| fig-align: center
 #| echo: false
-#| output-location: column
-
 orig_counts = y_full.value_counts().sort_index()
 sm = SVMSMOTE(random_state=42)
 X_smote, y_smote = sm.fit_resample(X_full, y_full)
@@ -201,6 +223,9 @@ $$
 - **$\mathbf{c}^p_j$**: binary vector indicating which categories of feature $j$ satisfy the splits  
 - **$\mathbf{k}^p$**: class label predicted for this region
 
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Tree Distance {.smaller}
  $$
@@ -224,7 +249,7 @@ d({T}_1, {T}_2)
 $$
 
 ::: footer
-<a style="opacity: 0.2;">A</a>
+<a style="opacity: 0.2;">M</a>
 :::
 
 ## Stable decision trees {.smaller}
@@ -244,11 +269,7 @@ Implementing stable trees proposed by Bertsimas et al. 2023 @bertsimasImprovingS
   $$
 
 ::: footer
-<a style="opacity: 0.2;">A</a>
-:::
-
-::: footer
-<a style="opacity: 0.2;">A</a>
+<a style="opacity: 0.2;">M</a>
 :::
 
 ## Overview
@@ -300,6 +321,11 @@ def bootstrap_trees(X, y, depths, min_samples, B):
     return trees
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
+
 ```{python}
 #| echo: false
 T0 = bootstrap_trees(X0, y0, DEPTHS, MIN_SAMPLES, NUM_BOOTSTRAPS)
@@ -334,6 +360,11 @@ def compute_average_distances(T0, T, X_train, y_train):
     return distances
 distances = compute_average_distances(T0, T, X_train, y_train)
 ```
+
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
 
 <!-- ## Evaluating Predictive Power -->
 
@@ -391,6 +422,11 @@ pareto_trees = pareto_optimal_trees(distances, auc_scores)
 print("Number of Pareto optimal trees:", len(pareto_trees))
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
+
 ## Tree Selection Strategy
 
 -  $\mathbb{T}^\star = \underset{\mathbb{T}_b \in \mathcal{T}^\star}{\text{argmax}} \ f(d_b, \alpha_b)$
@@ -412,6 +448,10 @@ selected_tree_index = select_final_tree(distances, auc_scores, pareto_trees)
 print("Selected tree index:", selected_tree_index)
 ```
 
+::: footer
+<a style="opacity: 0.2;">A</a>
+:::
+
 ## Visualizing Selected Tree
 
 ```{python}
@@ -425,13 +465,25 @@ plot_tree(selected_tree,
 plt.tight_layout()
 ```
 
-## Aggregated metrics {.smaller}
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
-|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	|  Nodes 	| Tree Depth 	|
-|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:------:	|:----------:	|
-| CART Pareto AUC       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
-| CART Pareto Stability 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
-| CART Pareto Distance  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
+## Aggregated metrics  {.smaller}
+
+
+|         Method        	|      AUC      	|    Distance   	| Feat. Import. Std. 	| Feat. in Top-3 	| Nodes 	| Tree Depth 	|
+|:---------------------:	|:-------------:	|:-------------:	|:------------------:	|:--------------:	|:-----:	|:----------:	|
+| CART Pareto AUC       	| 0.752 (0.029) 	| 0.043 (0.009) 	|        0.028       	|       11       	|  14.8 	|     4.4    	|
+| CART Pareto Stability 	| 0.751 (0.029) 	| 0.037 (0.014) 	|        0.03        	|       12       	|  19.2 	|     5.0    	|
+| CART Pareto Distance  	| 0.596 (0.066) 	| 0.009 (0.005) 	|        0.026       	|       20       	|  49.0 	|     8.4    	|
+| **CART Pareto AUC**       	| 0.900 (0.022) 	| 0.054 (0.031) 	|        0.022       	|        9       	| 35.800 	|    5.600   	|
+| **CART Pareto Stability** 	| 0.897 (0.023) 	| 0.020 (0.017) 	|        0.025       	|       12       	| 43.600 	|    7.100   	|
+| **CART Pareto Distance**  	| 0.852 (0.026) 	| 0.006 (0.001) 	|        0.021       	|       14       	| 58.200 	|    8.800   	|
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Results - Aggregated STD
 
@@ -493,7 +545,7 @@ $a_{b}$, $\forall b \in \mathcal{T}$
 
 ::: {.panel-tabset}
 
-### seed=23
+### `label=suicidea`
 ```{bash}
 ❯ uv run src/StableTree/main.py --seeds 23 28 --group-name seed_checking
 Created experiment group: seed_checking
@@ -517,7 +569,31 @@ Selected tree index: 16
 Completed experiment: experiment_20250429_183236_seed_23
 ```
 
-### seed=28
+### `label=suicattempt`
+```{bash}
+==================================================
+Running experiment with seed 28
+==================================================
+Experiment: experiment_20250429_183249_seed_28 - Seed: 28
+Number of samples in the full dataset: 586
+Number of samples in the training set: 439
+Number of samples in the test set: 147
+Shape of training set: (439, 56)
+Shape of random split: (219, 56), (219,)
+Number of trees in T0: 20
+Number of trees in T: 20
+Computing average tree distances |████████████████████████████████████████| 20/20 [100\%] in 10.6s (1.89/s)
+Number of distances computed: 20
+Average AUC score: 0.6365702479338843
+Number of Pareto optimal trees: 5
+Frequenicies of top 2 common features: [[(5, 30.0), (6, 30.0)], [(6, 25.0), (5, 20.0)], [(4, 15.0), (54, 15.0)]]
+Selected tree index: 3
+Completed experiment: experiment_20250429_183249_seed_28
+Experiment group summary saved to experiments/seed_checking/group_summary.json
+Total experiments run: 2
+```
+
+### `label=target`
 ```{bash}
 ==================================================
 Running experiment with seed 28
@@ -548,7 +624,7 @@ Total experiments run: 2
 
 ## Future work - Short term
 
-- Refine what **Stability** means with our stakeholders
+- Refine what **stability** means with our stakeholders
     - What do we measure concerning and how do we quantify success?
     - Are there correlations to other aggregate metrics that vary with magnitude of tree distance?
 - Hyper-parameter finetuning
@@ -559,7 +635,11 @@ Total experiments run: 2
 ## Future work - Long term
 
 - Does implementation meet the criteria for reliability in identifying YEH?
-- Feature selection and qualitative pre-proceesing
+- Feature selection and qualitative pre-processing
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## Thoughts and points of dicussion {.smaller}
 
@@ -568,6 +648,10 @@ Total experiments run: 2
 > The study of [39] proposes a new distance metric to quantify the structural differences and prediction similarities between decision trees. ... However, the metric does not consider the sequence of splits, thereby potentially overlooking the overall structural similarity of the trees. Furthermore, the approach suffers from high computational complexity due to the need for pairwise comparison of all paths between two trees, which can become computationally expensive as the number of leaf nodes increases.
 
 2. Stability-performance trade-off when selecting Pareto Optimal tree?
+
+::: footer
+<a style="opacity: 0.2;">M</a>
+:::
 
 ## References
 
