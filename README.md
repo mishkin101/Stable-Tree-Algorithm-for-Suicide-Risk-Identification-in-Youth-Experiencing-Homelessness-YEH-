@@ -1,6 +1,6 @@
 # Stable Decision Tree Method for Predicting Suicidal Ideation for At-risk Homeless Youth
 
-This project implements the stable decision tree algorithm based on the method outline in "Improveing Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. This methods produces a pareto optimal set from which a single final optimal tree is selected according to a objective function targeting a unique metrics to optimize (AUC, distance, combined, etc.). Our Implementation atempts to improve upon previous work in an creating effective method to idenditfy suicide risk among youth experiencing homelessness(YEH)[^2]. The dataset used in this implementation presents a unique contribution to consiering social network features as well as individual faxtors in building risk profiles.
+This project implements the stable decision tree algorithm based on the method outline in "Improveing Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. This methods produces a pareto optimal set from which a single final optimal tree is selected according to a objective function targeting a unique metrics to optimize (AUC, distance, combined, etc.). Our Implementation atempts to improve upon previous work[^2] in an creating effective method to idenditfy suicide risk among youth experiencing homelessness(YEH). The dataset used in this implementation presents a unique contribution to consiering social network features as well as individual faxtors in building risk profiles.
 
 
 [1^]: [Improving Stability in Decision Tree Models](https://arxiv.org/abs/2305.17299)
@@ -64,4 +64,5 @@ Completed experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI
 
 ## References:
 [Improving Stability in Decision Tree Models (Bertimas,2023)](https://arxiv.org/abs/2305.17299)
+
 ["Getting to the Root of the Problem: A Decision-Tree Analysis for Suicide Risk Among Young People Experiencing Homelessness"(Fulginiti,2022)](https://doi.org/10.1086/715211)
