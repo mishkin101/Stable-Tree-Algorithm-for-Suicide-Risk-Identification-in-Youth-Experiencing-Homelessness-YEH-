@@ -42,25 +42,45 @@ Running for dataset DataSet_Combined_SI_SNI_Baseline_FE with seed 42
 
 ==================================================
 ds_nameDataSet_Combined_SI_SNI_Baseline_FE.csv
+
 Experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea - Seed: 42 - Dataset: DataSet_Combined_SI_SNI_Baseline_FE
+
 Number of samples in the full dataset: 586
+
 Number of samples in the training set: 726
+
 Number of samples in the test set: 242
+
 Shape of training set: (726, 56)
+
 Shape of random split: (363, 56), (363,)
+
 Number of trees in T0: 20
+
 Number of trees in T: 20
+
 Computing average tree distances |████████████████████████████████████████| 20/20 [100%] in 20.7s (0.96/s) 
+
 Number of distances computed: 20
+
 Average AUC score: 0.821854723038044
+
 Number of Pareto optimal trees: 7
+
 Frequenicies of top 2 common features: [[('trauma_sum', 70.0), ('fight', 20.0)], [('harddrug_life', 45.0), ('exchange', 15.0)], [('LEAF_NODE', 25.0), ('harddrug_life', 20.0)]]
+
 Selected stability-accuracy trade-off final tree index: 1
+
 Stability-accuracy tree depth: 4, nodes: 23
+
 Selected AUC maximizing tree index: 1
+
 AUC-maximizing tree depth: 4, nodes: 23
+
 Selected distance minimizing tree index: 15
+
 Distance-minimizing tree depth: 11, nodes: 79
+
 Completed experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea
 
 ## References:
