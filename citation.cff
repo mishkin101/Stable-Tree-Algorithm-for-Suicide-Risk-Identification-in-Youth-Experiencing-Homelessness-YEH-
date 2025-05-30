@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Citation"
+authors:
+- family-names: "Bhaskar"
+  given-names: "Adhithya"
+  orcid: "https://orcid.org/0000-0003-4349-105X"
+- family-names: "Gelman"
+  given-names: "Michelle"
+title: "Stable Decision Tree Algorithm with Unique Distance Metric"
+version: 1.0.0
+url: "https://github.com/mishkin101/Interpretability_Suicide_Project"
