@@ -64,6 +64,3 @@ Distance-minimizing tree depth: 11, nodes: 79
 Completed experiment: experiment_20250501_134848_seed_42_DataSet_Combined_SI_SNI_Baseline_FE_suicidea
 
 ## References:
-[Improving Stability in Decision Tree Models (Bertimas,2023)](https://arxiv.org/abs/2305.17299)
-
-["Getting to the Root of the Problem: A Decision-Tree Analysis for Suicide Risk Among Young People Experiencing Homelessness"(Fulginiti,2022)](https://doi.org/10.1086/715211)
