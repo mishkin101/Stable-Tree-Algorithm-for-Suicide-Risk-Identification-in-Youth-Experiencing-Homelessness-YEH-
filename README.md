@@ -1,8 +1,10 @@
 # Stable Decision Tree Method for Predicting Suicidal Ideation for At-Risk Homeless Youth
 
-This project implements the stable decision tree algorithm based on the method outline in "Improving Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. The algorithm produces a Pareto optimal set from which a single final optimal tree is selected according to an objective function targeting a unique metric to optimize (AUC, distance, combined, etc.). Our Implementation attempts to improve upon previous work[^2] in creating an effective method to identify suicide risk among youth experiencing homelessness(YEH). The dataset used in this implementation presents a unique contribution to considering social network features as well as individual factors in building risk profiles.
+This project implements the stable decision tree algorithm based on the method outline in "Improving Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. The algorithm produces a Pareto optimal set from which a single final optimal tree is selected according to an objective function targeting a unique metric to optimize (AUC, distance, combined, etc.). Our Implementation attempts to improve upon previous work[^2] in creating an effective method to identify suicide risk among youth experiencing homelessness(YEH). The dataset used in this implementation presents a unique contribution to considering social network features as well as the individual factors in building risk profiles.
 
 The distance metric implementation used in the code may be found as a reference below.[^3]
+
+We reproduce the original aggregation metrics from the Bertimas paper, comparing different Pareto optimal tree selection strategies and a downsampled variant. Results can be found in the [Experiments folder](https://github.com/mishkin101/Stable-Tree-Algorithm-for-Suicide-Risk-Identification-in-Youth-Experiencing-Homelessness-YEH-/tree/main/experiments/FINAL_aggregate_output)
 
 
 [^1]: [Improving Stability in Decision Tree Models](https://arxiv.org/abs/2305.17299)
