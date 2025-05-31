@@ -2,10 +2,14 @@
 
 This project implements the stable decision tree algorithm based on the method outline in "Improving Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. The algorithm produces a Pareto optimal set from which a single final optimal tree is selected according to an objective function targeting a unique metric to optimize (AUC, distance, combined, etc.). Our Implementation attempts to improve upon previous work[^2] in creating an effective method to identify suicide risk among youth experiencing homelessness(YEH). The dataset used in this implementation presents a unique contribution to considering social network features as well as individual factors in building risk profiles.
 
+The distance metric implementation used in the code may be found as a reference below.[^3]
+
 
 [^1]: [Improving Stability in Decision Tree Models](https://arxiv.org/abs/2305.17299)
 
 [^2]:["Getting to the Root of the Problem: A Decision-Tree Analysis for Suicide Risk Among Young People Experiencing Homelessness"](https://doi.org/10.1086/715211)
+
+[^3]: [Path Distance Metric Repository from Stable Decision Tree Algorithm](https://github.com/vvdigalakis/dt-distance)
 
 ## Commands to run
 uv run src/StableTree/main.py --group-name FINAL_aggregate_output --option experiment --datasets data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/DataSet_Combined_SI_SNI_Baseline_FE.csv data/breast_cancer.csv --labels suicidea suicattempt target --seeds 42  123  999  2025  31415  27182  16180  14142  2718  8284
