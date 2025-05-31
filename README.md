@@ -1,4 +1,4 @@
-# Stable Decision Tree Method for Predicting Suicidal Ideation for At-risk Homeless Youth
+# Stable Decision Tree Method for Predicting Suicidal Ideation for At-Risk Homeless Youth
 
 This project implements the stable decision tree algorithm based on the method outline in "Improving Stability in Decision Tree Models"[^1] that presentas a unique distace metric for heuritic-based decision trees as a measure of stability. The algorithm produces a Pareto optimal set from which a single final optimal tree is selected according to an objective function targeting a unique metric to optimize (AUC, distance, combined, etc.). Our Implementation attempts to improve upon previous work[^2] in creating an effective method to identify suicide risk among youth experiencing homelessness(YEH). The dataset used in this implementation presents a unique contribution to considering social network features as well as individual factors in building risk profiles.
 
