@@ -1,0 +1,144 @@
+---
+title: "ISE 625 Project Progress"
+# date: "5/22/2021"
+subtitle: "Stable decision trees for suicide experience prediction"
+format: 
+  revealjs:
+    slide-number: c/t
+    theme: [default, template/custom.scss]
+    toc: true
+    progress: true
+    # mouse-wheel: true
+    controls: true
+author: "Adhithya Bhaskar, Michelle Gelman"
+# lightbox: true
+# embed-resources: true
+# bibliography: template/references.bib
+# incremental: true
+# csl: template/ieee.csl
+# width: 
+# height: 816
+editor:
+    render-on-save: true
+---
+
+## Problem Context and Background
+- **Aim:** Predict suicidal experiences among youth experiencing homelessness (YEH)
+- The provided decision tree model is unstable to change in train-test splits
+- Can we find a robust model invariant to shifts in distributions that will procude the same best features indicative of suicide ideaiton and attempts?
+
+## Dataset Considerations
+- Missing data
+    - 584, 587 samples remaining for each prediction model from initial listwise deletion method form oriignal 940 total samples
+    - 4% of data set mising for `suicideidea` and `suicideattempt` (36 and 40 samples respectively)
+- Imbalanced classes
+    - 83% labeled 2, 16% labeled 1 for suicideidea class
+    - 88% labeled 0, 11% labeled 1 for suicideattempt class 
+
+
+## Stable Decision Trees
+- Bertsimas et al. (2023) proposes a method to create stable decision trees
+- 1 of 6 datasets used is publicly available - Breast Cancer dataset (UCI Machine Learning Repository)
+- Used to test and compare our implementation
+- With satisfactory results, we will apply our implementation to the suicide dataset
+
+## Proposed Plan - [1. Understand the instability of provided DT]{.highlighted}
+- Given model exists as 2 python files (for `suicidea` and `suicattemp`)
+- Create simple example to deterministically try various splits
+- Empirically measure the difference in predicted splits
+
+## Proposed Plan - [2. Implement a stable DT (Bertsimas et al. 2023)]{.highlighted}
+1. Train initial set **(T0)** of decision trees on a subset of the data and a second set **(T)** on the full dataset
+3. Compute **average distance** of each tree in **T** to **T0** *(found code for this)*
+4. Compute performance metrics (AUC) of trees on validation/test set
+5. For the trees in **T** we select the Pareto optimal trees by optimizing for predictive performance and distance to **T0**
+
+## Proposed Plan - [3. Measuring effectiveness of proposed model]{.highlighted}
+1. Evaluate performance of provided DT using the stability experiment we define in step 1
+2. Evaluate performance of the stable tree using the same experiment handler
+3. Define and compare the models using metrics for assessing stability over various splits 
+
+## Key optimization algorithms to implement
+- ~~Distance between two trees~~
+
+$$
+d\bigl(\mathcal{T}_{1}, \mathcal{T}_{2}\bigr) 
+\;=\;\min_{\{x\}}\;
+\sum_{p\in\mathcal{P}(\mathcal{T}_{1})}\sum_{q\in\mathcal{P}(\mathcal{T}_{2})} d(p,q)\, x_{p,q}
+\;+\;\sum_{p\in\mathcal{P}(\mathcal{T}_{1})} w(p)\, x_{p}
+$$ the *Suicide Ideation* class has  83%  labeled as “2” while 16% are labeled “1.”. *Suicide Attempt:* has  88% are labeled “0” while 11% are labeled “1.”
+
+- Pareto optimal tree
+$$\mathbb{T}^{\star}=\arg\!\mathrm{max}\,f\!\left(d_{b},\alpha_{b}\right)\!$$
+
+## Implementation progress
+
+- [Jupyter Notebook](http://localhost:6570/)
+- Refactor provided code to create a pipeline for the stable decision tree
+
+## Provided code (1/2)
+
+```{.python}
+df = origindf[['age', 'gender', 'sexori', 'raceall', 'trauma_sum', \
+               'cesd_score', 'harddrug_life','school','degree','job',\
+               'sex', 'concurrent', 'exchange', 'children',\
+               'weapon','fight', 'fighthurt', 'ipv', 'ptsd_score', 'alcfirst', \
+                .
+                .
+                .
+               labelstr]].copy()
+logging.info("Cleaning sub tree from NaN")
+dfn = df.dropna().copy()
+train_test_cutoff=int(round(dfn.shape[0]*.75))
+```
+
+## Provided code (2/2)
+```{.python}
+dfm = dfn.values
+X_train, y_train = dfm[0:train_test_cutoff,:-1], dfm[0:train_test_cutoff,-1]
+X_test, y_test = dfm[train_test_cutoff:,:-1], dfm[train_test_cutoff:,-1]
+y = dfm[:,-1]
+
+cw = compute_class_weight(class_weight='balanced', classes=np.unique(y), y=y)
+cwt={0:cw[0], 1:cw[1]}
+
+clf = DecisionTreeClassifier(criterion='gini',min_samples_leaf=10, min_samples_split=20, max_depth=4, class_weight=cwt, min_impurity_decrease=0.01)
+clf.fit(X_train, y_train)
+```
+
+## Project Outcomes
+- A robust, stable decision tree model that minimizes the variability in tree structure due to random train-test splits
+- Empirical evidence supporting the stability of the model through consistent feature selection and comparable performance metrics
+
+- **Impact:** Better interpretability of decision trees to predict suicide risk among YEHs
+
+<!-- The project proposal and presentation will be evaluated based on the following criteria:
+    Relevance to class topic
+    Clarity of the project proposal (1 page) and presentation.
+    Feasibility of the proposed work based on data availability and proposed plan for solving the problem.
+    Potential for social impact. -->
+
+<!-- ### Proposal Outline
+## 1. Problem Context and Background
+## 2. Pre-processing Data
+
+- Dataset Considerations
+- Compare/contrast old pre-processing steps with new proposal
+
+## 3. Data Analysis      
+- Criteria for Ideal deal dataset
+- Defining Stability
+- Defining Generalizability
+- Defining Fairness
+## 3. Model Background
+- Literature Review
+- Hyperparameter Considerations
+- Mathematical Formulation
+## 1. Implementation
+-  Defining Tree Pipeline  
+- Mathematical Details
+## 4. Training ML Model
+## 5. Testing and Results 
+## 6. Discussion 
+## 7. Future Work -->
+<!-- https://quarto.org/docs/presentations/ -->
