@@ -6,6 +6,7 @@ The distance metric implementation used in the code may be found as a reference 
 
 We reproduce the original aggregation metrics from the Bertimas paper, comparing different Pareto optimal tree selection strategies and a downsampled variant. Results can be found in the [Experiments folder](https://github.com/mishkin101/Stable-Tree-Algorithm-for-Suicide-Risk-Identification-in-Youth-Experiencing-Homelessness-YEH-/tree/main/experiments/FINAL_aggregate_output)
 
+A write-up of the project and experiment design can be found here: [docs/Bertimas-Report-Final.pdf](https://github.com/mishkin101/Stable-Tree-Algorithm-for-Suicide-Risk-Identification-in-Youth-Experiencing-Homelessness-YEH-/blob/main/docs/Bertimas-Report-Final.pdf)
 
 [^1]: [Improving Stability in Decision Tree Models](https://arxiv.org/abs/2305.17299)
 
