@@ -5,6 +5,7 @@ format:
     revealjs:
         theme: [default, template/custom.scss]
         slide-number: c/t
+        embed-resources: true
 #   clean-revealjs:
 #     theme: [default, template/code.scss]
     # self-contained: true
