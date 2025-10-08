@@ -8,6 +8,8 @@ We reproduce the original aggregation metrics from the Bertimas paper, comparing
 
 A write-up of the project and experiment design can be found here: [docs/Bertimas-Report-Final.pdf](https://github.com/mishkin101/Stable-Tree-Algorithm-for-Suicide-Risk-Identification-in-Youth-Experiencing-Homelessness-YEH-/blob/main/docs/Bertimas-Report-Final.pdf)
 
+[*Presentation Slides*](https://mishkin101.github.io/Stable-Tree-Algorithm-for-Suicide-Risk-Identification-in-Youth-Experiencing-Homelessness-YEH-/)
+
 [^1]: [Improving Stability in Decision Tree Models](https://arxiv.org/abs/2305.17299)
 
 [^2]:["Getting to the Root of the Problem: A Decision-Tree Analysis for Suicide Risk Among Young People Experiencing Homelessness"](https://doi.org/10.1086/715211)
